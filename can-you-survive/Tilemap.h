@@ -8,7 +8,7 @@ public:
 	Tilemap();
 
 protected:
-	list<Tile*>lpTiles;
+	//Tile* apTiles [][];
 
 };
 #endif

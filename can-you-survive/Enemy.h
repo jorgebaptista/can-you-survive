@@ -8,6 +8,5 @@ public:
 	Enemy();
 	//Virtual functions to be given details
 	void Movement();
-	void Attack();
 };
 #endif

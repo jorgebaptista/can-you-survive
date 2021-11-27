@@ -2,19 +2,19 @@
 #ifndef COLLECTABLE_H
 #define COLLECTABLE_H
 #include <iostream>
+#include <SFML/Graphics.hpp>
+
 using namespace std;
+
 class Collectable {
 public:
 	//Default Constructor
 	Collectable();
 	//Check if the player is currently in position to pickup item
-	void CheckPickup();
+	void CheckPickup(sf::Vector2f position);
 
 protected:
-
-	//x position variable
-	int x;
-	//y position variable
-	int y;
+	// current position
+	sf::Vector2f m_Position;
 };
 #endif

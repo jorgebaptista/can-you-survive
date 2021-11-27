@@ -5,8 +5,6 @@ Player::Player() {
 	maxHealth = 100;
 	stamina = 100;
 	maxStamina = 100;
-	x = 10;
-	y = 10;
 	level = 1;
 	multiplier = 1.05;
 	xp = 0;
@@ -18,13 +16,15 @@ Player::Player() {
 //void Player::Movement(x, y IN, x,y OUT ) {
 //	//Allow the player to move using the arrow keys
 //	//use a listener, and respond with new x,y co-ord
+// Get input
 //}
 
-void Player::Attack() {
-	//Allow the player to attack the opponent with a damage calculation
+void Player::Movement() {
+
 }
 
-void StaminaDecrease() {
+
+void StaminaDecrease(int reduce) {
 	//Reduce stamina a certain amount
 }
 
@@ -33,7 +33,7 @@ void CheckIfLevelUp() {
 	//the level and increase stats by the multiplier
 }
 
-void CheckGroundType() {
+void CheckGroundType(string type) {
 	//See what type of ground the player is walking on, and make a decision
 	//based on the ground.
 }

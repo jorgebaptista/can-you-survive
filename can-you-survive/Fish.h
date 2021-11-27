@@ -2,6 +2,7 @@
 #ifndef FISH_H
 #define FISH_H
 #include "Collectable.h"
+
 class Fish : public Collectable {
 public:
 	//Constructor
