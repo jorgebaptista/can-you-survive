@@ -1,49 +1,49 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Class Name="Tilemap" Collapsed="true">
-    <Position X="8.5" Y="2.25" Width="1.5" />
+    <Position X="12.25" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAABAAAAAAA=</HashCode>
       <FileName>Tilemap.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Collectable" Collapsed="true">
-    <Position X="0.75" Y="0.75" Width="1.5" />
+    <Position X="4.5" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAQAACAAAAAAAAAAAAAAAAAAAAAAAAAABgAAAAAAA=</HashCode>
       <FileName>Collectable.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Enemy">
-    <Position X="5.75" Y="4" Width="1.5" />
+    <Position X="9.5" Y="5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAgAAAAAAAAAABAAAAAAAAIAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Enemy.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Fish" Collapsed="true">
-    <Position X="0.75" Y="2.25" Width="1.5" />
+    <Position X="4.5" Y="3.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAQCBAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Fish.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Player">
-    <Position X="3" Y="3.75" Width="1.5" />
+    <Position X="6.75" Y="4.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAACABAAAAAAABEEBCAAAgIAAEAAAAAAAAUAAAAA=</HashCode>
       <FileName>Player.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="PolarBear">
-    <Position X="4.5" Y="0.5" Width="1.5" />
+    <Position X="8.25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAEAAAIAAAAgAAABAAAAAAAAIEAAAAAAABgAAAAAAg=</HashCode>
       <FileName>PolarBear.h</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Tile" Collapsed="true">
-    <Position X="8.5" Y="0.75" Width="1.5" />
+    <Position X="12.25" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAEAAAAAAAABAAAAAAAAAAAAAQA=</HashCode>
       <FileName>Tile.h</FileName>

@@ -15,9 +15,10 @@ Player::Player() {
 	fishNum = 0;
 }
 
-void Player::Movement() {
-	//Allow the player to move using the arrow keys
-}
+//void Player::Movement(x, y IN, x,y OUT ) {
+//	//Allow the player to move using the arrow keys
+//	//use a listener, and respond with new x,y co-ord
+//}
 
 void Player::Attack() {
 	//Allow the player to attack the opponent with a damage calculation
