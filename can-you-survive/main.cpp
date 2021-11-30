@@ -15,9 +15,13 @@ int main() {
 
 	View mainView(FloatRect(0, 0, resolution.x, resolution.y));
 
+	Clock clock;
+
+	Time gameTimeTotal;
 	//Texture textureBackground = Texture
 
 	Tile tile;
+	Player polar;
 
 	while (window.isOpen())
 	{
@@ -29,7 +33,50 @@ int main() {
 			{
 				window.close();
 			}
+			if (Keyboard::isKeyPressed(Keyboard::W))
+			{
+				polar.moveUp();
+			}
+			else
+			{
+				polar.stopUp();
+			}
+
+			if (Keyboard::isKeyPressed(Keyboard::S))
+			{
+				polar.moveDown();
+			}
+			else
+			{
+				polar.stopDown();
+			}
+
+			if (Keyboard::isKeyPressed(Keyboard::A))
+			{
+				polar.moveLeft();
+			}
+			else
+			{
+				polar.stopLeft();
+			}
+
+			if (Keyboard::isKeyPressed(Keyboard::D))
+			{
+				polar.moveRight();
+			}
+			else
+			{
+				polar.stopRight();
+			}
 		}
+
+		Time dt = clock.restart();
+
+		gameTimeTotal += dt;
+
+		float dtAsSeconds = dt.asSeconds();
+
+		polar.Movement(dtAsSeconds);
 
 		mainView.setCenter(tile.getCenter());
 
@@ -37,6 +84,8 @@ int main() {
 		window.setView(mainView);
 
 		window.draw(tile.getSprite());
+		window.draw(polar.getSprite());
+		
 		window.display();
 	}
 	return 0;

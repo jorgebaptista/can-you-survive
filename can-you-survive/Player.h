@@ -14,10 +14,23 @@ public:
 	//See if player has reached level up conditions
 	void CheckIfLevelUp();
 	//See what kind of ground the polar bear is on
-	void CheckGroundType(string type);
+	void CheckGroundType(std::string type);
 
 	//Virtual functions to be given details
-	void Movement();
+	void Movement(float elapsedTime);
+
+	// Moving functions
+	void moveLeft();
+	void moveRight();
+	void moveUp();
+	void moveDown();
+
+	// Stopping functions
+	void stopLeft();
+	void stopRight();
+	void stopUp();
+	void stopDown();
+
 protected:
 	// Stamina of Player
 	int stamina;
@@ -31,5 +44,11 @@ protected:
 	int fishNum;
 	// How much the stats are increased by per level
 	double multiplier;
+
+	//direction variables
+	bool UpPressed;
+	bool DownPressed;
+	bool LeftPressed;
+	bool RightPressed;
 };
 #endif
