@@ -11,6 +11,8 @@ Player::Player() {
 	xpNeed = 100;
 	damage = 5;
 	fishNum = 0;
+
+
 }
 
 //void Player::Movement(x, y IN, x,y OUT ) {
@@ -19,8 +21,25 @@ Player::Player() {
 // Get input
 //}
 
-void Player::Movement() {
+void Player::Movement(float elapsedTime) {
+	if (UpPressed) {
+		m_Position.y -= 10 * elapsedTime;
+		m_Sprite.setRotation(270);
+	}
+	if (DownPressed) {
+		m_Position.y += 10 * elapsedTime;
+		m_Sprite.setRotation(90);
+	}
+	if (LeftPressed) {
+		m_Position.x -= 10 * elapsedTime;
+		m_Sprite.setRotation(180);
+	}
+	if (RightPressed) {
+		m_Position.x += 10 * elapsedTime;
+		m_Sprite.setRotation(0);
+	}
 
+	m_Sprite.setPosition(m_Position);
 }
 
 
@@ -33,7 +52,48 @@ void CheckIfLevelUp() {
 	//the level and increase stats by the multiplier
 }
 
-void CheckGroundType(string type) {
+void CheckGroundType(std::string type) {
 	//See what type of ground the player is walking on, and make a decision
 	//based on the ground.
+}
+
+//Movement section
+void Player::moveLeft()
+{
+	LeftPressed = true;
+}
+
+void Player::moveRight()
+{
+	RightPressed = true;
+}
+
+void Player::moveUp()
+{
+	UpPressed = true;
+}
+
+void Player::moveDown()
+{
+	DownPressed = true;
+}
+
+void Player::stopLeft()
+{
+	LeftPressed = false;
+}
+
+void Player::stopRight()
+{
+	RightPressed = false;
+}
+
+void Player::stopUp()
+{
+	UpPressed = false;
+}
+
+void Player::stopDown()
+{
+	DownPressed = false;
 }

@@ -3,8 +3,8 @@
 Tile::Tile(){
 	type="null";
 	
-	m_Position.x = 1000;
-	m_Position.y = 500;
+	m_Position.x = 100;
+	m_Position.y = 100;
 
 	m_Resolution.x = 1920;
 	m_Resolution.y = 1080;
