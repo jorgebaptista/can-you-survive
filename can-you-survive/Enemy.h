@@ -7,6 +7,9 @@ public:
 	//Constructor
 	Enemy();
 	//Virtual functions to be given details
-	void Movement();
+	void Movement(float elapsedTime, float totalTime);
+
+protected:
+	int randnum;
 };
 #endif

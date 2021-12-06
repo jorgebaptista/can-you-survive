@@ -18,10 +18,12 @@ int main() {
 	Clock clock;
 
 	Time gameTimeTotal;
+	float gameTimeTotalFloat;
 	//Texture textureBackground = Texture
 
 	Tile tile;
 	Player polar;
+	Enemy enemy;
 
 	while (window.isOpen())
 	{
@@ -74,9 +76,12 @@ int main() {
 
 		gameTimeTotal += dt;
 
+		gameTimeTotalFloat = gameTimeTotal.asSeconds();
+
 		float dtAsSeconds = dt.asSeconds();
 
-		polar.Movement(dtAsSeconds);
+		polar.Movement(dtAsSeconds, gameTimeTotalFloat);
+		enemy.Movement(dtAsSeconds, gameTimeTotalFloat);
 
 		mainView.setCenter(tile.getCenter());
 
@@ -85,6 +90,7 @@ int main() {
 
 		window.draw(tile.getSprite());
 		window.draw(polar.getSprite());
+		window.draw(enemy.getSprite());
 		
 		window.display();
 	}

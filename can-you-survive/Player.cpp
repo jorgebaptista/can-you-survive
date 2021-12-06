@@ -11,7 +11,7 @@ Player::Player() {
 	xpNeed = 100;
 	damage = 5;
 	fishNum = 0;
-
+	move = 'c';
 
 }
 
@@ -21,22 +21,46 @@ Player::Player() {
 // Get input
 //}
 
-void Player::Movement(float elapsedTime) {
-	if (UpPressed) {
-		m_Position.y -= 10 * elapsedTime;
-		m_Sprite.setRotation(270);
+void Player::Movement(float elapsedTime, float totalTime) {
+	if (moveTime <= totalTime) {
+		move = 'c';
+		if (UpPressed) {
+			m_Position.y -= 100 * elapsedTime;
+			m_Sprite.setRotation(270);
+			move = 'U';
+		}
+		if (DownPressed) {
+			m_Position.y += 100 * elapsedTime;
+			m_Sprite.setRotation(90);
+			move = 'D';
+		}
+		if (LeftPressed) {
+			m_Position.x -= 100 * elapsedTime;
+			m_Sprite.setRotation(180);
+			move = 'L';
+		}
+		if (RightPressed) {
+			m_Position.x += 100 * elapsedTime;
+			m_Sprite.setRotation(0);
+			move = 'R';
+		}
+		if (move != 'c') {
+			moveTime = totalTime + 1;
+		}
 	}
-	if (DownPressed) {
-		m_Position.y += 10 * elapsedTime;
-		m_Sprite.setRotation(90);
-	}
-	if (LeftPressed) {
-		m_Position.x -= 10 * elapsedTime;
-		m_Sprite.setRotation(180);
-	}
-	if (RightPressed) {
-		m_Position.x += 10 * elapsedTime;
-		m_Sprite.setRotation(0);
+	else {
+		if (move == 'U') {
+			m_Position.y -= 100 * elapsedTime;
+		}
+		if (move == 'D') {
+			m_Position.y += 100 * elapsedTime;
+		}
+		if (move == 'L') {
+			m_Position.x -= 100 * elapsedTime;
+		}
+		if (move == 'R') {
+			m_Position.x += 100 * elapsedTime;
+		}
 	}
 
 	m_Sprite.setPosition(m_Position);

@@ -11,7 +11,7 @@ public:
 	//Default Constructor
 	PolarBear();
 	//Function to move
-	virtual void Movement(float elapsedTime) = 0;
+	virtual void Movement(float elapsedTime, float totalTime) = 0;
 	//virtual sf::Vector2f Movement()=0;
 	//Function to attack
 	void Attack();
@@ -36,7 +36,8 @@ protected:
 	int health;
 	// The max health value the polar bear can have
 	int maxHealth;
-
+	
+	float moveTime;
 
 	// The current position of this polar b
 	Vector2f m_Position;

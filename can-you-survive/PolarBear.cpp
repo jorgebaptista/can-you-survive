@@ -12,7 +12,7 @@ PolarBear::PolarBear() {
 	m_Resolution.x = 100;
 	m_Resolution.y = 100;
 
-
+	moveTime = 0;
 
 	m_Texture.loadFromFile("graphics/polartemp.png");
 	m_Sprite.setTexture(m_Texture);

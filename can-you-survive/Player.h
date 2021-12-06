@@ -17,7 +17,7 @@ public:
 	void CheckGroundType(std::string type);
 
 	//Virtual functions to be given details
-	void Movement(float elapsedTime);
+	void Movement(float elapsedTime, float totalTime);
 
 	// Moving functions
 	void moveLeft();
@@ -45,6 +45,7 @@ protected:
 	// How much the stats are increased by per level
 	double multiplier;
 
+	char move;
 	//direction variables
 	bool UpPressed;
 	bool DownPressed;
