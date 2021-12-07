@@ -44,7 +44,9 @@ void Player::Movement(float elapsedTime, float totalTime) {
 			m_Sprite.setRotation(0);
 			move = 'R';
 		}
+		//move not being c means that a movement has been registered
 		if (move != 'c') {
+			//moveTime will be totalTime plus a certain amount to keep movement going the same way for a while.
 			moveTime = totalTime + 1;
 		}
 	}

@@ -11,39 +11,35 @@ Enemy::Enemy() {
 void Enemy::Movement(float elapsedTime, float totalTime) {
 	//Decide where to move randomly, unless player is within sight,
 	//in which case, attempt to move to player.
+
+	//Check if enough time has passed to allow movement
 	if(moveTime<=totalTime){
+		//Calculate a random number, number isn't changed until total run time reaches certain value;
 		randnum = rand() % 4 + 1;
+		//moveTime will be totalTime plus a certain amount to keep movement going the same way for a while.
 		moveTime = totalTime + 1;
-		std::cout << "Help" << std::endl;
-		std::cout << totalTime << std::endl;
-		std::cout << elapsedTime << std::endl;
 	}
 	
+	//Depending on number, change position
 	if (randnum == 1) {
+		//go up
 		m_Position.y -= 100 * elapsedTime;
-		m_Sprite.setRotation(270);
-		std::cout << totalTime << std::endl;
-		std::cout << elapsedTime << std::endl;
-		
+		m_Sprite.setRotation(270);	
 	}
 	if (randnum == 2) {
+		//go down
 		m_Position.y += 100 * elapsedTime;
 		m_Sprite.setRotation(90);
-		std::cout << totalTime << std::endl;
-		std::cout << elapsedTime << std::endl;
-		
 	}
 	if (randnum == 3) {
+		//go left
 		m_Position.x -= 100 * elapsedTime;
 		m_Sprite.setRotation(180);
-		std::cout << totalTime << std::endl;
-		std::cout << elapsedTime << std::endl;
-		
 	}
 	if (randnum == 4) {
+		//go right
 		m_Position.x += 100 * elapsedTime;
-		m_Sprite.setRotation(0);
-		
+		m_Sprite.setRotation(0);	
 	}
 
 	m_Sprite.setPosition(m_Position);

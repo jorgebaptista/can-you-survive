@@ -21,10 +21,13 @@ public:
 	//Function to get variables
 	FloatRect getPosition();
 
+	//Function to get center of object 
 	Vector2f getCenter();
 
+	//Returns the sprite
 	Sprite getSprite();
 
+	//Will check if polar bear is alive
 	bool isAlive();
 	
 
@@ -37,15 +40,18 @@ protected:
 	// The max health value the polar bear can have
 	int maxHealth;
 	
+	// Variable used to store when the object can move again
 	float moveTime;
 
-	// The current position of this polar b
+	// The current position of this polar bear
 	Vector2f m_Position;
 
 	Vector2f m_Resolution;
 
+	//Polar bear sprite
 	Sprite m_Sprite;
 
+	//Polar bear texture
 	Texture m_Texture;
 
 	//The level which determines how strong the polar bear is

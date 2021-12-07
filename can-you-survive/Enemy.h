@@ -10,6 +10,7 @@ public:
 	void Movement(float elapsedTime, float totalTime);
 
 protected:
+	//Random number used to determine which direction to go
 	int randnum;
 };
 #endif

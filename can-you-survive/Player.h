@@ -45,6 +45,7 @@ protected:
 	// How much the stats are increased by per level
 	double multiplier;
 
+	//Used to determine which way to move each movement call
 	char move;
 	//direction variables
 	bool UpPressed;
