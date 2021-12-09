@@ -14,6 +14,7 @@ void Enemy::Movement(float elapsedTime, float totalTime) {
 
 	//Check if enough time has passed to allow movement
 	if(moveTime<=totalTime){
+		
 		//Calculate a random number, number isn't changed until total run time reaches certain value;
 		randnum = rand() % 4 + 1;
 		//moveTime will be totalTime plus a certain amount to keep movement going the same way for a while.

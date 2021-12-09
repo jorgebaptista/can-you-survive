@@ -22,26 +22,25 @@ Player::Player() {
 //}
 
 void Player::Movement(float elapsedTime, float totalTime) {
+	//If enough total time has passed, the player can move again
 	if (moveTime <= totalTime) {
+		//move set to c to stop movement until button is pressed.
 		move = 'c';
+		//Checks direction pressed to see where to move character
 		if (UpPressed) {
-			m_Position.y -= 100 * elapsedTime;
-			m_Sprite.setRotation(270);
+			//set to U to allow continous movement up
 			move = 'U';
 		}
 		if (DownPressed) {
-			m_Position.y += 100 * elapsedTime;
-			m_Sprite.setRotation(90);
+			//set to D to allow continous movement down
 			move = 'D';
 		}
 		if (LeftPressed) {
-			m_Position.x -= 100 * elapsedTime;
-			m_Sprite.setRotation(180);
+			//set to L to allow continous movement left
 			move = 'L';
 		}
-		if (RightPressed) {
-			m_Position.x += 100 * elapsedTime;
-			m_Sprite.setRotation(0);
+		if (RightPressed) {		
+			//set to R to allow continous movement right
 			move = 'R';
 		}
 		//move not being c means that a movement has been registered
@@ -50,20 +49,26 @@ void Player::Movement(float elapsedTime, float totalTime) {
 			moveTime = totalTime + 1;
 		}
 	}
-	else {
-		if (move == 'U') {
-			m_Position.y -= 100 * elapsedTime;
-		}
-		if (move == 'D') {
-			m_Position.y += 100 * elapsedTime;
-		}
-		if (move == 'L') {
-			m_Position.x -= 100 * elapsedTime;
-		}
-		if (move == 'R') {
-			m_Position.x += 100 * elapsedTime;
-		}
+	//If moveTime is still larger than totalTime, then the character will continue moving in the same direction as what was inputted
+	
+	//Depending on what move is, the player will continue moving in the previously inputted direction
+	if (move == 'U') {
+		m_Position.y -= 100 * elapsedTime;
+		m_Sprite.setRotation(270);
 	}
+	if (move == 'D') {
+		m_Position.y += 100 * elapsedTime;
+		m_Sprite.setRotation(90);
+	}
+	if (move == 'L') {
+		m_Position.x -= 100 * elapsedTime;
+		m_Sprite.setRotation(180);
+	}
+	if (move == 'R') {
+		m_Position.x += 100 * elapsedTime;
+		m_Sprite.setRotation(0);
+	}
+
 
 	m_Sprite.setPosition(m_Position);
 }
@@ -103,6 +108,7 @@ void Player::moveDown()
 {
 	DownPressed = true;
 }
+
 
 void Player::stopLeft()
 {
