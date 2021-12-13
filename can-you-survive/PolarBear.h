@@ -48,6 +48,8 @@ protected:
 
 	Vector2f m_Resolution;
 
+
+
 	//Polar bear sprite
 	Sprite m_Sprite;
 

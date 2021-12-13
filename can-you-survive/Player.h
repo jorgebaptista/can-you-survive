@@ -10,7 +10,7 @@ public:
 	//Default Constructor
 	Player();
 	//Reduce stamina function
-	void StaminaDecrease(int reduce);
+	void StaminaDecrease(float reduce);
 	//See if player has reached level up conditions
 	void CheckIfLevelUp();
 	//See what kind of ground the polar bear is on
@@ -18,6 +18,13 @@ public:
 
 	//Virtual functions to be given details
 	void Movement(float elapsedTime, float totalTime);
+
+	float getStamina();
+
+	float getStaminaTimer();
+
+	void setStaminaTimer();
+	void setStaminaTimer(float staminaTimerAdd);
 
 	// Moving functions
 	void moveLeft();
@@ -33,9 +40,9 @@ public:
 
 protected:
 	// Stamina of Player
-	int stamina;
+	float  stamina;
 	// Max stamina the player can have
-	int maxStamina;
+	float  maxStamina;
 	// Gained experience points
 	int xp;
 	// Experience points needed to level up
@@ -44,6 +51,8 @@ protected:
 	int fishNum;
 	// How much the stats are increased by per level
 	double multiplier;
+	// Used to determine when to decrease stamina
+	float staminaTimer;
 
 	//Used to determine which way to move each movement call
 	char move;

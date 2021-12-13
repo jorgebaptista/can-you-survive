@@ -12,6 +12,7 @@ Player::Player() {
 	damage = 5;
 	fishNum = 0;
 	move = 'c';
+	staminaTimer = 0;
 
 }
 
@@ -74,8 +75,9 @@ void Player::Movement(float elapsedTime, float totalTime) {
 }
 
 
-void StaminaDecrease(int reduce) {
+void Player::StaminaDecrease(float reduce) {
 	//Reduce stamina a certain amount
+	stamina = stamina - reduce;
 }
 
 void CheckIfLevelUp() {
@@ -88,6 +90,21 @@ void CheckGroundType(std::string type) {
 	//based on the ground.
 }
 
+float Player::getStamina() {
+	return stamina;
+}
+
+float Player::getStaminaTimer() {
+	return staminaTimer;
+}
+
+void Player::setStaminaTimer(float staminaTimerAdd) {
+	staminaTimer = staminaTimer + staminaTimerAdd;
+}
+
+void Player::setStaminaTimer() {
+	staminaTimer = 0;
+}
 //Movement section
 void Player::moveLeft()
 {

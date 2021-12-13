@@ -17,6 +17,8 @@ int main() {
 
 	Clock clock;
 
+	
+
 	Time gameTimeTotal;
 	float gameTimeTotalFloat;
 	//Texture textureBackground = Texture
@@ -24,6 +26,13 @@ int main() {
 	Tile tile;
 	Player polar;
 	Enemy enemy;
+
+	RectangleShape staminaBar;
+	float staminaBarStartWidth = 200;
+	float staminaBarHeight = 40;
+	
+	staminaBar.setFillColor(Color::Red);
+	staminaBar.setPosition(100, 100);
 
 	while (window.isOpen())
 	{
@@ -79,11 +88,18 @@ int main() {
 		gameTimeTotalFloat = gameTimeTotal.asSeconds();
 
 		float dtAsSeconds = dt.asSeconds();
+		polar.setStaminaTimer(dtAsSeconds);
+		staminaBar.setSize(Vector2f(2*polar.getStamina(), staminaBarHeight));
 
 		polar.Movement(dtAsSeconds, gameTimeTotalFloat);
 		enemy.Movement(dtAsSeconds, gameTimeTotalFloat);
-
-		mainView.setCenter(tile.getCenter());
+		cout << polar.getStaminaTimer() << endl;
+		if (polar.getStaminaTimer() >= 1) {
+			polar.StaminaDecrease(1);
+			polar.setStaminaTimer();
+		}
+		
+		mainView.setCenter(polar.getCenter());
 
 		window.clear(); // clear the window
 		window.setView(mainView);
@@ -91,7 +107,7 @@ int main() {
 		window.draw(tile.getSprite());
 		window.draw(polar.getSprite());
 		window.draw(enemy.getSprite());
-		
+		window.draw(staminaBar);
 		window.display();
 	}
 	return 0;
