@@ -5,7 +5,8 @@
 
 //using namespace sf;
 
-class Player : public PolarBear {
+class Player : public PolarBear 
+{
 public:
 	//Default Constructor
 	Player();
@@ -34,6 +35,7 @@ public:
 	//Add time to staminaTimer
 	void addStaminaTimer(float staminaTimerAdd);
 
+	void Pickup(std::string name);
 	// Moving functions
 	void moveLeft();
 	void moveRight();

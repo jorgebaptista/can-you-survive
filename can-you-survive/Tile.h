@@ -6,7 +6,8 @@
 
 using namespace sf;
 
-class Tile {
+class Tile 
+{
 public:
 	//Constructor
 	Tile();

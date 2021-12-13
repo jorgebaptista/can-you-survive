@@ -1,6 +1,7 @@
 #include "Tile.h"
 //Constructor
-Tile::Tile(){
+Tile::Tile()
+{
 	type="null";
 	
 	m_Position.x = 100;
@@ -21,14 +22,17 @@ void Tile::ChangeType()
 	//This will result in the type of the tile changing
 }
 
-FloatRect Tile::getPosition(){
+FloatRect Tile::getPosition()
+{
 	return m_Sprite.getGlobalBounds();
 }
 
-Vector2f Tile::getCenter(){
+Vector2f Tile::getCenter()
+{
 	return m_Position;
 }
 
-Sprite Tile::getSprite(){
+Sprite Tile::getSprite()
+{
 	return m_Sprite;
 }

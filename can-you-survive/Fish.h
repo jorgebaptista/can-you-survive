@@ -3,7 +3,8 @@
 #define FISH_H
 #include "Collectable.h"
 
-class Fish : public Collectable {
+class Fish : public Collectable 
+{
 public:
 	//Constructor
 	Fish();
@@ -14,6 +15,10 @@ public:
 
 	//Return fish sprite
 	Sprite getSprite();
+
+	void setPosition(float x, float y);
+
+	FloatRect getPosition();
 
 private:
 	//The type of fish

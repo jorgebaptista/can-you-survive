@@ -3,7 +3,8 @@
 #define TILEMAP_H
 #include "Tile.h"
 #include <list>
-class Tilemap : public Tile {
+class Tilemap : public Tile 
+{
 public:
 	Tilemap();
 
