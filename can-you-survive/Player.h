@@ -19,12 +19,20 @@ public:
 	//Virtual functions to be given details
 	void Movement(float elapsedTime, float totalTime);
 
+
+	void EatFish();
+
+	//Return stamina
 	float getStamina();
 
+	//Return staminaTimer
 	float getStaminaTimer();
 
+	//Set staminaTimer to 0
 	void setStaminaTimer();
-	void setStaminaTimer(float staminaTimerAdd);
+
+	//Add time to staminaTimer
+	void addStaminaTimer(float staminaTimerAdd);
 
 	// Moving functions
 	void moveLeft();
@@ -40,9 +48,9 @@ public:
 
 protected:
 	// Stamina of Player
-	float  stamina;
+	float stamina;
 	// Max stamina the player can have
-	float  maxStamina;
+	float maxStamina;
 	// Gained experience points
 	int xp;
 	// Experience points needed to level up

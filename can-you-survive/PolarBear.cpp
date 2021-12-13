@@ -24,24 +24,31 @@ void PolarBear::Attack()
 {
 	
 }
-
-void PolarBear::TakeDamage(int dam)
+//Reduce the polarbear's health
+void PolarBear::ReduceHealth(int reduce)
 {
-
+	health = health - reduce;
 }
 
+//Return the global bounds of the polar bear
 FloatRect PolarBear::getPosition() {
 	return m_Sprite.getGlobalBounds();
 }
 
+//Return the center of the polar bear
 Vector2f PolarBear::getCenter() {
 	return m_Position;
 }
 
+//Return the polar bears sprite
 Sprite PolarBear::getSprite() {
 	return m_Sprite;
 }
 
 bool isAlive(){
 	return true;
+}
+
+int PolarBear::getHealth() {
+	return health;
 }

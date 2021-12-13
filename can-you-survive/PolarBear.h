@@ -16,7 +16,7 @@ public:
 	//Function to attack
 	void Attack();
 	//Function to receive damage
-	void TakeDamage(int dam);
+	void ReduceHealth(int reduce);
 
 	//Function to get variables
 	FloatRect getPosition();
@@ -27,10 +27,13 @@ public:
 	//Returns the sprite
 	Sprite getSprite();
 
+	//Will return health
+	int getHealth();
+
 	//Will check if polar bear is alive
 	bool isAlive();
 	
-
+	
 
 
 

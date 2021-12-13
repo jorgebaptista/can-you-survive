@@ -10,7 +10,7 @@ Player::Player() {
 	xp = 0;
 	xpNeed = 100;
 	damage = 5;
-	fishNum = 0;
+	fishNum = 4;
 	move = 'c';
 	staminaTimer = 0;
 
@@ -74,6 +74,20 @@ void Player::Movement(float elapsedTime, float totalTime) {
 	m_Sprite.setPosition(m_Position);
 }
 
+//Function used to eat fish in inventory
+void Player::EatFish() {
+	//Check if there is fish in the inventory
+	if (fishNum > 0) {
+		//Increase stamina by maxStamina amount divided by 10
+		stamina = stamina + maxStamina/10;
+		//If stamina addition is more than maxStamina, set stamina to maxStamina
+		if (stamina >= maxStamina) {
+			stamina = maxStamina;
+		}
+		//Reduce fish in inventory by 1
+		fishNum = fishNum - 1;
+	}
+}
 
 void Player::StaminaDecrease(float reduce) {
 	//Reduce stamina a certain amount
@@ -90,21 +104,26 @@ void CheckGroundType(std::string type) {
 	//based on the ground.
 }
 
+//Return stamina
 float Player::getStamina() {
 	return stamina;
 }
 
+//Return staminaTimer
 float Player::getStaminaTimer() {
 	return staminaTimer;
 }
 
-void Player::setStaminaTimer(float staminaTimerAdd) {
+//Add to the staminaTimer
+void Player::addStaminaTimer(float staminaTimerAdd) {
 	staminaTimer = staminaTimer + staminaTimerAdd;
 }
 
+//Set stamina to zero
 void Player::setStaminaTimer() {
 	staminaTimer = 0;
 }
+
 //Movement section
 void Player::moveLeft()
 {
