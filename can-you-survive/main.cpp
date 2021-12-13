@@ -28,6 +28,7 @@ int main() {
 	Tile* tile = new Tile(Vector2f(0, 0));
 	Player polar;
 	Enemy enemy;
+	Fish fishLand;
 
 	RectangleShape staminaBar;
 	float staminaBarStartWidth = 200;
@@ -39,6 +40,14 @@ int main() {
 	while (window.isOpen())
 	{
 		Event event;
+
+		Time dt = clock.restart();
+
+		gameTimeTotal += dt;
+
+		gameTimeTotalFloat = gameTimeTotal.asSeconds();
+
+		float dtAsSeconds = dt.asSeconds();
 
 		while (window.pollEvent(event))
 		{
@@ -81,9 +90,20 @@ int main() {
 			{
 				polar.stopRight();
 			}
+			//Eat fish
+			if (Keyboard::isKeyPressed(Keyboard::E))
+			{
+				if (eatTimer + 0.5 < gameTimeTotalFloat) {
+					polar.EatFish();
+					eatTimer = gameTimeTotalFloat;
+				}
+			}
 		}
 
-		Time dt = clock.restart();
+		//Timer used for multiple commands
+		
+		//Will set the stamina timer
+		polar.addStaminaTimer(dtAsSeconds);
 
 		gameTimeTotal += dt;
 
@@ -95,15 +115,12 @@ int main() {
 		healthBar.setSize(Vector2f(2 *polar.getHealth(), healthBarHeight));
 		
 		//Check if enough time has passed to decrease stamina or health
-		if (polar.getStaminaTimer() >= 1) 
-		{
-			if (!polar.getStamina() <= 0) 
-			{
+		if (polar.getStaminaTimer() >= 1) {
+			if (!polar.getStamina() <= 0) {
 				polar.StaminaDecrease(1);
 				polar.setStaminaTimer();
 			}
-			else 
-			{
+			else {
 				polar.ReduceHealth(1);
 				polar.setStaminaTimer();
 			}
@@ -155,6 +172,9 @@ int main() {
 		//window.draw(tile->getSprite());
 		window.draw(polar.getSprite());
 		window.draw(enemy.getSprite());
+
+		//Hudview used for elements that don't move
+		window.setView(hudView);
 		window.draw(staminaBar);
 		window.display();
 	}

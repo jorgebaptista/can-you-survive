@@ -6,8 +6,7 @@
 
 using namespace sf;
 
-class Tile 
-{
+class Tile {
 public:
 	// create an enum for the terrain type of this tile
 	enum class terrainType {SNOW, ICE, WATER};

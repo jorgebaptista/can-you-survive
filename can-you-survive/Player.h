@@ -26,6 +26,9 @@ public:
 	void setStaminaTimer();
 	void setStaminaTimer(float staminaTimerAdd);
 
+	//Add time to staminaTimer
+	void addStaminaTimer(float staminaTimerAdd);
+
 	// Moving functions
 	void moveLeft();
 	void moveRight();

@@ -1,7 +1,12 @@
 #include "Fish.h"
 //Constructor
 Fish::Fish() {
-	//type = "null";
+	type = "null";
+
+	m_Position.x = 100;
+	m_Position.y = 100;
+
+
 }
 
 void Fish::Spawn(string t) 
@@ -14,15 +19,11 @@ void Fish::Spawn(string t)
 	else if (type == "land") 
 	{
 		m_Texture.loadFromFile("graphics/fishlandtemp.png");
-		m_Position.x = -100;
-		m_Position.y = -100;
 	}
 
 	m_Sprite.setTexture(m_Texture);
-
-	m_Sprite.setPosition(m_Position);
-	m_Sprite.scale(2, 2);
-	m_Sprite.setOrigin(10, 10);
+	m_Sprite.scale(0.1, 0.1);
+	m_Sprite.setOrigin(256, 256);
 }
 string Fish::getType()
 {

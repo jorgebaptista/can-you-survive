@@ -10,6 +10,9 @@ public:
 	//Return the type of fish
 	string getType();
 
+	//Return fish sprite
+	Sprite getSprite();
+
 private:
 	//The type of fish
 	string type;
