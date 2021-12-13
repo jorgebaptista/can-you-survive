@@ -14,9 +14,12 @@ public:
 	Collectable();
 	//Check if the player is currently in position to pickup item
 	void CheckPickup(sf::Vector2f position);
+	void PickedUp();
+	bool isCollected();
 
 protected:
 	// current position
+	bool collected;
 	sf::Vector2f m_Position;
 };
 #endif

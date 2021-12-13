@@ -146,7 +146,23 @@ int main()
 		}
 		if (polar.getPosition().intersects(fishSea.getPosition())) 
 		{
-			polar.Pickup(fishSea.getType());
+			if (!fishSea.isCollected())
+			{
+				polar.Pickup("sea");
+				//fishSea.setPosition(-1000, -1000);
+				fishSea.PickedUp();
+			}
+			
+		}
+		else if (polar.getPosition().intersects(fishLand.getPosition())) 
+		{
+			if (!fishLand.isCollected()) 
+			{
+				polar.Pickup("land");
+				//fishLand.setPosition(-1000, -1000);
+				fishLand.PickedUp();
+			}
+			
 		}
 
 		//Move characters

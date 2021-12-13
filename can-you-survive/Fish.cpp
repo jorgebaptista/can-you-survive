@@ -9,12 +9,15 @@ Fish::Fish() {
 
 }
 
-void Fish::Spawn(string t) {
+void Fish::Spawn(string t) 
+{
 	type = t;
-	if (type == "sea") {
+	if (type == "sea") 
+	{
 		m_Texture.loadFromFile("graphics/fishseatemp.png");
 	}
-	else if (type == "land") {
+	else if (type == "land") 
+	{
 		m_Texture.loadFromFile("graphics/fishlandtemp.png");
 		m_Position.x = -100;
 		m_Position.y = -100;
@@ -44,4 +47,5 @@ FloatRect Fish::getPosition() {
 void Fish::setPosition(float x, float y) {
 	m_Position.x = x;
 	m_Position.y = y;
+	m_Sprite.setPosition(m_Position);
 }
