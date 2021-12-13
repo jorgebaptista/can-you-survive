@@ -92,6 +92,42 @@ int main() {
 		float dtAsSeconds = dt.asSeconds();
 		polar.setStaminaTimer(dtAsSeconds);
 		staminaBar.setSize(Vector2f(2*polar.getStamina(), staminaBarHeight));
+		healthBar.setSize(Vector2f(2 *polar.getHealth(), healthBarHeight));
+		
+		//Check if enough time has passed to decrease stamina or health
+		if (polar.getStaminaTimer() >= 1) 
+		{
+			if (!polar.getStamina() <= 0) 
+			{
+				polar.StaminaDecrease(1);
+				polar.setStaminaTimer();
+			}
+			else 
+			{
+				polar.ReduceHealth(1);
+				polar.setStaminaTimer();
+			}
+		}
+		if (polar.getPosition().intersects(fishSea.getPosition())) 
+		{
+			if (!fishSea.isCollected())
+			{
+				polar.Pickup("sea");
+				//fishSea.setPosition(-1000, -1000);
+				fishSea.PickedUp();
+			}
+			
+		}
+		else if (polar.getPosition().intersects(fishLand.getPosition())) 
+		{
+			if (!fishLand.isCollected()) 
+			{
+				polar.Pickup("land");
+				//fishLand.setPosition(-1000, -1000);
+				fishLand.PickedUp();
+			}
+			
+		}
 
 		polar.Movement(dtAsSeconds, gameTimeTotalFloat);
 		enemy.Movement(dtAsSeconds, gameTimeTotalFloat);
