@@ -3,12 +3,10 @@
 #define COLLECTABLE_H
 #include <iostream>
 #include <SFML/Graphics.hpp>
-using namespace sf;
 
 using namespace std;
 
-class Collectable 
-{
+class Collectable {
 public:
 	//Default Constructor
 	Collectable();
