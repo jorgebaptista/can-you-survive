@@ -2,10 +2,12 @@
 #include "Fish.h"
 #include "Player.h"
 #include "Tilemap.h"
+#include "FileSystem.h"
 
 using namespace sf;
 
 int main() {
+	Tilemap *tileMap = new Tilemap();
 
 	Vector2f resolution;
 	resolution.x = VideoMode::getDesktopMode().width;
@@ -23,7 +25,7 @@ int main() {
 	float gameTimeTotalFloat;
 	//Texture textureBackground = Texture
 
-	Tile tile;
+	Tile* tile = new Tile(Vector2f(0, 0));
 	Player polar;
 	Enemy enemy;
 
@@ -93,7 +95,7 @@ int main() {
 
 		polar.Movement(dtAsSeconds, gameTimeTotalFloat);
 		enemy.Movement(dtAsSeconds, gameTimeTotalFloat);
-		cout << polar.getStaminaTimer() << endl;
+		//std::cout << polar.getStaminaTimer() << endl;
 		if (polar.getStaminaTimer() >= 1) {
 			polar.StaminaDecrease(1);
 			polar.setStaminaTimer();
@@ -104,7 +106,17 @@ int main() {
 		window.clear(); // clear the window
 		window.setView(mainView);
 
-		window.draw(tile.getSprite());
+		std::vector<std::vector<Tile*>> map = tileMap->getMap();
+
+		for (int i = 0; i < map.size(); i++)
+		{
+			for (int j = 0; j < map[i].size(); j++)
+			{
+				window.draw(map[i][j]->getSprite());
+			}
+		}
+
+		//window.draw(tile->getSprite());
 		window.draw(polar.getSprite());
 		window.draw(enemy.getSprite());
 		window.draw(staminaBar);
