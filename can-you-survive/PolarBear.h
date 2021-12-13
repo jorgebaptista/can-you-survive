@@ -5,7 +5,7 @@
 #include <SFML/Graphics.hpp>
 using namespace sf;
 
-class PolarBear 
+class PolarBear
 {
 public:
 	//Default Constructor
@@ -16,7 +16,7 @@ public:
 	//Function to attack
 	void Attack();
 	//Function to receive damage
-	void TakeDamage(int dam);
+	void ReduceHealth(int reduce);
 
 	//Function to get variables
 	FloatRect getPosition();
@@ -27,9 +27,12 @@ public:
 	//Returns the sprite
 	Sprite getSprite();
 
+	//Will return health
+	int getHealth();
+
 	//Will check if polar bear is alive
 	bool isAlive();
-	
+
 
 
 
@@ -39,7 +42,7 @@ protected:
 	int health;
 	// The max health value the polar bear can have
 	int maxHealth;
-	
+
 	// Variable used to store when the object can move again
 	float moveTime;
 
