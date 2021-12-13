@@ -31,11 +31,8 @@ public:
 	int getHealth();
 
 	//Will check if polar bear is alive
-	bool isAlive();
-
-
-
-
+	//TODO: isalive?
+	//bool isAlive();
 
 protected:
 	// The polar bears health

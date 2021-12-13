@@ -1,12 +1,11 @@
 #include "Fish.h"
 //Constructor
-Fish::Fish() {
+Fish::Fish() 
+{
 	type = "null";
 
 	m_Position.x = 0;
 	m_Position.y = 0;
-
-
 }
 
 void Fish::Spawn(string t)
@@ -29,6 +28,7 @@ void Fish::Spawn(string t)
 	m_Sprite.scale(2, 2);
 	m_Sprite.setOrigin(10, 10);
 }
+
 string Fish::getType()
 {
 	//This will return the type of fish to determine what kind of effect

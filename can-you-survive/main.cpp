@@ -6,7 +6,8 @@
 
 using namespace sf;
 
-int main() {
+int main() 
+{
 	Tilemap *tileMap = new Tilemap();
 
 	Vector2f resolution;
@@ -189,5 +190,4 @@ int main() {
 		window.draw(healthBar);
 		window.display();
 	}
-	return 0;
-}
+	return 0;}
