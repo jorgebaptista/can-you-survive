@@ -48,7 +48,9 @@ protected:
 
 	Vector2f m_Resolution;
 
-
+	//goal position
+	float goal_PositionX;
+	float goal_PositionY;
 
 	//Polar bear sprite
 	Sprite m_Sprite;

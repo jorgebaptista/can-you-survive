@@ -7,6 +7,11 @@ Enemy::Enemy()
 	maxHealth = 100;
 	level = 1;
 	damage = 5;
+	m_Position.x = 256;
+	m_Position.y = 128;
+	goal_PositionX = m_Position.x;
+	goal_PositionY = m_Position.y;
+
 }
 
 void Enemy::Movement(float elapsedTime, float totalTime)
@@ -17,38 +22,93 @@ void Enemy::Movement(float elapsedTime, float totalTime)
 	//Check if enough time has passed to allow movement
 	if (moveTime <= totalTime)
 	{
+		m_Position.x = goal_PositionX;
+		m_Position.y = goal_PositionY;
+		m_Sprite.setPosition(m_Position);
 
 		//Calculate a random number, number isn't changed until total run time reaches certain value;
 		randnum = rand() % 4 + 1;
 		//moveTime will be totalTime plus a certain amount to keep movement going the same way for a while.
 		moveTime = totalTime + 1;
+
+		if (randnum == 1)
+		{
+			//go up
+			goal_PositionY = m_Position.y - 128;
+		}
+		if (randnum == 2)
+		{
+			//go down
+			goal_PositionY = m_Position.y + 128;
+		}
+		if (randnum == 3)
+		{
+			//go left
+			goal_PositionX = m_Position.x - 128;
+		}
+		if (randnum == 4)
+		{
+			//go right
+			goal_PositionX = m_Position.x - 128;
+		}
+
 	}
 
-	//Depending on number, change position
 	if (randnum == 1)
 	{
 		//go up
-		m_Position.y -= 100 * elapsedTime;
-		m_Sprite.setRotation(270);
+		if (m_Position.y > goal_PositionY) 
+		{
+			m_Position.y -= 128 * elapsedTime;
+			m_Sprite.setRotation(270);
+		}
+		else 
+		{
+			m_Position.y = goal_PositionY;
+		}
 	}
 	if (randnum == 2)
 	{
 		//go down
-		m_Position.y += 100 * elapsedTime;
-		m_Sprite.setRotation(90);
+		if (m_Position.y < goal_PositionY) 
+		{
+			m_Position.y += 128 * elapsedTime;
+			m_Sprite.setRotation(90);
+		}
+		else 
+		{
+			m_Position.y = goal_PositionY;
+		}
 	}
 	if (randnum == 3)
 	{
 		//go left
-		m_Position.x -= 100 * elapsedTime;
-		m_Sprite.setRotation(180);
+		if (m_Position.x > goal_PositionX) 
+		{
+			m_Position.x -= 128 * elapsedTime;
+			m_Sprite.setRotation(180);
+		}
+		else 
+		{
+			m_Position.y = goal_PositionY;
+		}
 	}
 	if (randnum == 4)
 	{
 		//go right
-		m_Position.x += 100 * elapsedTime;
-		m_Sprite.setRotation(0);
+		if (m_Position.x > goal_PositionX) 
+		{
+			m_Position.x += 128 * elapsedTime;
+			m_Sprite.setRotation(0);
+		}
+		else 
+		{
+			m_Position.y = goal_PositionY;
+		}
 	}
+
+	//Depending on number, change position
+	
 
 	m_Sprite.setPosition(m_Position);
 }

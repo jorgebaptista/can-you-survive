@@ -14,6 +14,10 @@ Player::Player()
 	fishNum = 4;
 	move = 'c';
 	staminaTimer = 0;
+	m_Position.x = 128;
+	m_Position.y = 128;
+	goal_PositionX=m_Position.x;
+	goal_PositionY=m_Position.y;
 
 }
 
@@ -29,26 +33,37 @@ void Player::Movement(float elapsedTime, float totalTime)
 	//If enough total time has passed, the player can move again
 	if (moveTime <= totalTime)
 	{
+		m_Position.x = goal_PositionX;
+		m_Position.y = goal_PositionY;
+		m_Sprite.setPosition(m_Position);
 		//move set to c to stop movement until button is pressed.
 		move = 'c';
 		//Checks direction pressed to see where to move character
 		if (UpPressed)
 		{
+			goal_PositionY = m_Position.y - 128;
+			//m_Position.y -= 128;
 			//set to U to allow continous movement up
 			move = 'U';
 		}
 		if (DownPressed)
 		{
+			goal_PositionY = m_Position.y + 128;
+			//m_Position.y += 128;
 			//set to D to allow continous movement down
 			move = 'D';
 		}
 		if (LeftPressed)
 		{
+			goal_PositionX = m_Position.x - 128;
+			//m_Position.x -= 128;
 			//set to L to allow continous movement left
 			move = 'L';
 		}
 		if (RightPressed)
 		{
+			goal_PositionX = m_Position.x + 128;
+			//m_Position.x += 128;
 			//set to R to allow continous movement right
 			move = 'R';
 		}
@@ -64,23 +79,51 @@ void Player::Movement(float elapsedTime, float totalTime)
 	//Depending on what move is, the player will continue moving in the previously inputted direction
 	if (move == 'U')
 	{
-		m_Position.y -= 100 * elapsedTime;
-		m_Sprite.setRotation(270);
+		if (m_Position.y > goal_PositionY) 
+		{
+			m_Position.y -= 128 * elapsedTime;
+			m_Sprite.setRotation(270);
+		}
+		else 
+		{
+			m_Position.y = goal_PositionY;
+		}
+		
 	}
 	if (move == 'D')
 	{
-		m_Position.y += 100 * elapsedTime;
-		m_Sprite.setRotation(90);
+		if (m_Position.y < goal_PositionY) 
+		{
+			m_Position.y += 128 * elapsedTime;
+			m_Sprite.setRotation(90);
+		}
+		else 
+		{
+			m_Position.y = goal_PositionY;
+		}
 	}
 	if (move == 'L')
 	{
-		m_Position.x -= 100 * elapsedTime;
-		m_Sprite.setRotation(180);
+		if (m_Position.x > goal_PositionX) 
+		{
+			m_Position.x -= 128 * elapsedTime;
+			m_Sprite.setRotation(180);
+		}
+		else 
+		{
+			m_Position.x = goal_PositionX;
+		}
 	}
 	if (move == 'R')
 	{
-		m_Position.x += 100 * elapsedTime;
-		m_Sprite.setRotation(0);
+		if (m_Position.x < goal_PositionX) {
+			m_Position.x += 128 * elapsedTime;
+			m_Sprite.setRotation(0);
+		}
+		else 
+		{
+			m_Position.x = goal_PositionX;
+		}
 	}
 
 
