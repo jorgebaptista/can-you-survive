@@ -20,12 +20,17 @@ Player::Player()
 	goal_PositionX=m_Position.x;
 	goal_PositionY=m_Position.y;
 	m_Sprite.setPosition(m_Position);
+
+	UpPressed = false;
+	DownPressed = false;
+	LeftPressed = false;
+	RightPressed = false;
 }
 
 //void Player::Movement(x, y IN, x,y OUT ) 
 // {
 //	//Allow the player to move using the arrow keys
-//	//use a listener, and respond with new x,y co-ord
+//	//use a listener, and respond with new x,y coordinates
 // Get input
 //}
 

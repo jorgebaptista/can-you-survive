@@ -39,7 +39,7 @@ int PolarBear::Attack()
 	return attackCalc;
 
 }
-//Reduce the polarbear's health
+//Reduce the polar bear's health
 void PolarBear::ReduceHealth(int reduce)
 {
 	health = health - reduce;
@@ -79,4 +79,14 @@ bool PolarBear::isAlive()
 int PolarBear::getHealth()
 {
 	return health;
+}
+
+void PolarBear::ChangeTerrain(Tile::terrainType terrain)
+{
+	m_currentTerrain = terrain;
+}
+
+Tile::terrainType PolarBear::getTerrain()
+{
+	return m_currentTerrain;
 }

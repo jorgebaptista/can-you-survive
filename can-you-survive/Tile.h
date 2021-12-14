@@ -15,17 +15,22 @@ public:
 	//Constructor with default values
 	Tile(Vector2f position = Vector2f(0, 0), terrainType initialTerrain = terrainType::SNOW);
 
-	//Function to change the type of the tile.
-	void ChangeType();
+	terrainType getTerrainType(); // get current terrain type
 
 	// TODO: what functions are used TILE
+	//Function to change the type of the tile.
+	void ChangeType(Tile::terrainType terrain);
+
 	FloatRect getPosition();
 	Vector2f getCenter();
 	Sprite getSprite();
 	
 protected:
-	terrainType m_terrainType;
+	const std::string SNOWPATH = "graphics/snow.png";
+	const std::string ICEPATH = "graphics/ice.png";
+	const std::string WATERPATH = "graphics/water.png";
 
+	terrainType m_terrainType;
 	Texture m_Texture; // store the texture of this object to be used by the sprite
 	Sprite m_Sprite; // store the sprite of this object
 

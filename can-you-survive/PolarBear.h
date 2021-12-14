@@ -3,6 +3,8 @@
 #define POLARBEAR_H
 #include <iostream>
 #include <SFML/Graphics.hpp>
+#include "Tile.h"
+
 using namespace sf;
 
 class PolarBear
@@ -30,6 +32,9 @@ public:
 	//Will return health
 	int getHealth();
 
+	void ChangeTerrain(Tile::terrainType terrain);
+	Tile::terrainType getTerrain();
+
 	//Will check if polar bear is alive
 	//TODO: isalive?
 	bool isAlive();
@@ -51,6 +56,7 @@ protected:
 
 	Vector2f m_Resolution;
 
+	//TODO: Move to enemy class?
 	//goal position
 	float goal_PositionX;
 	float goal_PositionY;
@@ -66,5 +72,6 @@ protected:
 	int level;
 	//The amount of damage the player can deal
 	int m_damage;
+	Tile::terrainType m_currentTerrain;
 };
 #endif

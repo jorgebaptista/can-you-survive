@@ -57,3 +57,8 @@ std::vector<std::vector<Tile*>> Tilemap::getMap()
 {
 	return map; //TODO: need better map drawing system
 }
+
+void Tilemap::ChangeTileTerrain(int y, int x, terrainType terrain)
+{
+	map[y][x]->ChangeType(terrain);
+}
