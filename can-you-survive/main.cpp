@@ -134,8 +134,8 @@ int main()
 			if (Keyboard::isKeyPressed(Keyboard::R))
 			{
 				if (attackTimer + 0.5 < gameTimeTotalFloat) {
-					Vector2f eCenter = enemy.getCenter();
-					Vector2f pCenter = polar.getCenter();
+					Vector2f eCenter = enemy->getCenter();
+					Vector2f pCenter = pPlayer->getCenter();
 					cout << endl;
 					for (int i = pCenter.x - 128; i < pCenter.x + 129; i = i + 128)
 					{
@@ -144,14 +144,14 @@ int main()
 							cout << i << " " << j << endl;
 							if (i == eCenter.x && j == eCenter.y) {
 								int damage = 0;
-								damage = polar.Attack();
-								enemy.ReduceHealth(damage);
-								if (enemy.getHealth()>0) {
-									damage = enemy.Attack();
-									polar.ReduceHealth(damage);
+								damage = pPlayer->Attack();
+								enemy->ReduceHealth(damage);
+								if (enemy->getHealth()>0) {
+									damage = enemy->Attack();
+									pPlayer->ReduceHealth(damage);
 								}
 								else {
-									polar.addXP(90);
+									pPlayer->addXP(90);
 								}
 							}
 						}
@@ -260,10 +260,10 @@ int main()
 			}
 		}
 
-		if (!enemy.isAlive()) {
-			enemy.RemoveFromPlay();
+		if (!enemy->isAlive()) {
+			enemy->RemoveFromPlay();
 		};
-		cout << enemy.getHealth() << endl;
+		cout << enemy->getHealth() << endl;
 
 		pPlayer->CheckIfLevelUp();
 		window.draw(pPlayer->getSprite());
