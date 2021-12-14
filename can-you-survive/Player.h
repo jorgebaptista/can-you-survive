@@ -12,6 +12,8 @@ public:
 	Player();
 	//Reduce stamina function
 	void StaminaDecrease(float reduce);
+
+	void addXP(int xp);
 	//See if player has reached level up conditions
 	void CheckIfLevelUp();
 	//See what kind of ground the polar bear is on

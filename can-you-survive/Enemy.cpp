@@ -6,12 +6,13 @@ Enemy::Enemy()
 	health = 100;
 	maxHealth = 100;
 	level = 1;
-	damage = 5;
+	m_damage = 2;
+	speed = 128;
 	m_Position.x = 256;
 	m_Position.y = 128;
 	goal_PositionX = m_Position.x;
 	goal_PositionY = m_Position.y;
-
+	m_Sprite.setPosition(m_Position);
 }
 
 void Enemy::Movement(float elapsedTime, float totalTime)
@@ -49,7 +50,7 @@ void Enemy::Movement(float elapsedTime, float totalTime)
 		if (randnum == 4)
 		{
 			//go right
-			goal_PositionX = m_Position.x - 128;
+			goal_PositionX = m_Position.x + 128;
 		}
 
 	}
@@ -59,7 +60,7 @@ void Enemy::Movement(float elapsedTime, float totalTime)
 		//go up
 		if (m_Position.y > goal_PositionY) 
 		{
-			m_Position.y -= 128 * elapsedTime;
+			m_Position.y -= speed * elapsedTime;
 			m_Sprite.setRotation(270);
 		}
 		else 
@@ -72,7 +73,7 @@ void Enemy::Movement(float elapsedTime, float totalTime)
 		//go down
 		if (m_Position.y < goal_PositionY) 
 		{
-			m_Position.y += 128 * elapsedTime;
+			m_Position.y += speed * elapsedTime;
 			m_Sprite.setRotation(90);
 		}
 		else 
@@ -85,25 +86,25 @@ void Enemy::Movement(float elapsedTime, float totalTime)
 		//go left
 		if (m_Position.x > goal_PositionX) 
 		{
-			m_Position.x -= 128 * elapsedTime;
+			m_Position.x -= speed * elapsedTime;
 			m_Sprite.setRotation(180);
 		}
 		else 
 		{
-			m_Position.y = goal_PositionY;
+			m_Position.x = goal_PositionX;
 		}
 	}
 	if (randnum == 4)
 	{
 		//go right
-		if (m_Position.x > goal_PositionX) 
+		if (m_Position.x < goal_PositionX) 
 		{
-			m_Position.x += 128 * elapsedTime;
+			m_Position.x += speed * elapsedTime;
 			m_Sprite.setRotation(0);
 		}
 		else 
 		{
-			m_Position.y = goal_PositionY;
+			m_Position.x = goal_PositionX;
 		}
 	}
 

@@ -2,10 +2,12 @@
 //Constructor
 PolarBear::PolarBear()
 {
+	srand(static_cast<unsigned int>(time(0)));
 	health = 100;
 	maxHealth = 100;
 	level = 1;
-	damage = 5;
+	
+	speed = 128;
 
 	m_Position.x = 100;
 	m_Position.y = 100;
@@ -15,6 +17,8 @@ PolarBear::PolarBear()
 
 	moveTime = 0;
 
+	m_damage = 5;
+
 	m_Texture.loadFromFile("graphics/polartemp.png");
 	m_Sprite.setTexture(m_Texture);
 	m_Sprite.scale(0.1, 0.1);
@@ -22,8 +26,17 @@ PolarBear::PolarBear()
 	m_Sprite.setPosition(m_Position);
 }
 
-void PolarBear::Attack()
+void PolarBear::RemoveFromPlay() 
 {
+	m_Position.x = 2000;
+	m_Position.y = 2000;
+	m_Sprite.setPosition(m_Position);
+}
+int PolarBear::Attack()
+{
+	int attackCalc = 0;
+	attackCalc = rand() % 5 + m_damage;
+	return attackCalc;
 
 }
 //Reduce the polarbear's health
@@ -50,9 +63,17 @@ Sprite PolarBear::getSprite()
 	return m_Sprite;
 }
 
-bool isAlive()
+bool PolarBear::isAlive()
 {
-	return true;
+	if (health<=0) {
+		return false;
+		m_Position.x = 2000;
+		m_Position.y = 2000;
+		m_Sprite.setPosition(m_Position);
+	}
+	else {
+		return true;
+	}
 }
 
 int PolarBear::getHealth()

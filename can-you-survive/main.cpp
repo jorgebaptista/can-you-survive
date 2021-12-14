@@ -8,6 +8,7 @@ using namespace sf;
 
 int main() 
 {
+	srand(static_cast<unsigned int>(time(0)));
 	Tilemap *tileMap = new Tilemap();
 
 	Vector2f resolution;
@@ -24,7 +25,9 @@ int main()
 
 	Time gameTimeTotal;
 	float gameTimeTotalFloat;
+	float attackTimer;
 	float eatTimer;
+	attackTimer = 0;
 	eatTimer = 0;
 	//Texture textureBackground = Texture
 
@@ -111,10 +114,41 @@ int main()
 			//Eat fish
 			if (Keyboard::isKeyPressed(Keyboard::E))
 			{
-				if (eatTimer + 0.5 < gameTimeTotalFloat) {
+				if (eatTimer + 0.5 < gameTimeTotalFloat) 
+				{
 					polar.EatFish();
 					eatTimer = gameTimeTotalFloat;
 				}
+			}
+			if (Keyboard::isKeyPressed(Keyboard::R))
+			{
+				if (attackTimer + 0.5 < gameTimeTotalFloat) {
+					Vector2f eCenter = enemy.getCenter();
+					Vector2f pCenter = polar.getCenter();
+					cout << endl;
+					for (int i = pCenter.x - 128; i < pCenter.x + 129; i = i + 128)
+					{
+						for (int j = pCenter.y - 128; j < pCenter.y + 129; j = j + 128)
+						{
+							cout << i << " " << j << endl;
+							if (i == eCenter.x && j == eCenter.y) {
+								int damage = 0;
+								damage = polar.Attack();
+								enemy.ReduceHealth(damage);
+								if (enemy.getHealth()>0) {
+									damage = enemy.Attack();
+									polar.ReduceHealth(damage);
+								}
+								else {
+									polar.addXP(90);
+								}
+							}
+						}
+					}
+					cout << eCenter.x << " " << eCenter.y << endl;
+					attackTimer = gameTimeTotalFloat;
+				}
+			
 			}
 		}
 		
@@ -162,7 +196,7 @@ int main()
 
 		//Move characters
 		polar.Movement(dtAsSeconds, gameTimeTotalFloat);
-		enemy.Movement(dtAsSeconds, gameTimeTotalFloat);
+		//enemy.Movement(dtAsSeconds, gameTimeTotalFloat);
 
 		mainView.setCenter(polar.getCenter());
 
@@ -179,6 +213,12 @@ int main()
 			}
 		}
 
+		if (!enemy.isAlive()) {
+			enemy.RemoveFromPlay();
+		};
+		cout << enemy.getHealth() << endl;
+
+		polar.CheckIfLevelUp();
 		window.draw(polar.getSprite());
 		window.draw(enemy.getSprite());
 		window.draw(fishSea.getSprite());
@@ -190,4 +230,5 @@ int main()
 		window.draw(healthBar);
 		window.display();
 	}
-	return 0;}
+	return 0;
+}

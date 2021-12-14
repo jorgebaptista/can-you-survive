@@ -14,7 +14,7 @@ public:
 	virtual void Movement(float elapsedTime, float totalTime) = 0;
 	//virtual sf::Vector2f Movement()=0;
 	//Function to attack
-	void Attack();
+	int Attack();
 	//Function to receive damage
 	void ReduceHealth(int reduce);
 
@@ -32,14 +32,17 @@ public:
 
 	//Will check if polar bear is alive
 	//TODO: isalive?
-	//bool isAlive();
+	bool isAlive();
+
+	void RemoveFromPlay();
 
 protected:
 	// The polar bears health
 	int health;
 	// The max health value the polar bear can have
 	int maxHealth;
-
+	// How fast the polar bear moves
+	int speed;
 	// Variable used to store when the object can move again
 	float moveTime;
 
@@ -58,9 +61,10 @@ protected:
 	//Polar bear texture
 	Texture m_Texture;
 
+
 	//The level which determines how strong the polar bear is
 	int level;
 	//The amount of damage the player can deal
-	int damage;
+	int m_damage;
 };
 #endif

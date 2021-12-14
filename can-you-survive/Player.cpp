@@ -10,15 +10,16 @@ Player::Player()
 	multiplier = 1.05;
 	xp = 0;
 	xpNeed = 100;
-	damage = 5;
-	fishNum = 4;
+	m_damage = 5;
+	speed = 640;
+	fishNum = 100;
 	move = 'c';
 	staminaTimer = 0;
 	m_Position.x = 128;
 	m_Position.y = 128;
 	goal_PositionX=m_Position.x;
 	goal_PositionY=m_Position.y;
-
+	m_Sprite.setPosition(m_Position);
 }
 
 //void Player::Movement(x, y IN, x,y OUT ) 
@@ -46,21 +47,21 @@ void Player::Movement(float elapsedTime, float totalTime)
 			//set to U to allow continous movement up
 			move = 'U';
 		}
-		if (DownPressed)
+		else if (DownPressed)
 		{
 			goal_PositionY = m_Position.y + 128;
 			//m_Position.y += 128;
 			//set to D to allow continous movement down
 			move = 'D';
 		}
-		if (LeftPressed)
+		else if (LeftPressed)
 		{
 			goal_PositionX = m_Position.x - 128;
 			//m_Position.x -= 128;
 			//set to L to allow continous movement left
 			move = 'L';
 		}
-		if (RightPressed)
+		else if (RightPressed)
 		{
 			goal_PositionX = m_Position.x + 128;
 			//m_Position.x += 128;
@@ -71,7 +72,7 @@ void Player::Movement(float elapsedTime, float totalTime)
 		if (move != 'c')
 		{
 			//moveTime will be totalTime plus a certain amount to keep movement going the same way for a while.
-			moveTime = totalTime + 1;
+			moveTime = totalTime + 0.2;
 		}
 	}
 	//If moveTime is still larger than totalTime, then the character will continue moving in the same direction as what was inputted
@@ -81,7 +82,7 @@ void Player::Movement(float elapsedTime, float totalTime)
 	{
 		if (m_Position.y > goal_PositionY) 
 		{
-			m_Position.y -= 128 * elapsedTime;
+			m_Position.y -= speed * elapsedTime;
 			m_Sprite.setRotation(270);
 		}
 		else 
@@ -94,7 +95,7 @@ void Player::Movement(float elapsedTime, float totalTime)
 	{
 		if (m_Position.y < goal_PositionY) 
 		{
-			m_Position.y += 128 * elapsedTime;
+			m_Position.y += speed * elapsedTime;
 			m_Sprite.setRotation(90);
 		}
 		else 
@@ -106,7 +107,7 @@ void Player::Movement(float elapsedTime, float totalTime)
 	{
 		if (m_Position.x > goal_PositionX) 
 		{
-			m_Position.x -= 128 * elapsedTime;
+			m_Position.x -= speed * elapsedTime;
 			m_Sprite.setRotation(180);
 		}
 		else 
@@ -117,7 +118,7 @@ void Player::Movement(float elapsedTime, float totalTime)
 	if (move == 'R')
 	{
 		if (m_Position.x < goal_PositionX) {
-			m_Position.x += 128 * elapsedTime;
+			m_Position.x += speed * elapsedTime;
 			m_Sprite.setRotation(0);
 		}
 		else 
@@ -144,8 +145,15 @@ void Player::EatFish()
 			stamina = maxStamina;
 		}
 		//Reduce fish in inventory by 1
+		xp = xp + 10;
 		fishNum = fishNum - 1;
 	}
+}
+
+//Add xp to players total experience
+void Player::addXP(int exp) 
+{
+	xp = xp + exp;
 }
 
 void Player::StaminaDecrease(float reduce)
@@ -154,13 +162,22 @@ void Player::StaminaDecrease(float reduce)
 	stamina = stamina - reduce;
 }
 
-void CheckIfLevelUp()
+void Player::CheckIfLevelUp()
 {
+	if (xp > xpNeed) {
+		level++;
+		maxHealth = maxHealth * 1.05;
+		maxStamina = maxStamina * 1.05;
+		health = maxHealth;
+		stamina = maxStamina;
+		m_damage++;
+		xpNeed = xpNeed * 2;
+	}
 	//See if the parameters to level up have been met, if so, increment
 	//the level and increase stats by the multiplier
 }
 
-void CheckGroundType(std::string type)
+void Player::CheckGroundType(std::string type)
 {
 	//See what type of ground the player is walking on, and make a decision
 	//based on the ground.
@@ -199,6 +216,7 @@ void Player::Pickup(std::string name)
 		{
 			stamina = maxStamina;
 		}
+		xp = xp + 10;
 	}
 	else if (name == "sea")
 	{
