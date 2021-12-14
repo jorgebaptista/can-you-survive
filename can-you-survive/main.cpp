@@ -8,8 +8,26 @@ using namespace sf;
 
 int main() 
 {
+	srand(static_cast<unsigned int>(time(0)));
+
+	// create a pointer to a new Tilemap
 	Tilemap *tileMap = new Tilemap();
 
+	// create a list of pointers to Polar bears
+	std::list<PolarBear*> lpPolarBears;
+
+	// create a pointer to player
+	Player* pPlayer = new Player();
+
+	float staminaDecrease = 1.f;
+
+	// push player to list of polar bears
+
+	lpPolarBears.push_back(pPlayer);
+
+	Enemy* enemy = new Enemy();
+
+	//TODO: Warning, use static cast unsigned??
 	Vector2f resolution;
 	resolution.x = VideoMode::getDesktopMode().width;
 	resolution.y = VideoMode::getDesktopMode().height;
@@ -26,9 +44,6 @@ int main()
 	float gameTimeTotalFloat;
 	float eatTimer;
 	eatTimer = 0;
-
-	Player polar;
-	Enemy enemy;
 	Fish fishLand;
 	Fish fishSea;
 
@@ -37,7 +52,7 @@ int main()
 
 	//Stamina Bar to display player stamina
 	RectangleShape staminaBar;
-	//Set inital width and height
+	//Set initial width and height
 	float staminaBarStartWidth = 200;
 	float staminaBarHeight = 40;
 	//Set color and position
@@ -49,7 +64,7 @@ int main()
 	//Set initial width and height
 	float healthBarStartWidth = 200;
 	float healthBarHeight = 40;
-	//Set color and positon
+	//Set color and position
 	healthBar.setFillColor(Color::Green);
 	healthBar.setPosition(50, 950);
 
@@ -73,85 +88,95 @@ int main()
 			}
 			if (Keyboard::isKeyPressed(Keyboard::W))
 			{
-				polar.moveUp();
+				pPlayer->moveUp();
 			}
 			else
 			{
-				polar.stopUp();
+				pPlayer->stopUp();
 			}
 
 			if (Keyboard::isKeyPressed(Keyboard::S))
 			{
-				polar.moveDown();
+				pPlayer->moveDown();
 			}
 			else
 			{
-				polar.stopDown();
+				pPlayer->stopDown();
 			}
 
 			if (Keyboard::isKeyPressed(Keyboard::A))
 			{
-				polar.moveLeft();
+				pPlayer->moveLeft();
 			}
 			else
 			{
-				polar.stopLeft();
+				pPlayer->stopLeft();
 			}
 
 			if (Keyboard::isKeyPressed(Keyboard::D))
 			{
-				polar.moveRight();
+				pPlayer->moveRight();
 			}
 			else
 			{
-				polar.stopRight();
+				pPlayer->stopRight();
 			}
 			//Eat fish
 			if (Keyboard::isKeyPressed(Keyboard::E))
 			{
 				if (eatTimer + 0.5 < gameTimeTotalFloat) {
-					polar.EatFish();
+					pPlayer->EatFish();
 					eatTimer = gameTimeTotalFloat;
 				}
 			}
 		}
 		
 		//Will set the stamina timer
-		polar.addStaminaTimer(dtAsSeconds);
+		pPlayer->addStaminaTimer(dtAsSeconds);
 
+		//TODO: In player class set stamina and health to 0 if they go below zero (negative)
 		//Set stamina and health bar size based on stamina and health
-		staminaBar.setSize(Vector2f(2 * polar.getStamina(), staminaBarHeight));
-		healthBar.setSize(Vector2f(2 * polar.getHealth(), healthBarHeight));
-
+		staminaBar.setSize(Vector2f(2 * pPlayer->getStamina(), staminaBarHeight));
+		healthBar.setSize(Vector2f(2 * pPlayer->getHealth(), healthBarHeight));
+		
+		//TODO: move this to player class
 		//Check if enough time has passed to decrease stamina or health
-		if (polar.getStaminaTimer() >= 1)
+		if (pPlayer->getStaminaTimer() >= 1)
 		{
-			if (!polar.getStamina() <= 0)
+			float decreaseAmount; 
+			
+			// if player is on water it decreases stamina 8 times faster
+			if (pPlayer->getTerrain() == Tile::terrainType::WATER)
 			{
-				polar.StaminaDecrease(1);
-				polar.setStaminaTimer();
+				decreaseAmount = staminaDecrease * 8;
 			}
 			else
 			{
-				polar.ReduceHealth(1);
-				polar.setStaminaTimer();
+				decreaseAmount = staminaDecrease;
 			}
+
+			// if player stamina is not 0 it decreases stamina, else it decreases health
+			pPlayer->getStamina() > 0 ? pPlayer->StaminaDecrease(decreaseAmount) : pPlayer->ReduceHealth(decreaseAmount);
+
+			pPlayer->setStaminaTimer();
 		}
-		if (polar.getPosition().intersects(fishSea.getPosition()))
+
+		// fish collision
+		if (pPlayer->getPosition().intersects(fishSea.getPosition()))
 		{
 			if (!fishSea.isCollected())
 			{
-				polar.Pickup("sea");
+				pPlayer->Pickup("sea");
 				//fishSea.setPosition(-1000, -1000);
 				fishSea.PickedUp();
 			}
 
 		}
-		else if (polar.getPosition().intersects(fishLand.getPosition()))
+		else if (pPlayer->getPosition().intersects(fishLand.getPosition()))
 		{
 			if (!fishLand.isCollected())
 			{
-				polar.Pickup("land");
+				pPlayer->Pickup("land");
 				//fishLand.setPosition(-1000, -1000);
 				fishLand.PickedUp();
 			}
@@ -159,30 +184,56 @@ int main()
 		}
 
 		//Move characters
-		polar.Movement(dtAsSeconds, gameTimeTotalFloat);
-		enemy.Movement(dtAsSeconds, gameTimeTotalFloat);
+		pPlayer->Movement(dtAsSeconds, gameTimeTotalFloat);
+		enemy->Movement(dtAsSeconds, gameTimeTotalFloat);
 
-		mainView.setCenter(polar.getCenter());
+		// TODO: optimize
+		// creates iterator for polar bear list
+		std::list<PolarBear*>::const_iterator iter;
+		// iterate through each element
+		for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); iter++)
+		{
+			Tile* tile = tileMap->getMap()[(*iter)->getCenter().y / 128][(*iter)->getCenter().x / 128];
+
+			(*iter)->ChangeTerrain(tile->getTerrainType());
+		}
+
+
+		mainView.setCenter(pPlayer->getCenter());
 
 		window.clear(Color(135, 206, 235)); // clear the window
 		window.setView(mainView);
 
-		std::vector<std::vector<Tile*>> map = tileMap->getMap();
+		// TODO: need better way to draw all map, DRAW class?
+		std::vector<std::vector<Tile*>> map = (tileMap->getMap());
 
+		//TODO:
+		// for each row of tiles
 		for (int i = 0; i < map.size(); i++)
 		{
+			// for each tile on that row
 			for (int j = 0; j < map[i].size(); j++)
 			{
+				// if the terrain type is ice
+				if (map[i][j]->getTerrainType() == Tile::terrainType::ICE)
+				{
+					if (((rand() % 100) + 1.f) >= 99.9)
+					{
+						tileMap->ChangeTileTerrain(i, j, Tile::terrainType::WATER);
+					}
+				}
+
+				// draw that tile
 				window.draw(map[i][j]->getSprite());
 			}
 		}
 
-		window.draw(polar.getSprite());
-		window.draw(enemy.getSprite());
+		window.draw(pPlayer->getSprite());
+		window.draw(enemy->getSprite());
 		window.draw(fishSea.getSprite());
 		window.draw(fishLand.getSprite());
 
-		//Hud view used for elements that don't move
+		//HUD view used for elements that don't move
 		window.setView(hudView);
 		window.draw(staminaBar);
 		window.draw(healthBar);

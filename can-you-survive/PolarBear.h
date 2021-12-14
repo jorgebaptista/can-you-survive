@@ -32,10 +32,11 @@ public:
 	//Will return health
 	int getHealth();
 
-	void CheckTile();
+	void ChangeTerrain(Tile::terrainType terrain);
+	Tile::terrainType getTerrain();
 
 	//Will check if polar bear is alive
-	//TODO: isalive?
+	//TODO: is alive?
 	//bool isAlive();
 
 protected:
@@ -52,6 +53,7 @@ protected:
 
 	Vector2f m_Resolution;
 
+	//TODO: Move to enemy class?
 	//goal position
 	float goal_PositionX;
 	float goal_PositionY;
@@ -67,6 +69,6 @@ protected:
 	//The amount of damage the player can deal
 	int damage;
 
-	Tile::terrainType currentTerrain;
+	Tile::terrainType m_currentTerrain;
 };
 #endif

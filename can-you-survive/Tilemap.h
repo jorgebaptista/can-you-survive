@@ -17,6 +17,8 @@ public:
 
 	//void LoadMap();
 
+	void ChangeTileTerrain(int x, int y, terrainType terrain);
+
 protected:
 	std::vector<std::vector<Tile*>> map;
 };
