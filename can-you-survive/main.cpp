@@ -26,9 +26,7 @@ int main()
 	float gameTimeTotalFloat;
 	float eatTimer;
 	eatTimer = 0;
-	//Texture textureBackground = Texture
 
-	Tile* tile = new Tile(Vector2f(0, 0));
 	Player polar;
 	Enemy enemy;
 	Fish fishLand;
@@ -166,7 +164,7 @@ int main()
 
 		mainView.setCenter(polar.getCenter());
 
-		window.clear(); // clear the window
+		window.clear(Color(135, 206, 235)); // clear the window
 		window.setView(mainView);
 
 		std::vector<std::vector<Tile*>> map = tileMap->getMap();

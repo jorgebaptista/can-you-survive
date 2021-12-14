@@ -29,19 +29,20 @@ Tile::Tile(Vector2f position, terrainType terrain)
 	m_Sprite.setScale(.5,.5);
 }
 
-void Tile::ChangeType()
+//void Tile::ChangeType()
+//{
+//	//This will result in the type of the tile changing
+//}
+
+//FloatRect Tile::getPosition(){
+//	return m_Sprite.getGlobalBounds();
+//}
+//
+//Vector2f Tile::getCenter(){
+//	return m_Position;
+//}
+//
+Sprite Tile::getSprite()
 {
-	//This will result in the type of the tile changing
-}
-
-FloatRect Tile::getPosition(){
-	return m_Sprite.getGlobalBounds();
-}
-
-Vector2f Tile::getCenter(){
-	return m_Position;
-}
-
-Sprite Tile::getSprite(){
 	return m_Sprite;
 }
