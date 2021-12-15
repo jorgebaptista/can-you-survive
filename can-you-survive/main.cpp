@@ -27,6 +27,7 @@ int main()
 
 	Enemy* enemy = new Enemy();
 
+	lpPolarBears.push_back(enemy);
 	//TODO: Warning, use static cast unsigned??
 	Vector2f resolution;
 	resolution.x = VideoMode::getDesktopMode().width;
@@ -70,6 +71,25 @@ int main()
 	healthBar.setFillColor(Color::Green);
 	healthBar.setPosition(50, 950);
 
+	Text fishText1;
+	Text fishText2;
+	Font font;
+	font.loadFromFile("fonts/KOMIKAP_.ttf");
+	fishText1.setFont(font);
+	fishText1.setString("Fish : 100");
+	fishText1.setCharacterSize(75);
+	
+	fishText1.setFillColor(Color::Black);
+	fishText1.setPosition(1500,900);
+	fishText1.setOrigin(200, 50);
+
+	fishText2.setFont(font);
+	fishText2.setString("Fish : 100");
+	fishText2.setCharacterSize(75);
+
+	fishText2.setFillColor(Color::White);
+	fishText2.setPosition(1495, 895);
+	fishText2.setOrigin(200, 50);
 	while (window.isOpen())
 	{
 		Event event;
@@ -133,33 +153,58 @@ int main()
 			}
 			if (Keyboard::isKeyPressed(Keyboard::R))
 			{
-				if (attackTimer + 0.5 < gameTimeTotalFloat) {
-					Vector2f eCenter = enemy->getCenter();
-					Vector2f pCenter = pPlayer->getCenter();
-					cout << endl;
-					for (int i = pCenter.x - 128; i < pCenter.x + 129; i = i + 128)
-					{
-						for (int j = pCenter.y - 128; j < pCenter.y + 129; j = j + 128)
-						{
-							cout << i << " " << j << endl;
-							if (i == eCenter.x && j == eCenter.y) {
-								int damage = 0;
-								damage = pPlayer->Attack();
-								enemy->ReduceHealth(damage);
-								if (enemy->getHealth()>0) {
-									damage = enemy->Attack();
-									pPlayer->ReduceHealth(damage);
-								}
-								else {
-									pPlayer->addXP(90);
+				if (attackTimer + 0.5 < gameTimeTotalFloat) 
+				{
+					list<PolarBear*>::const_iterator iter;
+					
+					for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); ++iter) {
+						std::cout << "help" << endl;
+						Vector2f eCenter = (*iter)->getCenter();
+						std::cout << eCenter.x << " " << eCenter.y << endl;
+						if (pPlayer->getCenter() != (*iter)->getCenter()) {
+							std::cout << "YES" << endl;
+							
+							Vector2f pCenter = pPlayer->getCenter();
+							std::cout << endl;
+							for (int i = pCenter.x - 128; i < pCenter.x + 129; i = i + 128)
+							{
+								for (int j = pCenter.y - 128; j < pCenter.y + 129; j = j + 128)
+								{
+									std::cout << "YEAHSSS" << endl;
+									std::cout << i << " " << j << endl;
+									if (i == eCenter.x && j == eCenter.y)
+									{
+										int damage = 0;
+										damage = pPlayer->Attack();
+										enemy->ReduceHealth(damage);
+										if (enemy->getHealth() > 0)
+										{
+											damage = enemy->Attack();
+											pPlayer->ReduceHealth(damage);
+										}
+										else
+										{
+											pPlayer->addXP(90);
+										}
+									}
 								}
 							}
 						}
 					}
-					cout << eCenter.x << " " << eCenter.y << endl;
+					
+					
+					//cout << eCenter.x << " " << eCenter.y << endl;
 					attackTimer = gameTimeTotalFloat;
 				}
 			
+			}
+			if (Keyboard::isKeyPressed(Keyboard::Q))
+			{
+				if (pPlayer->getTerrain() == Tile::terrainType::SNOW)
+				{
+					pPlayer->Hibernate();
+					pPlayer->CheckIfLevelUp();
+				}
 			}
 		}
 		
@@ -217,7 +262,7 @@ int main()
 
 		//Move characters
 		pPlayer->Movement(dtAsSeconds, gameTimeTotalFloat);
-		enemy->Movement(dtAsSeconds, gameTimeTotalFloat);
+		//enemy->Movement(dtAsSeconds, gameTimeTotalFloat);
 
 		// TODO: optimize
 		// creates iterator for polar bear list
@@ -263,18 +308,25 @@ int main()
 		if (!enemy->isAlive()) {
 			enemy->RemoveFromPlay();
 		};
-		cout << enemy->getHealth() << endl;
+		std::cout << enemy->getHealth() << endl;
 
-		pPlayer->CheckIfLevelUp();
+		
 		window.draw(pPlayer->getSprite());
 		window.draw(enemy->getSprite());
 		window.draw(fishSea.getSprite());
 		window.draw(fishLand.getSprite());
 
+		stringstream fishTotal;
+		fishTotal << "Fish : " << pPlayer->getFish();
+		fishText1.setString(fishTotal.str());
+		fishText2.setString(fishTotal.str());
 		//HUD view used for elements that don't move
 		window.setView(hudView);
 		window.draw(staminaBar);
 		window.draw(healthBar);
+		window.draw(fishText1);
+		window.draw(fishText2);
+		
 		window.display();
 	}
 	return 0;

@@ -28,9 +28,9 @@ PolarBear::PolarBear()
 
 void PolarBear::RemoveFromPlay() 
 {
-	m_Position.x = 2000;
-	m_Position.y = 2000;
-	m_Sprite.setPosition(m_Position);
+	//m_Position.x = 2000;
+	//m_Position.y = 2000;
+	//m_Sprite.setPosition(m_Position);
 }
 int PolarBear::Attack()
 {
@@ -66,10 +66,11 @@ Sprite PolarBear::getSprite()
 bool PolarBear::isAlive()
 {
 	if (health<=0) {
+		m_Sprite.setRotation(180);
+		//m_Position.x = 2000;
+		//m_Position.y = 2000;
+		//m_Sprite.setPosition(m_Position);
 		return false;
-		m_Position.x = 2000;
-		m_Position.y = 2000;
-		m_Sprite.setPosition(m_Position);
 	}
 	else {
 		return true;

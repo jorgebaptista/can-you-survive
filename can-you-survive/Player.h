@@ -22,9 +22,12 @@ public:
 	//Virtual functions to be given details
 	void Movement(float elapsedTime, float totalTime);
 
+	void Hibernate();
 
 	void EatFish();
 
+	//Return fish total
+	int getFish();
 	//Return stamina
 	float getStamina();
 

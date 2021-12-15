@@ -167,6 +167,13 @@ void Player::StaminaDecrease(float reduce)
 	stamina = stamina - reduce;
 }
 
+void Player::Hibernate() 
+{
+	stamina = maxStamina;
+	health = maxHealth;
+
+}
+
 void Player::CheckIfLevelUp()
 {
 	if (xp > xpNeed) {
@@ -177,6 +184,7 @@ void Player::CheckIfLevelUp()
 		stamina = maxStamina;
 		m_damage++;
 		xpNeed = xpNeed * 2;
+		CheckIfLevelUp();
 	}
 	//See if the parameters to level up have been met, if so, increment
 	//the level and increase stats by the multiplier
@@ -188,6 +196,9 @@ void Player::CheckGroundType(std::string type)
 	//based on the ground.
 }
 
+int Player::getFish() {
+	return fishNum;
+}
 //Return stamina
 float Player::getStamina()
 {
