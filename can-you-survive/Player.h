@@ -13,6 +13,10 @@ public:
 	//Reduce stamina function
 	void StaminaDecrease(float reduce);
 
+	//Add to health
+	void addHealth(float h);
+
+	//Add to xp
 	void addXP(int xp);
 	//See if player has reached level up conditions
 	void CheckIfLevelUp();
@@ -28,8 +32,15 @@ public:
 
 	//Return fish total
 	int getFish();
+
+	//Return level
+	int getLevel();
+
 	//Return stamina
 	float getStamina();
+
+	//Return max stamina
+	float getStaminaMax();
 
 	//Return staminaTimer
 	float getStaminaTimer();
