@@ -92,6 +92,10 @@ int main()
 	fishText2.setFillColor(Color::White);
 	fishText2.setPosition(1495, 895);
 	fishText2.setOrigin(200, 50);
+
+	int maxFps = 0;
+	int minFps = 50000;
+
 	while (window.isOpen())
 	{
 		Event event;
@@ -104,8 +108,24 @@ int main()
 
 		float dtAsSeconds = dt.asSeconds();
 
+
+		// debug fps
+
+		int fps = floor(1.0f / dtAsSeconds);
+
+		if (maxFps < fps) maxFps = fps;
+		if (minFps > fps) minFps = fps;
+		std::cout << "fps : " << fps << "Min fps: " << minFps << " Max fps: " << maxFps << std::endl;
+
 		while (window.pollEvent(event))
 		{
+			// reset fps count
+			if (Keyboard::isKeyPressed(Keyboard::K))
+			{
+				minFps = 5000;
+				maxFps = 0;
+			}
+
 			if (Keyboard::isKeyPressed(Keyboard::Escape))
 			{
 				window.close();
@@ -287,13 +307,27 @@ int main()
 		// TODO: need better way to draw all map, DRAW class?
 		std::vector<std::vector<Tile*>> map = (tileMap->getMap());
 
+		// TODO: Optimize camera view, variables ?
+		int minCameraViewX = pPlayer->getCenter().x - VideoMode::getDesktopMode().width / 2;
+		int minCameraViewY = pPlayer->getCenter().y - VideoMode::getDesktopMode().height / 2;
+
+		int maxCameraViewX = (pPlayer->getCenter().x + VideoMode::getDesktopMode().width / 2) + 256;
+		int maxCameraViewY = (pPlayer->getCenter().y + VideoMode::getDesktopMode().height / 2) + 256;
+
+		if (minCameraViewX < 0) minCameraViewX = 0;
+		if (minCameraViewY < 0) minCameraViewY = 0;
+
+		if (maxCameraViewX > mapBounds.x) maxCameraViewX = mapBounds.x;
+		if (maxCameraViewY > mapBounds.y) maxCameraViewY = mapBounds.y;
+
 		//TODO:
 		// for each row of tiles
-		for (int i = 0; i < map.size(); i++)
+		for (int i = (minCameraViewY / 128); i < maxCameraViewY / 128; i++)
 		{
 			// for each tile on that row
-			for (int j = 0; j < map[i].size(); j++)
+			for (int j = minCameraViewX / 128; j < maxCameraViewX / 128; j++)
 			{
+				// UNDONE: need to put ice melt outside the draw
 				// if the terrain type is ice
 				if (map[i][j]->getTerrainType() == Tile::terrainType::ICE)
 				{
