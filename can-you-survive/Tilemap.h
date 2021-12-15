@@ -19,7 +19,11 @@ public:
 
 	void ChangeTileTerrain(int x, int y, terrainType terrain);
 
+	Vector2f getMapBounds();
+
 protected:
 	std::vector<std::vector<Tile*>> map;
+
+	Vector2f m_bounds;
 };
 #endif

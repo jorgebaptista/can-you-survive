@@ -13,7 +13,8 @@ public:
 	//Default Constructor
 	PolarBear();
 	//Function to move
-	virtual void Movement(float elapsedTime, float totalTime) = 0;
+	//TODO: Implement bound check here cuz both enemy and player uses it?
+	virtual void Movement(float elapsedTime, float totalTime, Vector2f mapBounds) = 0;
 	//virtual sf::Vector2f Movement()=0;
 	//Function to attack
 	int Attack();

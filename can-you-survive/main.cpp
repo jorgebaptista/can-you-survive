@@ -13,6 +13,8 @@ int main()
 	// create a pointer to a new Tilemap
 	Tilemap *tileMap = new Tilemap();
 
+	Vector2f mapBounds = tileMap->getMapBounds();
+
 	// create a list of pointers to Polar bears
 	std::list<PolarBear*> lpPolarBears;
 
@@ -261,14 +263,15 @@ int main()
 		}
 
 		//Move characters
-		pPlayer->Movement(dtAsSeconds, gameTimeTotalFloat);
-		//enemy->Movement(dtAsSeconds, gameTimeTotalFloat);
+		pPlayer->Movement(dtAsSeconds, gameTimeTotalFloat, mapBounds);
+		enemy->Movement(dtAsSeconds, gameTimeTotalFloat, mapBounds);
 
 		// TODO: optimize
 		// creates iterator for polar bear list
 		std::list<PolarBear*>::const_iterator iter;
 		// iterate through each element
-		for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); iter++)
+		for (iter = lpPolarBears.begin
+		(); iter != lpPolarBears.end(); iter++)
 		{
 			Tile* tile = tileMap->getMap()[(*iter)->getCenter().y / 128][(*iter)->getCenter().x / 128];
 
@@ -308,7 +311,7 @@ int main()
 		if (!enemy->isAlive()) {
 			enemy->RemoveFromPlay();
 		};
-		std::cout << enemy->getHealth() << endl;
+		//std::cout << enemy->getHealth() << endl;
 
 		
 		window.draw(pPlayer->getSprite());

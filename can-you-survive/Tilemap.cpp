@@ -18,6 +18,8 @@ Tilemap::Tilemap()
 		{
 			map.push_back(std::vector<Tile*>()); // push back a new vector of tiles
 
+			m_bounds.y++;
+
 			// for each character in that string
 			for (char& t : line)
 			{
@@ -49,8 +51,13 @@ Tilemap::Tilemap()
 			tilePosition = Vector2f(0, tilePosition.y + 128); // increment next tile position by the size of last tile
 			row++; // increment row
 		}
+
+		m_bounds.x = line.size();
 	}
 	else std::cout << "Cannot find file."; //debug can't find file
+
+	m_bounds.x *= 128;
+	m_bounds.y *= 128;
 }
 
 std::vector<std::vector<Tile*>> Tilemap::getMap()
@@ -61,4 +68,9 @@ std::vector<std::vector<Tile*>> Tilemap::getMap()
 void Tilemap::ChangeTileTerrain(int y, int x, terrainType terrain)
 {
 	map[y][x]->ChangeType(terrain);
+}
+
+Vector2f Tilemap::getMapBounds()
+{
+	return m_bounds;
 }

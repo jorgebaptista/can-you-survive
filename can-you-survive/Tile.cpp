@@ -25,6 +25,7 @@ void Tile::ChangeType(Tile::terrainType terrain)
 {
 	m_terrainType = terrain;
 
+	// check current terrain type and assign a texture depending on type
 	switch (m_terrainType)
 	{
 	case Tile::terrainType::SNOW:

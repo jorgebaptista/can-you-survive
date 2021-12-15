@@ -17,8 +17,8 @@ Player::Player()
 	staminaTimer = 0;
 	m_Position.x = 128;
 	m_Position.y = 128;
-	goal_PositionX=m_Position.x;
-	goal_PositionY=m_Position.y;
+	goal_PositionX = m_Position.x;
+	goal_PositionY = m_Position.y;
 	m_Sprite.setPosition(m_Position);
 
 	UpPressed = false;
@@ -34,7 +34,7 @@ Player::Player()
 // Get input
 //}
 
-void Player::Movement(float elapsedTime, float totalTime)
+void Player::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 {
 	//If enough total time has passed, the player can move again
 	if (moveTime <= totalTime)
@@ -45,32 +45,32 @@ void Player::Movement(float elapsedTime, float totalTime)
 		//move set to c to stop movement until button is pressed.
 		move = 'c';
 		//Checks direction pressed to see where to move character
-		if (UpPressed)
+		if (UpPressed && !(m_Position.y - 128 < 0))
 		{
 			goal_PositionY = m_Position.y - 128;
 			//m_Position.y -= 128;
-			//set to U to allow continous movement up
+			//set to U to allow continuous movement up
 			move = 'U';
 		}
-		else if (DownPressed)
+		else if (DownPressed && m_Position.y + 128 < mapBounds.y)
 		{
 			goal_PositionY = m_Position.y + 128;
 			//m_Position.y += 128;
-			//set to D to allow continous movement down
+			//set to D to allow continuous movement down
 			move = 'D';
 		}
-		else if (LeftPressed)
+		else if (LeftPressed && !(m_Position.x - 128 < 0))
 		{
 			goal_PositionX = m_Position.x - 128;
 			//m_Position.x -= 128;
-			//set to L to allow continous movement left
+			//set to L to allow continuous movement left
 			move = 'L';
 		}
-		else if (RightPressed)
+		else if (RightPressed && m_Position.x + 128 < mapBounds.x)
 		{
 			goal_PositionX = m_Position.x + 128;
 			//m_Position.x += 128;
-			//set to R to allow continous movement right
+			//set to R to allow continuous movement right
 			move = 'R';
 		}
 		//move not being c means that a movement has been registered

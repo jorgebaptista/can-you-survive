@@ -20,7 +20,7 @@ public:
 	void CheckGroundType(std::string type);
 
 	//Virtual functions to be given details
-	void Movement(float elapsedTime, float totalTime);
+	void Movement(float elapsedTime, float totalTime, Vector2f mapBounds) override;
 
 	void Hibernate();
 

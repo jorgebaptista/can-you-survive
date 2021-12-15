@@ -8,7 +8,7 @@ public:
 	//Constructor
 	Enemy();
 	//Virtual functions to be given details
-	void Movement(float elapsedTime, float totalTime);
+	void Movement(float elapsedTime, float totalTime, Vector2f mapBounds) override;
 
 protected:
 	//Random number used to determine which direction to go
