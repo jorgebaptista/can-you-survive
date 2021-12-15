@@ -9,6 +9,7 @@ public:
 	Enemy();
 	//Virtual functions to be given details
 	void Movement(float elapsedTime, float totalTime);
+	void MoveTowards();
 
 protected:
 	//Random number used to determine which direction to go

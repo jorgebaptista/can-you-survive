@@ -155,6 +155,13 @@ void Player::EatFish()
 	}
 }
 
+void Player::addHealth(float h) 
+{
+	health = health + h;
+	if (health > maxHealth) {
+		health = maxHealth;
+	}
+}
 //Add xp to players total experience
 void Player::addXP(int exp) 
 {
@@ -198,6 +205,14 @@ void Player::CheckGroundType(std::string type)
 
 int Player::getFish() {
 	return fishNum;
+}
+
+int Player::getLevel() {
+	return level;
+}
+
+float Player::getStaminaMax() {
+	return maxStamina;
 }
 //Return stamina
 float Player::getStamina()

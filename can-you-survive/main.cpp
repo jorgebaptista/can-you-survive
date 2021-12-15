@@ -43,8 +43,10 @@ int main()
 
 	Time gameTimeTotal;
 	float gameTimeTotalFloat;
+	float tileChangeTimer;
 	float attackTimer;
 	float eatTimer;
+	tileChangeTimer = 0;
 	attackTimer = 0;
 	eatTimer = 0;
 	Fish fishLand;
@@ -73,23 +75,65 @@ int main()
 
 	Text fishText1;
 	Text fishText2;
+	Text levelText1;
+	Text levelText2;
+	Text healthText1;
+	Text healthText2;
+	Text staminaText1;
+	Text staminaText2;
+
 	Font font;
 	font.loadFromFile("fonts/KOMIKAP_.ttf");
 	fishText1.setFont(font);
 	fishText1.setString("Fish : 100");
 	fishText1.setCharacterSize(75);
-	
 	fishText1.setFillColor(Color::Black);
-	fishText1.setPosition(1500,900);
-	fishText1.setOrigin(200, 50);
+	fishText1.setPosition(1300,900);
 
 	fishText2.setFont(font);
 	fishText2.setString("Fish : 100");
 	fishText2.setCharacterSize(75);
-
 	fishText2.setFillColor(Color::White);
-	fishText2.setPosition(1495, 895);
-	fishText2.setOrigin(200, 50);
+	fishText2.setPosition(1295, 895);
+
+	levelText1.setFont(font);
+	levelText1.setString("Level : 1");
+	levelText1.setCharacterSize(25);
+	levelText1.setFillColor(Color::Black);
+	levelText1.setPosition(50, 900);
+
+	levelText2.setFont(font);
+	levelText2.setString("Level : 1");
+	levelText2.setCharacterSize(25);
+	levelText2.setFillColor(Color::White);
+	levelText2.setPosition(48, 898);
+
+	healthText1.setFont(font);
+	healthText1.setString("Health");
+	healthText1.setCharacterSize(25);
+	healthText1.setFillColor(Color::Black);
+	healthText1.setPosition(55, 950);
+
+	healthText2.setFont(font);
+	healthText2.setString("Health");
+	healthText2.setCharacterSize(25);
+	healthText2.setFillColor(Color::White);
+	healthText2.setPosition(53, 948);
+
+	staminaText1.setFont(font);
+	staminaText1.setString("Stamina");
+	staminaText1.setCharacterSize(25);
+	staminaText1.setFillColor(Color::Black);
+	staminaText1.setPosition(55, 1000);
+
+	staminaText2.setFont(font);
+	staminaText2.setString("Stamina");
+	staminaText2.setCharacterSize(25);
+	staminaText2.setFillColor(Color::White);
+	staminaText2.setPosition(53, 998);
+
+
+
 	while (window.isOpen())
 	{
 		Event event;
@@ -104,10 +148,12 @@ int main()
 
 		while (window.pollEvent(event))
 		{
+			//Close the game window
 			if (Keyboard::isKeyPressed(Keyboard::Escape))
 			{
 				window.close();
 			}
+			//Allow player to move using WASD
 			if (Keyboard::isKeyPressed(Keyboard::W))
 			{
 				pPlayer->moveUp();
@@ -151,35 +197,31 @@ int main()
 					eatTimer = gameTimeTotalFloat;
 				}
 			}
+			//Attack with R
 			if (Keyboard::isKeyPressed(Keyboard::R))
 			{
 				if (attackTimer + 0.5 < gameTimeTotalFloat) 
 				{
 					list<PolarBear*>::const_iterator iter;
-					
 					for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); ++iter) {
-						std::cout << "help" << endl;
 						Vector2f eCenter = (*iter)->getCenter();
 						std::cout << eCenter.x << " " << eCenter.y << endl;
 						if (pPlayer->getCenter() != (*iter)->getCenter()) {
-							std::cout << "YES" << endl;
-							
 							Vector2f pCenter = pPlayer->getCenter();
 							std::cout << endl;
 							for (int i = pCenter.x - 128; i < pCenter.x + 129; i = i + 128)
 							{
 								for (int j = pCenter.y - 128; j < pCenter.y + 129; j = j + 128)
 								{
-									std::cout << "YEAHSSS" << endl;
 									std::cout << i << " " << j << endl;
 									if (i == eCenter.x && j == eCenter.y)
 									{
 										int damage = 0;
 										damage = pPlayer->Attack();
-										enemy->ReduceHealth(damage);
-										if (enemy->getHealth() > 0)
+										(*iter)->ReduceHealth(damage);
+										if ((*iter)->getHealth() > 0)
 										{
-											damage = enemy->Attack();
+											damage = (*iter)->Attack();
 											pPlayer->ReduceHealth(damage);
 										}
 										else
@@ -232,6 +274,14 @@ int main()
 				decreaseAmount = staminaDecrease;
 			}
 
+			float staminaPercent = 0;
+			staminaPercent = (pPlayer->getStamina()/pPlayer->getStaminaMax()) * 100;
+
+			if (staminaPercent > 80) {
+				pPlayer->addHealth(2);
+			}
+			std::cout << staminaPercent << endl;
+
 			// if player stamina is not 0 it decreases stamina, else it decreases health
 			pPlayer->getStamina() > 0 ? pPlayer->StaminaDecrease(decreaseAmount) : pPlayer->ReduceHealth(decreaseAmount);
 
@@ -261,12 +311,16 @@ int main()
 		}
 
 		//Move characters
-		pPlayer->Movement(dtAsSeconds, gameTimeTotalFloat);
-		//enemy->Movement(dtAsSeconds, gameTimeTotalFloat);
+		std::list<PolarBear*>::const_iterator iter;
+		for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); ++iter) 
+		{
+			(*iter)->Movement(dtAsSeconds, gameTimeTotalFloat);
+		}
+		
 
 		// TODO: optimize
 		// creates iterator for polar bear list
-		std::list<PolarBear*>::const_iterator iter;
+		
 		// iterate through each element
 		for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); iter++)
 		{
@@ -286,46 +340,72 @@ int main()
 
 		//TODO:
 		// for each row of tiles
+		
 		for (int i = 0; i < map.size(); i++)
 		{
 			// for each tile on that row
 			for (int j = 0; j < map[i].size(); j++)
 			{
-				// if the terrain type is ice
-				if (map[i][j]->getTerrainType() == Tile::terrainType::ICE)
-				{
-					if (((rand() % 100) + 1.f) >= 99.9)
+				//
+					// if the terrain type is ice
+					if (map[i][j]->getTerrainType() == Tile::terrainType::ICE)
 					{
-						tileMap->ChangeTileTerrain(i, j, Tile::terrainType::WATER);
-					}
-				}
 
+						if (((rand() % 100) + 1.f) >= 99.9)
+						{
+							if (tileChangeTimer + 0.1 < gameTimeTotalFloat) {
+								tileMap->ChangeTileTerrain(i, j, Tile::terrainType::WATER);
+								tileChangeTimer = gameTimeTotalFloat;
+							}
+						}
+
+					}
+				
 				// draw that tile
 				window.draw(map[i][j]->getSprite());
 			}
 		}
+		iter = lpPolarBears.begin();
+		while (iter != lpPolarBears.end()) 
+		{
+			if (!(*iter)->isAlive()) 
+			{
+				lpPolarBears.erase(iter++);
+			}
+			else
+			{
+				++iter;
+			}
+		}
 
-		if (!enemy->isAlive()) {
-			enemy->RemoveFromPlay();
-		};
-		std::cout << enemy->getHealth() << endl;
-
-		
-		window.draw(pPlayer->getSprite());
-		window.draw(enemy->getSprite());
+		for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); ++iter) 
+		{
+			window.draw((*iter)->getSprite());
+		}
 		window.draw(fishSea.getSprite());
 		window.draw(fishLand.getSprite());
 
-		stringstream fishTotal;
-		fishTotal << "Fish : " << pPlayer->getFish();
-		fishText1.setString(fishTotal.str());
-		fishText2.setString(fishTotal.str());
+		stringstream fishString;
+		fishString << "Fish : " << pPlayer->getFish();
+		fishText1.setString(fishString.str());
+		fishText2.setString(fishString.str());
+
+		stringstream levelString;
+		levelString << "Level : " << pPlayer->getLevel();
+		levelText1.setString(levelString.str());
+		levelText2.setString(levelString.str());
 		//HUD view used for elements that don't move
 		window.setView(hudView);
 		window.draw(staminaBar);
 		window.draw(healthBar);
 		window.draw(fishText1);
 		window.draw(fishText2);
+		window.draw(levelText1);
+		window.draw(levelText2);
+		window.draw(healthText1);
+		window.draw(healthText2);
+		window.draw(staminaText1);
+		window.draw(staminaText2);
 		
 		window.display();
 	}
