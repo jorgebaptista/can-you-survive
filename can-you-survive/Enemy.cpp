@@ -19,7 +19,7 @@ void Enemy::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 {
 	//Decide where to move randomly, unless player is within sight,
 	//in which case, attempt to move to player.
-
+	
 	//Check if enough time has passed to allow movement
 	if (moveTime <= totalTime)
 	{
@@ -159,4 +159,24 @@ void Enemy::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 
 
 	m_Sprite.setPosition(m_Position);
+}
+
+void Enemy::MoveTowards(float elapsedTime, float totalTime, Vector2f pPosition) 
+{
+	Vector2f distance;
+	distance.x = 0;
+	distance.y = 0;
+	
+	distance.x = m_Position.x - pPosition.x;
+	distance.y = m_Position.y - pPosition.y;
+
+	if (distance.x > distance.y) 
+	{
+
+	}
+
+	else if (distance.x < distance.y) 
+	{
+
+	}
 }
