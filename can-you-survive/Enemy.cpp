@@ -162,6 +162,7 @@ void Enemy::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 	m_Sprite.setPosition(m_Position);
 }
 
+//Used by enemy to track player
 void Enemy::MoveTowards(float elapsedTime, float totalTime, Vector2f pPosition)
 {
 	Vector2f distance;

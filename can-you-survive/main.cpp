@@ -477,7 +477,8 @@ int main()
 		window.draw(staminaText1);
 		window.draw(staminaText2);
 
-		if (pPlayer->getLevel() == 4) {
+		//Check if player level meets win condition
+		if (pPlayer->getLevel() < 4) {
 			window.draw(winText1);
 			window.draw(winText2);
 		}
