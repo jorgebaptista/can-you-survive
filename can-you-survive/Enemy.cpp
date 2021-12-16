@@ -161,22 +161,72 @@ void Enemy::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 	m_Sprite.setPosition(m_Position);
 }
 
-void Enemy::MoveTowards(float elapsedTime, float totalTime, Vector2f pPosition) 
+void Enemy::MoveTowards(float elapsedTime, float totalTime, Vector2f pPosition)
 {
 	Vector2f distance;
 	distance.x = 0;
 	distance.y = 0;
-	
-	distance.x = m_Position.x - pPosition.x;
-	distance.y = m_Position.y - pPosition.y;
-
-	if (distance.x > distance.y) 
+	if (moveTime <= totalTime)
 	{
+		if (m_Position.x < pPosition.x)
+		{
+			distance.x = pPosition.x - m_Position.x;
+		}
+		else
+		{
+			distance.x = m_Position.x - pPosition.x;
+		}
+		if (m_Position.y < pPosition.y)
+		{
+			distance.y = pPosition.y - m_Position.y;
+		}
+		else
+		{
+			distance.y = m_Position.y - pPosition.y;
+		}
+		std::cout << distance.x << std::endl;
+		std::cout << distance.y << std::endl;
+		//if(distance.x == 0 and distance.y == 128)
 
-	}
+		//Check used to make sure the enemy stops moving at the player
+		if ((distance.x < 127 && distance.y <= 255) || (distance.x < 255 && distance.y < 127))
+		{
+			randnum = 0;
+			moveTime = totalTime + 1;
+		}
+		else {
+			if (distance.x > distance.y)
+			{
+				if (m_Position.x < pPosition.x)
+				{
+					randnum = 4;
+					goal_PositionX = m_Position.x + speed;
+				}
+				else
+				{
+					randnum = 3;
+					goal_PositionX = m_Position.x - speed;
+				}
+				moveTime = totalTime + 1;
+			}
 
-	else if (distance.x < distance.y) 
-	{
+			else if (distance.x < distance.y)
+			{
+				if (m_Position.y < pPosition.y)
+				{
+					randnum = 2;
+					goal_PositionY = m_Position.y + speed;
+
+				}
+				else
+				{
+					randnum = 1;
+					goal_PositionY = m_Position.y - speed;
+				}
+				moveTime = totalTime + 1;
+			}
+		}
+		std::cout << randnum << std::endl;
 
 	}
 }

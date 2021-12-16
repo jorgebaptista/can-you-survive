@@ -83,6 +83,8 @@ int main()
 	Text healthText2;
 	Text staminaText1;
 	Text staminaText2;
+	Text winText1;
+	Text winText2;
 
 	Font font;
 	font.loadFromFile("fonts/KOMIKAP_.ttf");
@@ -134,6 +136,18 @@ int main()
 	staminaText2.setFillColor(Color::White);
 	staminaText2.setPosition(53, 998);
 
+	winText1.setFont(font);
+	winText1.setString("You win!");
+	winText1.setCharacterSize(100);
+	winText1.setFillColor(Color::Black);
+	winText1.setPosition(960, 540);
+
+	winText2.setFont(font);
+	winText2.setString("You win!");
+	winText2.setCharacterSize(100);
+	winText2.setFillColor(Color::White);
+	winText2.setPosition(955, 535);
+
 	int maxFps = 0;
 	int minFps = 50000;
 
@@ -156,7 +170,7 @@ int main()
 
 		if (maxFps < fps) maxFps = fps;
 		if (minFps > fps) minFps = fps;
-		std::cout << "fps : " << fps << "Min fps: " << minFps << " Max fps: " << maxFps << std::endl;
+		//std::cout << "fps : " << fps << "Min fps: " << minFps << " Max fps: " << maxFps << std::endl;
 
 		while (window.pollEvent(event))
 		{
@@ -328,17 +342,11 @@ int main()
 
 		}
 
-		//Move characters
-		std::list<PolarBear*>::const_iterator iter;
-		for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); ++iter)
-		{
-			(*iter)->Movement(dtAsSeconds, gameTimeTotalFloat, mapBounds);
-		}
 
 
 		// TODO: optimize
 		// creates iterator for polar bear list
-
+		std::list<PolarBear*>::const_iterator iter;
 		// iterate through each element
 		for (iter = lpPolarBears.begin
 		(); iter != lpPolarBears.end(); iter++)
@@ -369,6 +377,18 @@ int main()
 
 		if (maxCameraViewX > mapBounds.x) maxCameraViewX = mapBounds.x;
 		if (maxCameraViewY > mapBounds.y) maxCameraViewY = mapBounds.y;
+
+		if (enemy->getCenter().y > minCameraViewY && enemy->getCenter().y < maxCameraViewY
+			&& enemy->getCenter().x > minCameraViewX && enemy->getCenter().x < maxCameraViewX) {
+			enemy->MoveTowards(dtAsSeconds, gameTimeTotalFloat, pPlayer->getCenter());
+		}
+
+		//Move characters
+
+		for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); ++iter)
+		{
+			(*iter)->Movement(dtAsSeconds, gameTimeTotalFloat, mapBounds);
+		}
 
 		//TODO:
 		// for each row of tiles
@@ -436,6 +456,11 @@ int main()
 		window.draw(healthText2);
 		window.draw(staminaText1);
 		window.draw(staminaText2);
+
+		if (pPlayer->getLevel() == 4) {
+			window.draw(winText1);
+			window.draw(winText2);
+		}
 
 		window.display();
 	}
