@@ -156,7 +156,8 @@ int main()
 
 		if (maxFps < fps) maxFps = fps;
 		if (minFps > fps) minFps = fps;
-		std::cout << "fps : " << fps << "Min fps: " << minFps << " Max fps: " << maxFps << std::endl;
+		// CHECK FPS
+		//std::cout << "fps : " << fps << "Min fps: " << minFps << " Max fps: " << maxFps << std::endl;
 
 		while (window.pollEvent(event))
 		{
@@ -348,26 +349,58 @@ int main()
 		}
 
 		// set camera center to player position
-		mainView.setCenter(pPlayer->getCenter());
+
+		Vector2f cameraCenter = mainView.getCenter();
+
+		if (pPlayer->getCenter().x < (VideoMode::getDesktopMode().width / 2 - 64))
+		{
+			cameraCenter.x = (VideoMode::getDesktopMode().width / 2) - 64;
+		}
+		else if (pPlayer->getCenter().x > (mapBounds.x - VideoMode::getDesktopMode().width / 2) - 64)
+		{
+			cameraCenter.x = (mapBounds.x - VideoMode::getDesktopMode().width / 2) - 64;
+		}
+		else
+		{
+			cameraCenter.x = pPlayer->getCenter().x;
+		}
+		if (pPlayer->getCenter().y < (VideoMode::getDesktopMode().height / 2) - 64)
+		{
+			cameraCenter.y = (VideoMode::getDesktopMode().height / 2) - 64;
+		}
+		else if (pPlayer->getCenter().y > (mapBounds.y - VideoMode::getDesktopMode().height / 2) - 64)
+		{
+			cameraCenter.y = (mapBounds.y - VideoMode::getDesktopMode().height / 2) - 64;
+		}
+		else
+		{
+			cameraCenter.y = pPlayer->getCenter().y;
+		}
+
+		mainView.setCenter(cameraCenter);
 
 		window.clear(Color(135, 206, 235)); // clear the window
 		window.setView(mainView);
+
+
 
 		// TODO: need better way to draw all map, DRAW class?
 		std::vector<std::vector<Tile*>> map = (tileMap->getMap());
 
 		// TODO: Optimize camera view, variables ?
-		int minCameraViewX = pPlayer->getCenter().x - VideoMode::getDesktopMode().width / 2;
-		int minCameraViewY = pPlayer->getCenter().y - VideoMode::getDesktopMode().height / 2;
+		int minCameraViewX = cameraCenter.x - VideoMode::getDesktopMode().width / 2;
+		int minCameraViewY = cameraCenter.y - VideoMode::getDesktopMode().height / 2;
 
-		int maxCameraViewX = (pPlayer->getCenter().x + VideoMode::getDesktopMode().width / 2) + 256;
-		int maxCameraViewY = (pPlayer->getCenter().y + VideoMode::getDesktopMode().height / 2) + 256;
+		int maxCameraViewX = (cameraCenter.x + VideoMode::getDesktopMode().width / 2) + 256;
+		int maxCameraViewY = (cameraCenter.y + VideoMode::getDesktopMode().height / 2) + 256;
 
 		if (minCameraViewX < 0) minCameraViewX = 0;
 		if (minCameraViewY < 0) minCameraViewY = 0;
 
 		if (maxCameraViewX > mapBounds.x) maxCameraViewX = mapBounds.x;
 		if (maxCameraViewY > mapBounds.y) maxCameraViewY = mapBounds.y;
+
+
 
 		//TODO:
 		// for each row of tiles
