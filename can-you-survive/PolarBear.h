@@ -42,6 +42,7 @@ public:
 
 	void RemoveFromPlay();
 
+	void Spawn(int h, int mh, int l, int d, float x, float y);
 protected:
 	// The polar bears health
 	int health;

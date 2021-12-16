@@ -17,7 +17,7 @@ int main()
 
 	// create a list of pointers to Polar bears
 	std::list<PolarBear*> lpPolarBears;
-
+	std::list<Enemy*> lpEnemy;
 	// create a pointer to player
 	Player* pPlayer = new Player();
 
@@ -28,8 +28,13 @@ int main()
 	lpPolarBears.push_back(pPlayer);
 
 	Enemy* enemy = new Enemy();
+	Enemy* enemy2 = new Enemy();
 
 	lpPolarBears.push_back(enemy);
+	lpPolarBears.push_back(enemy2);
+
+	lpEnemy.push_back(enemy);
+	lpEnemy.push_back(enemy2);
 	//TODO: Warning, use static cast unsigned??
 	Vector2f resolution;
 	resolution.x = VideoMode::getDesktopMode().width;
@@ -57,6 +62,7 @@ int main()
 	fishLand.Spawn("land");
 	fishSea.Spawn("sea");
 
+	int randnum = 0; rand() % 4 + 1;
 	//Stamina Bar to display player stamina
 	RectangleShape staminaBar;
 	//Set initial width and height
@@ -246,7 +252,7 @@ int main()
 								for (int j = pCenter.y - 128; j < pCenter.y + 129; j = j + 128)
 								{
 									std::cout << i << " " << j << endl;
-									if (i == eCenter.x && j == eCenter.y)
+									if (i-1 <= eCenter.x && i+1 >= eCenter.x && j-1 <= eCenter.y && j+1 >= eCenter.y)
 									{
 										int damage = 0;
 										damage = pPlayer->Attack();
@@ -347,6 +353,7 @@ int main()
 		// TODO: optimize
 		// creates iterator for polar bear list
 		std::list<PolarBear*>::const_iterator iter;
+		std::list<Enemy*>::const_iterator iterE;
 		// iterate through each element
 		for (iter = lpPolarBears.begin
 		(); iter != lpPolarBears.end(); iter++)
@@ -415,19 +422,32 @@ int main()
 				window.draw(map[i][j]->getSprite());
 			}
 		}
-		iter = lpPolarBears.begin();
-		while (iter != lpPolarBears.end())
+		int tilenumX = mapBounds.x;
+		int tilenumY = mapBounds.y;
+		cout << tilenumX / 128 << endl;
+		cout << tilenumY / 128 << endl;
+		
+		iterE = lpEnemy.begin();
+		while (iterE != lpEnemy.end())
 		{
-			if (!(*iter)->isAlive())
+			if (!(*iterE)->isAlive())
 			{
-				lpPolarBears.erase(iter++);
+			
+				//int tilenumX = mapBounds.x;
+				//int tilenumY = mapBounds.y;
+				//cout << tilenumX / 128 << endl;
+				randnum = rand() % 4 + 1;
+				int x = randnum;
+				randnum = rand() % 4 + 1;
+				int y = randnum;
+				(*iterE)->Spawn(100, 100, 1, 3, x*128, y*128);
 			}
 			else
 			{
-				++iter;
+				++iterE;
 			}
 		}
-
+		
 		for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); ++iter)
 		{
 			window.draw((*iter)->getSprite());

@@ -15,6 +15,7 @@ Enemy::Enemy()
 	m_Sprite.setPosition(m_Position);
 }
 
+
 void Enemy::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 {
 	//Decide where to move randomly, unless player is within sight,
@@ -184,12 +185,10 @@ void Enemy::MoveTowards(float elapsedTime, float totalTime, Vector2f pPosition)
 		{
 			distance.y = m_Position.y - pPosition.y;
 		}
-		std::cout << distance.x << std::endl;
-		std::cout << distance.y << std::endl;
-		//if(distance.x == 0 and distance.y == 128)
+
 
 		//Check used to make sure the enemy stops moving at the player
-		if ((distance.x < 127 && distance.y <= 255) || (distance.x < 255 && distance.y < 127))
+		if ((distance.x < 127 && distance.y < 255) || (distance.x < 255 && distance.y < 127))
 		{
 			randnum = 0;
 			moveTime = totalTime + 1;
