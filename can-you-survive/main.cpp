@@ -340,15 +340,14 @@ int main()
 		// creates iterator for polar bear list
 
 		// iterate through each element
-		for (iter = lpPolarBears.begin
-		(); iter != lpPolarBears.end(); iter++)
+		for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); iter++)
 		{
 			Tile* tile = tileMap->getMap()[(*iter)->getCenter().y / 128][(*iter)->getCenter().x / 128];
 
 			(*iter)->ChangeTerrain(tile->getTerrainType());
 		}
 
-
+		// set camera center to player position
 		mainView.setCenter(pPlayer->getCenter());
 
 		window.clear(Color(135, 206, 235)); // clear the window
