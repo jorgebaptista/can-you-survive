@@ -3,12 +3,16 @@
 #include "Player.h"
 #include "Tilemap.h"
 #include "FileSystem.h"
+#include <list>
+#include <stdexcept>
 
 using namespace sf;
 
 int main()
 {
 	srand(static_cast<unsigned int>(time(0)));
+
+	std::ifstream objectFile("objects.txt");
 
 	// create a pointer to a new Tilemap
 	Tilemap* tileMap = new Tilemap();
@@ -17,19 +21,68 @@ int main()
 
 	// create a list of pointers to Polar bears
 	std::list<PolarBear*> lpPolarBears;
+	Player* pPlayer = nullptr;
 
-	// create a pointer to player
-	Player* pPlayer = new Player();
+	//TODO: Move this repeated stuff to another class? singleton for files? tilemap has this kind of loop too
+	if (objectFile.is_open())
+	{
+		Vector2f objectPosition(0, 0); // first tile position at 0, 0
+		std::string line;
+
+		int row = 0;
+
+		for (line; getline(objectFile, line);)
+		{
+			if (objectPosition.y > mapBounds.y)
+			{
+				std::cout << "Row size of objects.txt file cannot be greater than bounds of map.\n";
+				return 0;
+			}
+			for (char& t : line)
+			{
+				if (objectPosition.x > mapBounds.x)
+				{
+					std::cout << "Column size of objects.txt file cannot be greater than bounds of map.\n";
+					return 0;
+				}
+
+				switch (t)
+				{
+				case '1':
+					// create a pointer to a new player
+					if (pPlayer == nullptr)
+					{
+						pPlayer = new Player(objectPosition);
+						// push player to list of polar bears
+						lpPolarBears.push_back(pPlayer);
+					}
+					else
+					{
+						std::cout << "There can only be one player. Please check objects.txt file, there shouldn't be more than one 1 char.\n";
+						return 0;
+					}
+					break;
+				case '2':
+					Enemy * enemy = new Enemy(objectPosition);
+					lpPolarBears.push_back(enemy);
+					break;
+				}
+
+				objectPosition.x += 128;
+			}
+			objectPosition = Vector2f(0, objectPosition.y + 128);
+		}
+	}
+	else
+	{
+		std::cout << "Cannot find objects.txt file. Please create a file with objects (player, enemies, collectibles, etc)"; //debug can't find file
+		return 0;
+	}
+
+	objectFile.close();
 
 	float staminaDecrease = 1.f;
 
-	// push player to list of polar bears
-
-	lpPolarBears.push_back(pPlayer);
-
-	Enemy* enemy = new Enemy();
-
-	lpPolarBears.push_back(enemy);
 	//TODO: Warning, use static cast unsigned??
 	Vector2f resolution;
 	resolution.x = VideoMode::getDesktopMode().width;
@@ -157,7 +210,7 @@ int main()
 		if (maxFps < fps) maxFps = fps;
 		if (minFps > fps) minFps = fps;
 		// CHECK FPS
-		//std::cout << "fps : " << fps << "Min fps: " << minFps << " Max fps: " << maxFps << std::endl;
+		std::cout << "Fps: " << fps << " Min fps: " << minFps << " Max fps: " << maxFps << std::endl;
 
 		while (window.pollEvent(event))
 		{
@@ -348,32 +401,42 @@ int main()
 			(*iter)->ChangeTerrain(tile->getTerrainType());
 		}
 
-		// set camera center to player position
+		/****************************  CAMERA  *******************************/
 
+		// calculate where camera will be centered
 		Vector2f cameraCenter = mainView.getCenter();
 
+		// if player x position is less the center of screen width
 		if (pPlayer->getCenter().x < (VideoMode::getDesktopMode().width / 2 - 64))
 		{
+			// camera center will stay there instead (as in, it will not outside the bounds of the map)
 			cameraCenter.x = (VideoMode::getDesktopMode().width / 2) - 64;
 		}
+		// if player x position is more than the map bound width minus center of screen width 
 		else if (pPlayer->getCenter().x > (mapBounds.x - VideoMode::getDesktopMode().width / 2) - 64)
 		{
+			// camera center will stay there instead (as in, it will not outside the bounds of the map)
 			cameraCenter.x = (mapBounds.x - VideoMode::getDesktopMode().width / 2) - 64;
 		}
 		else
 		{
 			cameraCenter.x = pPlayer->getCenter().x;
 		}
+		// if player x position is less the center of screen height
 		if (pPlayer->getCenter().y < (VideoMode::getDesktopMode().height / 2) - 64)
 		{
+			// camera center will stay there instead (as in, it will not outside the bounds of the map)
 			cameraCenter.y = (VideoMode::getDesktopMode().height / 2) - 64;
 		}
+		// if player x position is more than the map bound width minus center of screen height 
 		else if (pPlayer->getCenter().y > (mapBounds.y - VideoMode::getDesktopMode().height / 2) - 64)
 		{
+			// camera center will stay there instead (as in, it will not outside the bounds of the map)
 			cameraCenter.y = (mapBounds.y - VideoMode::getDesktopMode().height / 2) - 64;
 		}
 		else
 		{
+			// else just center on player instead
 			cameraCenter.y = pPlayer->getCenter().y;
 		}
 
@@ -381,11 +444,6 @@ int main()
 
 		window.clear(Color(135, 206, 235)); // clear the window
 		window.setView(mainView);
-
-
-
-		// TODO: need better way to draw all map, DRAW class?
-		std::vector<std::vector<Tile*>> map = (tileMap->getMap());
 
 		// TODO: Optimize camera view, variables ?
 		int minCameraViewX = cameraCenter.x - VideoMode::getDesktopMode().width / 2;
@@ -400,16 +458,26 @@ int main()
 		if (maxCameraViewX > mapBounds.x) maxCameraViewX = mapBounds.x;
 		if (maxCameraViewY > mapBounds.y) maxCameraViewY = mapBounds.y;
 
-
-
-		//TODO:
+		// TODO: need better way to draw all map, DRAW class?
+		std::vector<std::vector<Tile*>> map = (tileMap->getMap());
 		// for each row of tiles
 		for (int i = (minCameraViewY / 128); i < maxCameraViewY / 128; i++)
 		{
 			// for each tile on that row
 			for (int j = minCameraViewX / 128; j < maxCameraViewX / 128; j++)
 			{
-				// UNDONE: need to put ice melt outside the draw
+				// draw that tile
+				window.draw(map[i][j]->getSprite());
+			}
+		}
+
+
+		// TODO: Need better system to melt ice 
+		for (int i = 0; i < mapBounds.y / 128; i++)
+		{
+			// for each tile on that row
+			for (int j = 0; j < mapBounds.x / 128; j++)
+			{
 				// if the terrain type is ice
 				if (map[i][j]->getTerrainType() == Tile::terrainType::ICE)
 				{
@@ -420,13 +488,11 @@ int main()
 							tileChangeTimer = gameTimeTotalFloat;
 						}
 					}
-
 				}
-
-				// draw that tile
-				window.draw(map[i][j]->getSprite());
 			}
 		}
+
+
 		iter = lpPolarBears.begin();
 		while (iter != lpPolarBears.end())
 		{

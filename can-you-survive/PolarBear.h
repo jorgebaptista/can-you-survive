@@ -11,9 +11,9 @@ class PolarBear
 {
 public:
 	//Default Constructor
-	PolarBear();
+	PolarBear(Vector2f position = Vector2f(128,128));
 	//Function to move
-	//TODO: Implement bound check here cuz both enemy and player uses it?
+	//TODO: Implement bound check here because both enemy and player uses it?
 	virtual void Movement(float elapsedTime, float totalTime, Vector2f mapBounds) = 0;
 	//virtual sf::Vector2f Movement()=0;
 	//Function to attack

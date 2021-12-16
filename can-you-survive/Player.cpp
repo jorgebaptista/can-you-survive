@@ -1,6 +1,6 @@
 #include "Player.h"
 //Constructor
-Player::Player()
+Player::Player(Vector2f position)
 {
 	health = 100;
 	maxHealth = 100;
@@ -15,11 +15,10 @@ Player::Player()
 	fishNum = 100;
 	move = 'c';
 	staminaTimer = 0;
-	m_Position.x = 128;
-	m_Position.y = 128;
+
+	m_Position = position;
 	goal_PositionX = m_Position.x;
 	goal_PositionY = m_Position.y;
-	m_Sprite.setPosition(m_Position);
 
 	UpPressed = false;
 	DownPressed = false;

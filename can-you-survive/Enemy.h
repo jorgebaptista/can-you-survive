@@ -6,7 +6,7 @@ class Enemy :public PolarBear
 {
 public:
 	//Constructor
-	Enemy();
+	Enemy(Vector2f position);
 	//Virtual functions to be given details
 	void Movement(float elapsedTime, float totalTime, Vector2f mapBounds) override;
 	void MoveTowards();

@@ -1,17 +1,17 @@
 #include "Enemy.h"
 //Constructor
-Enemy::Enemy()
+Enemy::Enemy(Vector2f position)
 {
-	srand(static_cast<unsigned int>(time(0)));
 	health = 100;
 	maxHealth = 100;
 	level = 1;
 	m_damage = 2;
 	speed = 128;
-	m_Position.x = 256;
-	m_Position.y = 128;
+
+	m_Position = position;
 	goal_PositionX = m_Position.x;
 	goal_PositionY = m_Position.y;
+
 	m_Sprite.setPosition(m_Position);
 }
 

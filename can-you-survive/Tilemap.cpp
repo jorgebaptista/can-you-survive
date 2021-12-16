@@ -5,7 +5,6 @@ Tilemap::Tilemap()
 	std::ifstream mapFile("map.txt"); // open map text file
 
 	Vector2f tilePosition (0, 0); // first tile position at 0, 0
-
 	// if text file exists
 	if (mapFile.is_open())
 	{
@@ -44,7 +43,7 @@ Tilemap::Tilemap()
 
 				Tile* tile = new Tile(tilePosition, terrain); // create a new tile
 
-				tilePosition = Vector2f(tilePosition.x + 128, tilePosition.y); // increment next tile position by the size of last tile
+				tilePosition.x += 128; // increment next tile position by the size of last tile
 
 				map[row].push_back(tile); // push new tile into vector of tiles
 			}
@@ -55,6 +54,8 @@ Tilemap::Tilemap()
 		m_bounds.x = line.size();
 	}
 	else std::cout << "Cannot find file."; //debug can't find file
+
+	mapFile.close();
 
 	m_bounds.x *= 128;
 	m_bounds.y *= 128;

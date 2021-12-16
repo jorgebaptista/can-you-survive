@@ -9,7 +9,7 @@ class Player : public PolarBear
 {
 public:
 	//Default Constructor
-	Player();
+	Player(Vector2f position);
 	//Reduce stamina function
 	void StaminaDecrease(float reduce);
 
