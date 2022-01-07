@@ -305,7 +305,7 @@ int main()
 								for (int j = pCenter.y - 128; j < pCenter.y + 129; j = j + 128)
 								{
 									std::cout << i << " " << j << endl;
-									if (i-1 <= eCenter.x && i+1 >= eCenter.x && j-1 <= eCenter.y && j+1 >= eCenter.y)
+									if (i - 1 <= eCenter.x && i + 1 >= eCenter.x && j - 1 <= eCenter.y && j + 1 >= eCenter.y)
 									{
 										int damage = 0;
 										damage = pPlayer->Attack();
@@ -473,12 +473,10 @@ int main()
 		if (maxCameraViewY > mapBounds.y) maxCameraViewY = mapBounds.y;
 
 		// Enemy merge stuff
-		iterE = lpEnemy.begin();
-		while (iterE != lpEnemy.end())
+		for (iterE = lpEnemy.begin(); iterE != lpEnemy.end(); ++iterE)
 		{
-		
 			if ((*iterE)->getCenter().y > minCameraViewY && (*iterE)->getCenter().y < maxCameraViewY
-			&& (*iterE)->getCenter().x > minCameraViewX && (*iterE)->getCenter().x < maxCameraViewX) 
+				&& (*iterE)->getCenter().x > minCameraViewX && (*iterE)->getCenter().x < maxCameraViewX)
 			{
 				(*iterE)->MoveTowards(dtAsSeconds, gameTimeTotalFloat, pPlayer->getCenter());
 			}
@@ -488,7 +486,7 @@ int main()
 		for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); ++iter)
 		{
 			(*iter)->Movement(dtAsSeconds, gameTimeTotalFloat, mapBounds);
-		}		
+		}
 
 		// TODO: need better way to draw all map, DRAW class?
 		std::vector<std::vector<Tile*>> map = (tileMap->getMap());
@@ -530,13 +528,13 @@ int main()
 		int tilenumY = mapBounds.y;
 		std::cout << tilenumX / 128 << endl;
 		std::cout << tilenumY / 128 << endl;
-		
+
 		iterE = lpEnemy.begin();
 		while (iterE != lpEnemy.end())
 		{
 			if (!(*iterE)->isAlive())
 			{
-			
+
 				//int tilenumX = mapBounds.x;
 				//int tilenumY = mapBounds.y;
 				//cout << tilenumX / 128 << endl;
@@ -544,14 +542,14 @@ int main()
 				int x = randnum;
 				randnum = rand() % 4 + 1;
 				int y = randnum;
-				(*iterE)->Spawn(100, 100, 1, 3, x*128, y*128);
+				(*iterE)->Spawn(100, 100, 1, 3, x * 128, y * 128);
 			}
 			else
 			{
 				++iterE;
 			}
 		}
-		
+
 		for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); ++iter)
 		{
 			window.draw((*iter)->getSprite());
