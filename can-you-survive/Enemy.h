@@ -9,7 +9,7 @@ public:
 	Enemy(Vector2f position);
 	//Virtual functions to be given details
 	void Movement(float elapsedTime, float totalTime, Vector2f mapBounds) override;
-	void MoveTowards();
+	void MoveTowards(float elapsedTime, float totalTime, Vector2f pPosition);
 
 protected:
 	//Random number used to determine which direction to go

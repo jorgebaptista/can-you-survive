@@ -17,7 +17,6 @@ PolarBear::PolarBear(Vector2f position)
 	m_Resolution.y = 100;
 
 	moveTime = 0;
-
 	m_damage = 5;
 
 	m_Texture.loadFromFile("graphics/polartemp.png");
@@ -27,12 +26,21 @@ PolarBear::PolarBear(Vector2f position)
 	m_Sprite.setPosition(m_Position);
 }
 
-void PolarBear::RemoveFromPlay() 
-{
-	//m_Position.x = 2000;
-	//m_Position.y = 2000;
-	//m_Sprite.setPosition(m_Position);
+//Used to spawn new polarbears when they die
+void PolarBear::Spawn(int h, int mh, int l, int d, float x, float y) {
+	health = h;
+	maxHealth = mh;
+	level = l;
+	m_damage = d;
+
+	m_Position.x = x;
+	m_Position.y = y;
+	goal_PositionX = m_Position.x;
+	goal_PositionY = m_Position.y;
+	m_Sprite.setPosition(m_Position);
 }
+
+//Perform attack calculation
 int PolarBear::Attack()
 {
 	int attackCalc = 0;

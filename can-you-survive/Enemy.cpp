@@ -15,11 +15,12 @@ Enemy::Enemy(Vector2f position)
 	m_Sprite.setPosition(m_Position);
 }
 
+
 void Enemy::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 {
 	//Decide where to move randomly, unless player is within sight,
 	//in which case, attempt to move to player.
-
+	
 	//Check if enough time has passed to allow movement
 	if (moveTime <= totalTime)
 	{
@@ -159,4 +160,73 @@ void Enemy::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 
 
 	m_Sprite.setPosition(m_Position);
+}
+
+//Used by enemy to track player
+void Enemy::MoveTowards(float elapsedTime, float totalTime, Vector2f pPosition)
+{
+	Vector2f distance;
+	distance.x = 0;
+	distance.y = 0;
+	if (moveTime <= totalTime)
+	{
+		if (m_Position.x < pPosition.x)
+		{
+			distance.x = pPosition.x - m_Position.x;
+		}
+		else
+		{
+			distance.x = m_Position.x - pPosition.x;
+		}
+		if (m_Position.y < pPosition.y)
+		{
+			distance.y = pPosition.y - m_Position.y;
+		}
+		else
+		{
+			distance.y = m_Position.y - pPosition.y;
+		}
+
+
+		//Check used to make sure the enemy stops moving at the player
+		if ((distance.x < 127 && distance.y < 255) || (distance.x < 255 && distance.y < 127))
+		{
+			randnum = 0;
+			moveTime = totalTime + 1;
+		}
+		else {
+			if (distance.x > distance.y)
+			{
+				if (m_Position.x < pPosition.x)
+				{
+					randnum = 4;
+					goal_PositionX = m_Position.x + speed;
+				}
+				else
+				{
+					randnum = 3;
+					goal_PositionX = m_Position.x - speed;
+				}
+				moveTime = totalTime + 1;
+			}
+
+			else if (distance.x < distance.y)
+			{
+				if (m_Position.y < pPosition.y)
+				{
+					randnum = 2;
+					goal_PositionY = m_Position.y + speed;
+
+				}
+				else
+				{
+					randnum = 1;
+					goal_PositionY = m_Position.y - speed;
+				}
+				moveTime = totalTime + 1;
+			}
+		}
+		std::cout << randnum << std::endl;
+
+	}
 }

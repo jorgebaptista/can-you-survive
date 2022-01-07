@@ -26,18 +26,14 @@ Player::Player(Vector2f position)
 	RightPressed = false;
 }
 
-//void Player::Movement(x, y IN, x,y OUT ) 
-// {
-//	//Allow the player to move using the arrow keys
-//	//use a listener, and respond with new x,y coordinates
-// Get input
-//}
 
+//Movement function
 void Player::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 {
 	//If enough total time has passed, the player can move again
 	if (moveTime <= totalTime)
 	{
+		//Set position to current goal position
 		m_Position.x = goal_PositionX;
 		m_Position.y = goal_PositionY;
 		m_Sprite.setPosition(m_Position);
@@ -47,28 +43,24 @@ void Player::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 		if (UpPressed && !(m_Position.y - 128 < 0))
 		{
 			goal_PositionY = m_Position.y - 128;
-			//m_Position.y -= 128;
 			//set to U to allow continuous movement up
 			move = 'U';
 		}
 		else if (DownPressed && m_Position.y + 128 < mapBounds.y)
 		{
 			goal_PositionY = m_Position.y + 128;
-			//m_Position.y += 128;
 			//set to D to allow continuous movement down
 			move = 'D';
 		}
 		else if (LeftPressed && !(m_Position.x - 128 < 0))
 		{
 			goal_PositionX = m_Position.x - 128;
-			//m_Position.x -= 128;
 			//set to L to allow continuous movement left
 			move = 'L';
 		}
 		else if (RightPressed && m_Position.x + 128 < mapBounds.x)
 		{
 			goal_PositionX = m_Position.x + 128;
-			//m_Position.x += 128;
 			//set to R to allow continuous movement right
 			move = 'R';
 		}
@@ -154,9 +146,11 @@ void Player::EatFish()
 	}
 }
 
+//Add health to the player
 void Player::addHealth(float h) 
 {
 	health = health + h;
+	//if health exceeds the max, set it to maxHealth
 	if (health > maxHealth) {
 		health = maxHealth;
 	}
@@ -173,13 +167,15 @@ void Player::StaminaDecrease(float reduce)
 	stamina = stamina - reduce;
 }
 
+//Restore health and stamina when player hibernates, fish consumed and used 
 void Player::Hibernate() 
 {
 	stamina = maxStamina;
 	health = maxHealth;
-
+	xp = fishNum * 10;
+	fishNum = 0;
 }
-
+//Check if the player has gained enough xp to level up.
 void Player::CheckIfLevelUp()
 {
 	if (xp > xpNeed) {
@@ -190,6 +186,7 @@ void Player::CheckIfLevelUp()
 		stamina = maxStamina;
 		m_damage++;
 		xpNeed = xpNeed * 2;
+		//Check level up again incase another level up condition is already met
 		CheckIfLevelUp();
 	}
 	//See if the parameters to level up have been met, if so, increment
@@ -202,14 +199,17 @@ void Player::CheckGroundType(std::string type)
 	//based on the ground.
 }
 
+//Return fishNum variable
 int Player::getFish() {
 	return fishNum;
 }
 
+//Return player level
 int Player::getLevel() {
 	return level;
 }
 
+//Return maximum stamina
 float Player::getStaminaMax() {
 	return maxStamina;
 }
@@ -237,17 +237,22 @@ void Player::setStaminaTimer()
 	staminaTimer = 0;
 }
 
+//Check if player has picked up a fish, and what kind
 void Player::Pickup(std::string name)
 {
+	//Land fish effects apply instantly
 	if (name == "land")
 	{
+		//Stamina restoration is based on maximum stamina, the higher the max, the more stamina restored
 		stamina = stamina + maxStamina / 10;
+		//If stamina restoration increases it to more than the max, set stamina to max
 		if (stamina >= maxStamina)
 		{
 			stamina = maxStamina;
 		}
 		xp = xp + 10;
 	}
+	//Sea fish are stored for later use
 	else if (name == "sea")
 	{
 		fishNum = fishNum + 1;

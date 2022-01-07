@@ -23,6 +23,9 @@ int main()
 	std::list<PolarBear*> lpPolarBears;
 	Player* pPlayer = nullptr;
 
+	// ? merge conflict
+	std::list<Enemy*> lpEnemy;
+
 	//TODO: Move this repeated stuff to another class? singleton for files? tilemap has this kind of loop too
 	if (objectFile.is_open())
 	{
@@ -65,6 +68,7 @@ int main()
 				case '2':
 					Enemy * enemy = new Enemy(objectPosition);
 					lpPolarBears.push_back(enemy);
+					lpEnemy.push_back(enemy);
 					break;
 				}
 
@@ -110,6 +114,7 @@ int main()
 	fishLand.Spawn("land");
 	fishSea.Spawn("sea");
 
+	int randnum = 0; rand() % 4 + 1;
 	//Stamina Bar to display player stamina
 	RectangleShape staminaBar;
 	//Set initial width and height
@@ -136,6 +141,8 @@ int main()
 	Text healthText2;
 	Text staminaText1;
 	Text staminaText2;
+	Text winText1;
+	Text winText2;
 
 	Font font;
 	font.loadFromFile("fonts/KOMIKAP_.ttf");
@@ -186,6 +193,18 @@ int main()
 	staminaText2.setCharacterSize(25);
 	staminaText2.setFillColor(Color::White);
 	staminaText2.setPosition(53, 998);
+
+	winText1.setFont(font);
+	winText1.setString("You win!");
+	winText1.setCharacterSize(100);
+	winText1.setFillColor(Color::Black);
+	winText1.setPosition(960, 540);
+
+	winText2.setFont(font);
+	winText2.setString("You win!");
+	winText2.setCharacterSize(100);
+	winText2.setFillColor(Color::White);
+	winText2.setPosition(955, 535);
 
 	int maxFps = 0;
 	int minFps = 50000;
@@ -286,7 +305,7 @@ int main()
 								for (int j = pCenter.y - 128; j < pCenter.y + 129; j = j + 128)
 								{
 									std::cout << i << " " << j << endl;
-									if (i == eCenter.x && j == eCenter.y)
+									if (i-1 <= eCenter.x && i+1 >= eCenter.x && j-1 <= eCenter.y && j+1 >= eCenter.y)
 									{
 										int damage = 0;
 										damage = pPlayer->Attack();
@@ -382,17 +401,12 @@ int main()
 
 		}
 
-		//Move characters
-		std::list<PolarBear*>::const_iterator iter;
-		for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); ++iter)
-		{
-			(*iter)->Movement(dtAsSeconds, gameTimeTotalFloat, mapBounds);
-		}
 
 
 		// TODO: optimize
 		// creates iterator for polar bear list
-
+		std::list<PolarBear*>::const_iterator iter;
+		std::list<Enemy*>::const_iterator iterE;
 		// iterate through each element
 		for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); iter++)
 		{
@@ -458,8 +472,28 @@ int main()
 		if (maxCameraViewX > mapBounds.x) maxCameraViewX = mapBounds.x;
 		if (maxCameraViewY > mapBounds.y) maxCameraViewY = mapBounds.y;
 
+		// Enemy merge stuff
+		iterE = lpEnemy.begin();
+		while (iterE != lpEnemy.end())
+		{
+		
+			if ((*iterE)->getCenter().y > minCameraViewY && (*iterE)->getCenter().y < maxCameraViewY
+			&& (*iterE)->getCenter().x > minCameraViewX && (*iterE)->getCenter().x < maxCameraViewX) 
+			{
+				(*iterE)->MoveTowards(dtAsSeconds, gameTimeTotalFloat, pPlayer->getCenter());
+			}
+		}
+
+		//Move characters
+		for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); ++iter)
+		{
+			(*iter)->Movement(dtAsSeconds, gameTimeTotalFloat, mapBounds);
+		}		
+
 		// TODO: need better way to draw all map, DRAW class?
 		std::vector<std::vector<Tile*>> map = (tileMap->getMap());
+
+		//TODO:
 		// for each row of tiles
 		for (int i = (minCameraViewY / 128); i < maxCameraViewY / 128; i++)
 		{
@@ -492,20 +526,32 @@ int main()
 			}
 		}
 
-
-		iter = lpPolarBears.begin();
-		while (iter != lpPolarBears.end())
+		int tilenumX = mapBounds.x;
+		int tilenumY = mapBounds.y;
+		std::cout << tilenumX / 128 << endl;
+		std::cout << tilenumY / 128 << endl;
+		
+		iterE = lpEnemy.begin();
+		while (iterE != lpEnemy.end())
 		{
-			if (!(*iter)->isAlive())
+			if (!(*iterE)->isAlive())
 			{
-				lpPolarBears.erase(iter++);
+			
+				//int tilenumX = mapBounds.x;
+				//int tilenumY = mapBounds.y;
+				//cout << tilenumX / 128 << endl;
+				randnum = rand() % 4 + 1;
+				int x = randnum;
+				randnum = rand() % 4 + 1;
+				int y = randnum;
+				(*iterE)->Spawn(100, 100, 1, 3, x*128, y*128);
 			}
 			else
 			{
-				++iter;
+				++iterE;
 			}
 		}
-
+		
 		for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); ++iter)
 		{
 			window.draw((*iter)->getSprite());
@@ -534,6 +580,12 @@ int main()
 		window.draw(healthText2);
 		window.draw(staminaText1);
 		window.draw(staminaText2);
+
+		//Check if player level meets win condition
+		if (pPlayer->getLevel() < 4) {
+			window.draw(winText1);
+			window.draw(winText2);
+		}
 
 		window.display();
 	}
