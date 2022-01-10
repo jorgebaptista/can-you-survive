@@ -11,7 +11,7 @@ Player::Player(Vector2f position)
 	xp = 0;
 	xpNeed = 100;
 	m_damage = 5;
-	speed = 640;
+	speed = 256;
 	fishNum = 100;
 	move = 'c';
 	staminaTimer = 0;
@@ -68,7 +68,7 @@ void Player::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 		if (move != 'c')
 		{
 			//moveTime will be totalTime plus a certain amount to keep movement going the same way for a while.
-			moveTime = totalTime + 0.2;
+			moveTime = totalTime + 0.5;
 		}
 	}
 	//If moveTime is still larger than totalTime, then the character will continue moving in the same direction as what was inputted
