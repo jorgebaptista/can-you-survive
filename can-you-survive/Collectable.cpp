@@ -2,7 +2,8 @@
 //Constructor
 Collectable::Collectable()
 {
-	m_Position = sf::Vector2f(0, 0);
+	m_Position.x = -1000;
+	m_Position.y = -1000;
 	collected = false;
 }
 
@@ -20,4 +21,9 @@ void Collectable::PickedUp() {
 //Return collected variable
 bool Collectable::isCollected() {
 	return collected;
+}
+
+Vector2f Collectable::getCenter()
+{
+	return m_Position;
 }

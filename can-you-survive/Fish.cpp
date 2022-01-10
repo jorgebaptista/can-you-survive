@@ -4,8 +4,8 @@ Fish::Fish()
 {
 	type = "null";
 
-	m_Position.x = 0;
-	m_Position.y = 0;
+	m_Position.x = -1000;
+	m_Position.y = -1000;
 }
 
 void Fish::Spawn(string t)
@@ -18,8 +18,6 @@ void Fish::Spawn(string t)
 	else if (type == "land")
 	{
 		m_Texture.loadFromFile("graphics/fishlandtemp.png");
-		m_Position.x = -100;
-		m_Position.y = -100;
 	}
 
 	m_Sprite.setTexture(m_Texture);

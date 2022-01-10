@@ -16,6 +16,7 @@ public:
 	void CheckPickup(sf::Vector2f position);
 	void PickedUp();
 	bool isCollected();
+	Vector2f getCenter();
 
 protected:
 	// current position

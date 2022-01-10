@@ -21,10 +21,19 @@ int main()
 
 	// create a list of pointers to Polar bears
 	std::list<PolarBear*> lpPolarBears;
+	std::list<Fish*> lpFish;
+	for (int i = 0; i < 5; i++) {
+		Fish* fishLand = new Fish();
+		fishLand->Spawn("land");
+		lpFish.push_back(fishLand);
+
+	}
+
 	Player* pPlayer = nullptr;
 
 	// ? merge conflict
 	std::list<Enemy*> lpEnemy;
+	
 
 	//TODO: Move this repeated stuff to another class? singleton for files? tilemap has this kind of loop too
 	if (objectFile.is_open())
@@ -69,14 +78,17 @@ int main()
 					Enemy * enemy = new Enemy(objectPosition);
 					lpPolarBears.push_back(enemy);
 					lpEnemy.push_back(enemy);
+
 					break;
 				}
 
 				objectPosition.x += 128;
 			}
+			
 			objectPosition = Vector2f(0, objectPosition.y + 128);
 		}
 	}
+
 	else
 	{
 		std::cout << "Cannot find objects.txt file. Please create a file with objects (player, enemies, collectibles, etc)"; //debug can't find file
@@ -281,64 +293,64 @@ int main()
 				pPlayer->stopRight();
 			}
 			//Eat fish
-			if (Keyboard::isKeyPressed(Keyboard::E))
-			{
-				if (eatTimer + 0.5 < gameTimeTotalFloat) {
-					pPlayer->EatFish();
-					eatTimer = gameTimeTotalFloat;
-				}
-			}
-			//Attack with R
-			if (Keyboard::isKeyPressed(Keyboard::R))
-			{
-				if (attackTimer + 0.5 < gameTimeTotalFloat)
+if (Keyboard::isKeyPressed(Keyboard::E))
+{
+	if (eatTimer + 0.5 < gameTimeTotalFloat) {
+		pPlayer->EatFish();
+		eatTimer = gameTimeTotalFloat;
+	}
+}
+//Attack with R
+if (Keyboard::isKeyPressed(Keyboard::R))
+{
+	if (attackTimer + 0.5 < gameTimeTotalFloat)
+	{
+		list<PolarBear*>::const_iterator iter;
+		for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); ++iter) {
+			Vector2f eCenter = (*iter)->getCenter();
+			std::cout << eCenter.x << " " << eCenter.y << endl;
+			if (pPlayer->getCenter() != (*iter)->getCenter()) {
+				Vector2f pCenter = pPlayer->getCenter();
+				std::cout << endl;
+				for (int i = pCenter.x - 128; i < pCenter.x + 129; i = i + 128)
 				{
-					list<PolarBear*>::const_iterator iter;
-					for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); ++iter) {
-						Vector2f eCenter = (*iter)->getCenter();
-						std::cout << eCenter.x << " " << eCenter.y << endl;
-						if (pPlayer->getCenter() != (*iter)->getCenter()) {
-							Vector2f pCenter = pPlayer->getCenter();
-							std::cout << endl;
-							for (int i = pCenter.x - 128; i < pCenter.x + 129; i = i + 128)
+					for (int j = pCenter.y - 128; j < pCenter.y + 129; j = j + 128)
+					{
+						std::cout << i << " " << j << endl;
+						if (i - 1 <= eCenter.x && i + 1 >= eCenter.x && j - 1 <= eCenter.y && j + 1 >= eCenter.y)
+						{
+							int damage = 0;
+							damage = pPlayer->Attack();
+							(*iter)->ReduceHealth(damage);
+							if ((*iter)->getHealth() > 0)
 							{
-								for (int j = pCenter.y - 128; j < pCenter.y + 129; j = j + 128)
-								{
-									std::cout << i << " " << j << endl;
-									if (i - 1 <= eCenter.x && i + 1 >= eCenter.x && j - 1 <= eCenter.y && j + 1 >= eCenter.y)
-									{
-										int damage = 0;
-										damage = pPlayer->Attack();
-										(*iter)->ReduceHealth(damage);
-										if ((*iter)->getHealth() > 0)
-										{
-											damage = (*iter)->Attack();
-											pPlayer->ReduceHealth(damage);
-										}
-										else
-										{
-											pPlayer->addXP(90);
-										}
-									}
-								}
+								damage = (*iter)->Attack();
+								pPlayer->ReduceHealth(damage);
+							}
+							else
+							{
+								pPlayer->addXP(90);
 							}
 						}
 					}
-
-
-					//cout << eCenter.x << " " << eCenter.y << endl;
-					attackTimer = gameTimeTotalFloat;
-				}
-
-			}
-			if (Keyboard::isKeyPressed(Keyboard::Q))
-			{
-				if (pPlayer->getTerrain() == Tile::terrainType::SNOW)
-				{
-					pPlayer->Hibernate();
-					pPlayer->CheckIfLevelUp();
 				}
 			}
+		}
+
+
+		//cout << eCenter.x << " " << eCenter.y << endl;
+		attackTimer = gameTimeTotalFloat;
+	}
+
+}
+if (Keyboard::isKeyPressed(Keyboard::Q))
+{
+	if (pPlayer->getTerrain() == Tile::terrainType::SNOW)
+	{
+		pPlayer->Hibernate();
+		pPlayer->CheckIfLevelUp();
+	}
+}
 		}
 
 		//Will set the stamina timer
@@ -380,26 +392,21 @@ int main()
 		}
 
 		// fish collision
-		if (pPlayer->getPosition().intersects(fishSea.getPosition()))
-		{
-			if (!fishSea.isCollected())
-			{
-				pPlayer->Pickup("sea");
-				//fishSea.setPosition(-1000, -1000);
-				fishSea.PickedUp();
-			}
+		std::list<Fish*>::const_iterator iterF;
 
-		}
-		else if (pPlayer->getPosition().intersects(fishLand.getPosition()))
-		{
-			if (!fishLand.isCollected())
-			{
-				pPlayer->Pickup("land");
-				//fishLand.setPosition(-1000, -1000);
-				fishLand.PickedUp();
+		for (iterF = lpFish.begin(); iterF != lpFish.end(); iterF++) {
+			if (pPlayer->getPosition().intersects((*iterF)->getPosition())) {
+				if ((*iterF)->getType() == "land") {
+					pPlayer->Pickup("land");
+				}
+				else if ((*iterF)->getType() == "sea") {
+					pPlayer->Pickup("sea");
+				}
+				(*iterF)->setPosition(-1000, -1000);
+				(*iterF)->PickedUp();
 			}
-
 		}
+
 
 
 
@@ -475,9 +482,11 @@ int main()
 		// Enemy merge stuff
 		for (iterE = lpEnemy.begin(); iterE != lpEnemy.end(); ++iterE)
 		{
+			
 			if ((*iterE)->getCenter().y > minCameraViewY && (*iterE)->getCenter().y < maxCameraViewY
 				&& (*iterE)->getCenter().x > minCameraViewX && (*iterE)->getCenter().x < maxCameraViewX)
 			{
+				
 				(*iterE)->MoveTowards(dtAsSeconds, gameTimeTotalFloat, pPlayer->getCenter());
 			}
 		}
@@ -534,7 +543,15 @@ int main()
 		{
 			if (!(*iterE)->isAlive())
 			{
-
+				
+				for (iterF = lpFish.begin(); iterF != lpFish.end(); iterF++) {
+					if (((*iterF)->getCenter().x < -0) && (*iterF)->getType() == "land") {
+						
+						(*iterF)->setPosition((*iterE)->getCenter().x, (*iterE)->getCenter().y);
+						break;
+					}
+					
+				}
 				//int tilenumX = mapBounds.x;
 				//int tilenumY = mapBounds.y;
 				//cout << tilenumX / 128 << endl;
@@ -553,6 +570,10 @@ int main()
 		for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); ++iter)
 		{
 			window.draw((*iter)->getSprite());
+		}
+
+		for (iterF = lpFish.begin(); iterF != lpFish.end(); ++iterF) {
+			window.draw((*iterF)->getSprite());
 		}
 		window.draw(fishSea.getSprite());
 		window.draw(fishLand.getSprite());
