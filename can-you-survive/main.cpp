@@ -106,8 +106,23 @@ int main()
 
 	RenderWindow window(VideoMode(resolution.x, resolution.y), "Can You Survive?", Style::Fullscreen);
 
+	//blackout
+	Texture blackoutT;
+	Sprite blackoutS;
+	Color blackoutCDarken;
+	Color blackoutCLighten;
+	blackoutCDarken.a = 100;
+	blackoutCLighten.a = 0;
+	
+	blackoutT.loadFromFile("graphics/black.jpg");
+	blackoutS.setTexture(blackoutT);
+	
+	
+	blackoutS.scale(4.0,4.0);
+
 	//Views created
 	View mainView(FloatRect(0, 0, resolution.x, resolution.y));
+	View blackoutView(FloatRect(0, 0, resolution.x, resolution.y));
 	View hudView(FloatRect(0, 0, resolution.x, resolution.y));
 
 	Clock clock;
@@ -117,9 +132,11 @@ int main()
 	float tileChangeTimer;
 	float attackTimer;
 	float eatTimer;
+	float seasonTimer;
 	tileChangeTimer = 0;
 	attackTimer = 0;
 	eatTimer = 0;
+	seasonTimer = 0;
 	Fish fishLand;
 	Fish fishSea;
 
@@ -155,6 +172,8 @@ int main()
 	Text staminaText2;
 	Text winText1;
 	Text winText2;
+	Text yearText1;
+	Text yearText2;
 
 	Font font;
 	font.loadFromFile("fonts/KOMIKAP_.ttf");
@@ -218,8 +237,21 @@ int main()
 	winText2.setFillColor(Color::White);
 	winText2.setPosition(955, 535);
 
+	yearText1.setFont(font);
+	yearText1.setString("Year: 1");
+	yearText1.setCharacterSize(50);
+	yearText1.setFillColor(Color::Black);
+	yearText1.setPosition(55, 55);
+
+	yearText2.setFont(font);
+	yearText2.setString("Year: 1");
+	yearText2.setCharacterSize(50);
+	yearText2.setFillColor(Color::White);
+	yearText2.setPosition(53, 53);
+
 	int maxFps = 0;
 	int minFps = 50000;
+	int year = 1;
 
 	while (window.isOpen())
 	{
@@ -232,6 +264,8 @@ int main()
 		gameTimeTotalFloat = gameTimeTotal.asSeconds();
 
 		float dtAsSeconds = dt.asSeconds();
+
+		seasonTimer = seasonTimer + dtAsSeconds;
 
 
 		// debug fps
@@ -293,66 +327,90 @@ int main()
 				pPlayer->stopRight();
 			}
 			//Eat fish
-if (Keyboard::isKeyPressed(Keyboard::E))
-{
-	if (eatTimer + 0.5 < gameTimeTotalFloat) {
-		pPlayer->EatFish();
-		eatTimer = gameTimeTotalFloat;
-	}
-}
-//Attack with R
-if (Keyboard::isKeyPressed(Keyboard::R))
-{
-	if (attackTimer + 0.5 < gameTimeTotalFloat)
-	{
-		list<PolarBear*>::const_iterator iter;
-		for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); ++iter) {
-			Vector2f eCenter = (*iter)->getCenter();
-			std::cout << eCenter.x << " " << eCenter.y << endl;
-			if (pPlayer->getCenter() != (*iter)->getCenter()) {
-				Vector2f pCenter = pPlayer->getCenter();
-				std::cout << endl;
-				for (int i = pCenter.x - 128; i < pCenter.x + 129; i = i + 128)
+			if (Keyboard::isKeyPressed(Keyboard::E))
+			{
+				if (eatTimer + 0.5 < gameTimeTotalFloat) 
 				{
-					for (int j = pCenter.y - 128; j < pCenter.y + 129; j = j + 128)
+					pPlayer->EatFish();
+					eatTimer = gameTimeTotalFloat;
+				}
+			}
+			//Attack with R
+			if (Keyboard::isKeyPressed(Keyboard::R))
+			{
+				if (attackTimer + 0.5 < gameTimeTotalFloat)
+				{
+					list<PolarBear*>::const_iterator iter;
+					for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); ++iter) 
 					{
-						std::cout << i << " " << j << endl;
-						if (i - 1 <= eCenter.x && i + 1 >= eCenter.x && j - 1 <= eCenter.y && j + 1 >= eCenter.y)
+						Vector2f eCenter = (*iter)->getCenter();
+						std::cout << eCenter.x << " " << eCenter.y << endl;
+						if (pPlayer->getCenter() != (*iter)->getCenter()) 
 						{
-							int damage = 0;
-							damage = pPlayer->Attack();
-							(*iter)->ReduceHealth(damage);
-							if ((*iter)->getHealth() > 0)
+							Vector2f pCenter = pPlayer->getCenter();
+							std::cout << endl;
+							for (int i = pCenter.x - 128; i < pCenter.x + 129; i = i + 128)
 							{
-								damage = (*iter)->Attack();
-								pPlayer->ReduceHealth(damage);
-							}
-							else
-							{
-								pPlayer->addXP(90);
+								for (int j = pCenter.y - 128; j < pCenter.y + 129; j = j + 128)
+								{
+									std::cout << i << " " << j << endl;
+									if (i - 1 <= eCenter.x && i + 1 >= eCenter.x && j - 1 <= eCenter.y && j + 1 >= eCenter.y)
+									{
+										int damage = 0;
+										damage = pPlayer->Attack();
+										(*iter)->ReduceHealth(damage);
+										if ((*iter)->getHealth() > 0)
+										{
+											damage = (*iter)->Attack();
+											pPlayer->ReduceHealth(damage);
+										}
+										else
+										{
+											pPlayer->addXP(90);
+										}
+									}
+								}
 							}
 						}
 					}
+					//cout << eCenter.x << " " << eCenter.y << endl;
+					attackTimer = gameTimeTotalFloat;
+				}
+
+			}
+			if (Keyboard::isKeyPressed(Keyboard::Q))
+			{
+				if (pPlayer->getTerrain() == Tile::terrainType::SNOW && seasonTimer > 5)
+				{
+					pPlayer->Hibernate();
+					pPlayer->CheckIfLevelUp();
+					seasonTimer = 0;
+					year++;
+
+					//Attempting to reload tilemap with restored ice blocks, currently doesn't work
+
+					/*tileMap = new Tilemap();
+					float wait = 0;
+					Clock clockWait;
+
+					Time waitTotal;
+					
+					while (wait < 15) {
+
+						waitTotal = clockWait.restart();
+						wait += waitTotal.asSeconds();
+					}
+					*/
 				}
 			}
 		}
 
-
-		//cout << eCenter.x << " " << eCenter.y << endl;
-		attackTimer = gameTimeTotalFloat;
-	}
-
-}
-if (Keyboard::isKeyPressed(Keyboard::Q))
-{
-	if (pPlayer->getTerrain() == Tile::terrainType::SNOW)
-	{
-		pPlayer->Hibernate();
-		pPlayer->CheckIfLevelUp();
-	}
-}
+		if (seasonTimer > 5) {
+			blackoutS.setColor(blackoutCDarken);
 		}
-
+		else {
+			blackoutS.setColor(blackoutCLighten);
+		}
 		//Will set the stamina timer
 		pPlayer->addStaminaTimer(dtAsSeconds);
 
@@ -578,6 +636,9 @@ if (Keyboard::isKeyPressed(Keyboard::Q))
 		window.draw(fishSea.getSprite());
 		window.draw(fishLand.getSprite());
 
+		window.setView(blackoutView);
+		window.draw(blackoutS);
+
 		stringstream fishString;
 		fishString << "Fish : " << pPlayer->getFish();
 		fishText1.setString(fishString.str());
@@ -588,6 +649,12 @@ if (Keyboard::isKeyPressed(Keyboard::Q))
 		levelText1.setString(levelString.str());
 		levelText2.setString(levelString.str());
 		//HUD view used for elements that don't move
+
+		stringstream yearString;
+		yearString << "Year : " << year;
+		yearText1.setString(yearString.str());
+		yearText2.setString(yearString.str());
+
 		window.setView(hudView);
 		window.draw(staminaBar);
 		window.draw(healthBar);
@@ -599,9 +666,11 @@ if (Keyboard::isKeyPressed(Keyboard::Q))
 		window.draw(healthText2);
 		window.draw(staminaText1);
 		window.draw(staminaText2);
+		window.draw(yearText1);
+		window.draw(yearText2);
 
 		//Check if player level meets win condition
-		if (pPlayer->getLevel() < 4) {
+		if (pPlayer->getLevel() > 4) {
 			window.draw(winText1);
 			window.draw(winText2);
 		}
