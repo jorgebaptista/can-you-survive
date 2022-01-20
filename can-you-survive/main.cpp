@@ -57,7 +57,7 @@ int main()
 					std::cout << "Column size of objects.txt file cannot be greater than bounds of map.\n";
 					return 0;
 				}
-
+				
 				switch (t)
 				{
 				case '1':
@@ -114,7 +114,7 @@ int main()
 	blackoutCDarken.a = 100;
 	blackoutCLighten.a = 0;
 	
-	blackoutT.loadFromFile("graphics/black.jpg");
+	blackoutT.loadFromFile("graphics/black.png");
 	blackoutS.setTexture(blackoutT);
 	
 	
@@ -401,6 +401,7 @@ int main()
 						wait += waitTotal.asSeconds();
 					}
 					*/
+					
 				}
 			}
 		}
