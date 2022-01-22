@@ -133,16 +133,20 @@ int main()
 	float attackTimer;
 	float eatTimer;
 	float seasonTimer;
+	float waitTimer;
 	tileChangeTimer = 0;
 	attackTimer = 0;
 	eatTimer = 0;
 	seasonTimer = 0;
+	waitTimer = 0;
 	Fish fishLand;
 	Fish fishSea;
 
 	fishLand.Spawn("land");
 	fishSea.Spawn("sea");
 
+	bool pause;
+	pause = false;
 	int randnum = 0; rand() % 4 + 1;
 	//Stamina Bar to display player stamina
 	RectangleShape staminaBar;
@@ -275,135 +279,149 @@ int main()
 		if (maxFps < fps) maxFps = fps;
 		if (minFps > fps) minFps = fps;
 		// CHECK FPS
-		std::cout << "Fps: " << fps << " Min fps: " << minFps << " Max fps: " << maxFps << std::endl;
+		//std::cout << "Fps: " << fps << " Min fps: " << minFps << " Max fps: " << maxFps << std::endl;
 
 		while (window.pollEvent(event))
 		{
-			// reset fps count
-			if (Keyboard::isKeyPressed(Keyboard::K))
+			
+			if (Keyboard::isKeyPressed(Keyboard::G))
 			{
-				minFps = 5000;
-				maxFps = 0;
-			}
-
-			if (Keyboard::isKeyPressed(Keyboard::Escape))
-			{
-				window.close();
-			}
-			//Allow player to move using WASD
-			if (Keyboard::isKeyPressed(Keyboard::W))
-			{
-				pPlayer->moveUp();
-			}
-			else
-			{
-				pPlayer->stopUp();
-			}
-
-			if (Keyboard::isKeyPressed(Keyboard::S))
-			{
-				pPlayer->moveDown();
-			}
-			else
-			{
-				pPlayer->stopDown();
-			}
-
-			if (Keyboard::isKeyPressed(Keyboard::A))
-			{
-				pPlayer->moveLeft();
-			}
-			else
-			{
-				pPlayer->stopLeft();
-			}
-
-			if (Keyboard::isKeyPressed(Keyboard::D))
-			{
-				pPlayer->moveRight();
-			}
-			else
-			{
-				pPlayer->stopRight();
-			}
-			//Eat fish
-			if (Keyboard::isKeyPressed(Keyboard::E))
-			{
-				if (eatTimer + 0.5 < gameTimeTotalFloat) 
-				{
-					pPlayer->EatFish();
-					eatTimer = gameTimeTotalFloat;
-				}
-			}
-			//Attack with R
-			if (Keyboard::isKeyPressed(Keyboard::R))
-			{
-				if (attackTimer + 0.5 < gameTimeTotalFloat)
-				{
-					list<PolarBear*>::const_iterator iter;
-					for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); ++iter) 
+				if (waitTimer + 0.1 < gameTimeTotalFloat) {
+					if (pause == false)
 					{
-						Vector2f eCenter = (*iter)->getCenter();
-						std::cout << eCenter.x << " " << eCenter.y << endl;
-						if (pPlayer->getCenter() != (*iter)->getCenter()) 
+						pause = true;
+						waitTimer = gameTimeTotalFloat;
+					}
+					else
+					{
+						pause = false;
+						waitTimer = gameTimeTotalFloat;
+					}
+					cout << pause << endl;
+				}
+			
+			}
+			if (pause == false) 
+			{
+				// reset fps count
+				if (Keyboard::isKeyPressed(Keyboard::K))
+				{
+					minFps = 5000;
+					maxFps = 0;
+				}
+
+				if (Keyboard::isKeyPressed(Keyboard::Escape))
+				{
+					window.close();
+				}
+				//Allow player to move using WASD
+				if (Keyboard::isKeyPressed(Keyboard::W))
+				{
+					pPlayer->moveUp();
+				}
+				else
+				{
+					pPlayer->stopUp();
+				}
+
+				if (Keyboard::isKeyPressed(Keyboard::S))
+				{
+					pPlayer->moveDown();
+				}
+				else
+				{
+					pPlayer->stopDown();
+				}
+
+				if (Keyboard::isKeyPressed(Keyboard::A))
+				{
+					pPlayer->moveLeft();
+				}
+				else
+				{
+					pPlayer->stopLeft();
+				}
+
+				if (Keyboard::isKeyPressed(Keyboard::D))
+				{
+					pPlayer->moveRight();
+				}
+				else
+				{
+					pPlayer->stopRight();
+				}
+				//Eat fish
+				if (Keyboard::isKeyPressed(Keyboard::E))
+				{
+					if (eatTimer + 0.5 < gameTimeTotalFloat)
+					{
+						pPlayer->EatFish();
+						eatTimer = gameTimeTotalFloat;
+					}
+				}
+				//Attack with R
+				if (Keyboard::isKeyPressed(Keyboard::R))
+				{
+					if (attackTimer + 0.5 < gameTimeTotalFloat)
+					{
+						list<PolarBear*>::const_iterator iter;
+						for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); ++iter)
 						{
-							Vector2f pCenter = pPlayer->getCenter();
-							std::cout << endl;
-							for (int i = pCenter.x - 128; i < pCenter.x + 129; i = i + 128)
+							Vector2f eCenter = (*iter)->getCenter();
+							std::cout << eCenter.x << " " << eCenter.y << endl;
+							if (pPlayer->getCenter() != (*iter)->getCenter())
 							{
-								for (int j = pCenter.y - 128; j < pCenter.y + 129; j = j + 128)
+								Vector2f pCenter = pPlayer->getCenter();
+								std::cout << endl;
+								for (int i = pCenter.x - 128; i < pCenter.x + 129; i = i + 128)
 								{
-									std::cout << i << " " << j << endl;
-									if (i - 1 <= eCenter.x && i + 1 >= eCenter.x && j - 1 <= eCenter.y && j + 1 >= eCenter.y)
+									for (int j = pCenter.y - 128; j < pCenter.y + 129; j = j + 128)
 									{
-										int damage = 0;
-										damage = pPlayer->Attack();
-										(*iter)->ReduceHealth(damage);
-										if ((*iter)->getHealth() > 0)
+										std::cout << i << " " << j << endl;
+										if (i - 1 <= eCenter.x && i + 1 >= eCenter.x && j - 1 <= eCenter.y && j + 1 >= eCenter.y)
 										{
-											damage = (*iter)->Attack();
-											pPlayer->ReduceHealth(damage);
-										}
-										else
-										{
-											pPlayer->addXP(90);
+											int damage = 0;
+											damage = pPlayer->Attack();
+											(*iter)->ReduceHealth(damage);
+											if ((*iter)->getHealth() > 0)
+											{
+												damage = (*iter)->Attack();
+												pPlayer->ReduceHealth(damage);
+											}
+											else
+											{
+												pPlayer->addXP(90);
+											}
 										}
 									}
 								}
 							}
 						}
+						//cout << eCenter.x << " " << eCenter.y << endl;
+						attackTimer = gameTimeTotalFloat;
 					}
-					//cout << eCenter.x << " " << eCenter.y << endl;
-					attackTimer = gameTimeTotalFloat;
-				}
 
-			}
-			if (Keyboard::isKeyPressed(Keyboard::Q))
-			{
-				if (pPlayer->getTerrain() == Tile::terrainType::SNOW && seasonTimer > 5)
+				}
+				if (Keyboard::isKeyPressed(Keyboard::Q))
 				{
-					pPlayer->Hibernate();
-					pPlayer->CheckIfLevelUp();
-					seasonTimer = 0;
-					year++;
+					if (pPlayer->getTerrain() == Tile::terrainType::SNOW && seasonTimer > 5)
+					{
+						pPlayer->Hibernate();
+						pPlayer->CheckIfLevelUp();
+						seasonTimer = 0;
+						year++;
 
-					//Attempting to reload tilemap with restored ice blocks, currently doesn't work
+						//Attempting to reload tilemap with restored ice blocks, currently doesn't work
+						tileMap = new Tilemap();
+						pause = true;
 
-					/*tileMap = new Tilemap();
-					float wait = 0;
-					Clock clockWait;
 
-					Time waitTotal;
-					
-					while (wait < 15) {
-
-						waitTotal = clockWait.restart();
-						wait += waitTotal.asSeconds();
 					}
-					*/
-					
 				}
 			}
+
+			
+
 		}
 
 		if (seasonTimer > 5) {
@@ -551,9 +569,11 @@ int main()
 		}
 
 		//Move characters
-		for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); ++iter)
-		{
-			(*iter)->Movement(dtAsSeconds, gameTimeTotalFloat, mapBounds);
+		if (pause == false) {
+			for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); ++iter)
+			{
+				(*iter)->Movement(dtAsSeconds, gameTimeTotalFloat, mapBounds);
+			}
 		}
 
 		// TODO: need better way to draw all map, DRAW class?
@@ -594,8 +614,8 @@ int main()
 
 		int tilenumX = mapBounds.x;
 		int tilenumY = mapBounds.y;
-		std::cout << tilenumX / 128 << endl;
-		std::cout << tilenumY / 128 << endl;
+		//std::cout << tilenumX / 128 << endl;
+		//std::cout << tilenumY / 128 << endl;
 
 		iterE = lpEnemy.begin();
 		while (iterE != lpEnemy.end())

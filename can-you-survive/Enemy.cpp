@@ -170,6 +170,9 @@ void Enemy::MoveTowards(float elapsedTime, float totalTime, Vector2f pPosition)
 	distance.y = 0;
 	if (moveTime <= totalTime)
 	{
+		//m_Position.x = goal_PositionX;
+		//m_Position.y = goal_PositionY;
+		//m_Sprite.setPosition(m_Position);
 		if (m_Position.x < pPosition.x)
 		{
 			distance.x = pPosition.x - m_Position.x;
@@ -226,7 +229,7 @@ void Enemy::MoveTowards(float elapsedTime, float totalTime, Vector2f pPosition)
 				moveTime = totalTime + 1;
 			}
 		}
-		std::cout << randnum << std::endl;
+		//std::cout << randnum << std::endl;
 
 	}
 }
