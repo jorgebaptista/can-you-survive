@@ -10,7 +10,7 @@ using namespace sf;
 class Tilemap : public Tile 
 {
 public:
-	Tilemap();
+	Tilemap(int y);
 
 	std::vector<std::vector<Tile*>> getMap();
 

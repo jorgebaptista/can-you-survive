@@ -1,8 +1,13 @@
 #include "Tilemap.h"
 //Constructor
-Tilemap::Tilemap()
+Tilemap::Tilemap(int y)
 {
-	std::ifstream mapFile("map.txt"); // open map text file
+	std::ifstream mapFile("map.txt");
+	//mapFile.open("map2.txt", std::ifstream::in);
+	//if (y = 2) {
+		//std::ifstream mapFile("map2.txt"); // open map text file
+	//}
+
 
 	Vector2f tilePosition (0, 0); // first tile position at 0, 0
 	// if text file exists

@@ -228,6 +228,20 @@ void Enemy::MoveTowards(float elapsedTime, float totalTime, Vector2f pPosition)
 				}
 				moveTime = totalTime + 1;
 			}
+			/*else {
+				if (m_Position.y < pPosition.y && m_Position.x < pPosition.x)
+				{
+					randnum = 2;
+					goal_PositionY = m_Position.y + speed;
+
+				}
+				else
+				{
+					randnum = 4;
+					goal_PositionX = m_Position.x + speed;
+				}
+			}
+			*/
 		}
 		//std::cout << randnum << std::endl;
 

@@ -14,8 +14,9 @@ int main()
 
 	std::ifstream objectFile("objects.txt");
 
+	int year = 1;
 	// create a pointer to a new Tilemap
-	Tilemap* tileMap = new Tilemap();
+	Tilemap* tileMap = new Tilemap(year);
 
 	Vector2f mapBounds = tileMap->getMapBounds();
 
@@ -129,11 +130,13 @@ int main()
 
 	Time gameTimeTotal;
 	float gameTimeTotalFloat;
+	float pauseTimeTotal;
 	float tileChangeTimer;
 	float attackTimer;
 	float eatTimer;
 	float seasonTimer;
 	float waitTimer;
+	pauseTimeTotal = 0;
 	tileChangeTimer = 0;
 	attackTimer = 0;
 	eatTimer = 0;
@@ -255,7 +258,7 @@ int main()
 
 	int maxFps = 0;
 	int minFps = 50000;
-	int year = 1;
+	
 
 	while (window.isOpen())
 	{
@@ -263,9 +266,14 @@ int main()
 
 		Time dt = clock.restart();
 
-		gameTimeTotal += dt;
+		if (pause == false) {
+			gameTimeTotal += dt;
 
-		gameTimeTotalFloat = gameTimeTotal.asSeconds();
+			gameTimeTotalFloat = gameTimeTotal.asSeconds();
+		}
+		
+		pauseTimeTotal += dt.asSeconds();
+		
 
 		float dtAsSeconds = dt.asSeconds();
 
@@ -286,16 +294,16 @@ int main()
 			
 			if (Keyboard::isKeyPressed(Keyboard::G))
 			{
-				if (waitTimer + 0.1 < gameTimeTotalFloat) {
+				if (waitTimer + 0.1 < pauseTimeTotal) {
 					if (pause == false)
 					{
 						pause = true;
-						waitTimer = gameTimeTotalFloat;
+						waitTimer = pauseTimeTotal;
 					}
 					else
 					{
 						pause = false;
-						waitTimer = gameTimeTotalFloat;
+						waitTimer = pauseTimeTotal;
 					}
 					cout << pause << endl;
 				}
@@ -412,7 +420,7 @@ int main()
 						year++;
 
 						//Attempting to reload tilemap with restored ice blocks, currently doesn't work
-						tileMap = new Tilemap();
+						tileMap = new Tilemap(year);
 						pause = true;
 
 
@@ -440,7 +448,7 @@ int main()
 
 		//TODO: move this to player class
 		//Check if enough time has passed to decrease stamina or health
-		if (pPlayer->getStaminaTimer() >= 1)
+		if (pPlayer->getStaminaTimer() >= 1 && pause == false)
 		{
 			float decreaseAmount;
 
@@ -492,13 +500,14 @@ int main()
 		std::list<PolarBear*>::const_iterator iter;
 		std::list<Enemy*>::const_iterator iterE;
 		// iterate through each element
-		for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); iter++)
-		{
-			Tile* tile = tileMap->getMap()[(*iter)->getCenter().y / 128][(*iter)->getCenter().x / 128];
+		if (pause == false) {
+			for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); iter++)
+			{
+				Tile* tile = tileMap->getMap()[(*iter)->getCenter().y / 128][(*iter)->getCenter().x / 128];
 
-			(*iter)->ChangeTerrain(tile->getTerrainType());
+				(*iter)->ChangeTerrain(tile->getTerrainType());
+			}
 		}
-
 		/****************************  CAMERA  *******************************/
 
 		// calculate where camera will be centered
@@ -593,19 +602,21 @@ int main()
 
 
 		// TODO: Need better system to melt ice 
-		for (int i = 0; i < mapBounds.y / 128; i++)
-		{
-			// for each tile on that row
-			for (int j = 0; j < mapBounds.x / 128; j++)
+		if (pause == false) {
+			for (int i = 0; i < mapBounds.y / 128; i++)
 			{
-				// if the terrain type is ice
-				if (map[i][j]->getTerrainType() == Tile::terrainType::ICE)
+				// for each tile on that row
+				for (int j = 0; j < mapBounds.x / 128; j++)
 				{
-					if (((rand() % 100) + 1.f) >= 99.9)
+					// if the terrain type is ice
+					if (map[i][j]->getTerrainType() == Tile::terrainType::ICE)
 					{
-						if (tileChangeTimer + 0.1 < gameTimeTotalFloat) {
-							tileMap->ChangeTileTerrain(i, j, Tile::terrainType::WATER);
-							tileChangeTimer = gameTimeTotalFloat;
+						if (((rand() % 100) + 1.f) >= 99.9)
+						{
+							if (tileChangeTimer + 0.1 < gameTimeTotalFloat) {
+								tileMap->ChangeTileTerrain(i, j, Tile::terrainType::WATER);
+								tileChangeTimer = gameTimeTotalFloat;
+							}
 						}
 					}
 				}
