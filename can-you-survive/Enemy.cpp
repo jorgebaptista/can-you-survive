@@ -52,24 +52,33 @@ void Enemy::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 				else canMove = true;
 				break;
 			case 2:
+				//Check if going down goes outside the map
 				if (m_Position.y + speed > mapBounds.y)
 				{
+					// generate a new num
 					randnum = randnum = rand() % 4 + 1;
 				}
+				// if it doesn't go outside of map then break while loop with bool
 				else canMove = true;
 				break;
 			case 3:
+				//Check if going left goes outside map
 				if (m_Position.x - speed < 0)
 				{
+					// generate a new num
 					randnum = randnum = rand() % 4 + 1;
 				}
+				// if it doesn't go outside of map then break while loop with bool
 				else canMove = true;
 				break;
 			case 4:
+				//Check if going right goes outside map
 				if (m_Position.x + speed > mapBounds.x)
 				{
+					// generate a new num
 					randnum = randnum = rand() % 4 + 1;
 				}
+				// if it doesn't go outside of map then break while loop with bool
 				else canMove = true;
 				break;
 			default:
@@ -80,6 +89,7 @@ void Enemy::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 		//moveTime will be totalTime plus a certain amount to keep movement going the same way for a while.
 		moveTime = totalTime + 1;
 
+		//Set goal position based on randnum
 		if (randnum == 1)
 		{
 			//go up
@@ -103,6 +113,7 @@ void Enemy::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 
 	}
 
+	//move based on randnum
 	if (randnum == 1)
 	{
 		//go up
@@ -111,6 +122,7 @@ void Enemy::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 			m_Position.y -= speed * elapsedTime;
 			m_Sprite.setRotation(270);
 		}
+		//Used to ensure character doesn't move past boundry
 		else
 		{
 			m_Position.y = goal_PositionY;
@@ -124,6 +136,7 @@ void Enemy::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 			m_Position.y += speed * elapsedTime;
 			m_Sprite.setRotation(90);
 		}
+		//Used to ensure character doesn't move past boundry
 		else
 		{
 			m_Position.y = goal_PositionY;
@@ -137,6 +150,7 @@ void Enemy::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 			m_Position.x -= speed * elapsedTime;
 			m_Sprite.setRotation(180);
 		}
+		//Used to ensure character doesn't move past boundry
 		else
 		{
 			m_Position.x = goal_PositionX;
@@ -150,6 +164,7 @@ void Enemy::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 			m_Position.x += speed * elapsedTime;
 			m_Sprite.setRotation(0);
 		}
+		//Used to ensure character doesn't move past boundry
 		else
 		{
 			m_Position.x = goal_PositionX;
@@ -165,14 +180,17 @@ void Enemy::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 //Used by enemy to track player
 void Enemy::MoveTowards(float elapsedTime, float totalTime, Vector2f pPosition)
 {
+	//Used to measure distance from player
 	Vector2f distance;
 	distance.x = 0;
 	distance.y = 0;
 	if (moveTime <= totalTime)
 	{
-		//m_Position.x = goal_PositionX;
-		//m_Position.y = goal_PositionY;
-		//m_Sprite.setPosition(m_Position);
+		//set position to goal position
+		m_Position.x = goal_PositionX;
+		m_Position.y = goal_PositionY;
+		m_Sprite.setPosition(m_Position);
+		//Determine distance to player
 		if (m_Position.x < pPosition.x)
 		{
 			distance.x = pPosition.x - m_Position.x;
@@ -197,6 +215,7 @@ void Enemy::MoveTowards(float elapsedTime, float totalTime, Vector2f pPosition)
 			randnum = 0;
 			moveTime = totalTime + 1;
 		}
+		//Determine where enemy should move
 		else {
 			if (distance.x > distance.y)
 			{
@@ -228,8 +247,9 @@ void Enemy::MoveTowards(float elapsedTime, float totalTime, Vector2f pPosition)
 				}
 				moveTime = totalTime + 1;
 			}
-			/*else {
-				if (m_Position.y < pPosition.y && m_Position.x < pPosition.x)
+			//Else to move enemy if x distance and y distance are the same
+			else {
+				if (m_Position.y < pPosition.y)
 				{
 					randnum = 2;
 					goal_PositionY = m_Position.y + speed;
@@ -237,11 +257,12 @@ void Enemy::MoveTowards(float elapsedTime, float totalTime, Vector2f pPosition)
 				}
 				else
 				{
-					randnum = 4;
-					goal_PositionX = m_Position.x + speed;
+					randnum = 1;
+					goal_PositionY = m_Position.y - speed;
 				}
+				moveTime = totalTime + 1;
 			}
-			*/
+			
 		}
 		//std::cout << randnum << std::endl;
 

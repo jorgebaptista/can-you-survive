@@ -1,7 +1,8 @@
 #include "Tilemap.h"
-//Constructor
+//Constructor, y used to select map.txt to draw from
 Tilemap::Tilemap(int y)
 {
+	//Used to draw map
 	std::ifstream mapFile("map.txt");
 	//mapFile.open("map2.txt", std::ifstream::in);
 	//if (y = 2) {

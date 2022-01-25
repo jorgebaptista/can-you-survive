@@ -11,18 +11,22 @@ using namespace sf;
 int main()
 {
 	srand(static_cast<unsigned int>(time(0)));
-
+	//Objects file used to draw objects
 	std::ifstream objectFile("objects.txt");
-
+	
+	//Year used for map changes
 	int year = 1;
 	// create a pointer to a new Tilemap
 	Tilemap* tileMap = new Tilemap(year);
-
+	//map boundries gotten to stop player from walking outside of map.
 	Vector2f mapBounds = tileMap->getMapBounds();
 
 	// create a list of pointers to Polar bears
 	std::list<PolarBear*> lpPolarBears;
+
+	//create a list of pointers to fish
 	std::list<Fish*> lpFish;
+	//fill pointers with fish
 	for (int i = 0; i < 5; i++) {
 		Fish* fishLand = new Fish();
 		fishLand->Spawn("land");
@@ -43,9 +47,10 @@ int main()
 		std::string line;
 
 		int row = 0;
-
+		//for loop to place player and enemies into lists, and assign position
 		for (line; getline(objectFile, line);)
 		{
+			//ensure the row size of the object file doesn't exceed the map boundries
 			if (objectPosition.y > mapBounds.y)
 			{
 				std::cout << "Row size of objects.txt file cannot be greater than bounds of map.\n";
@@ -53,6 +58,7 @@ int main()
 			}
 			for (char& t : line)
 			{
+				//ensure the column size of the object file doesn't exceed the map boundries
 				if (objectPosition.x > mapBounds.x)
 				{
 					std::cout << "Column size of objects.txt file cannot be greater than bounds of map.\n";
@@ -61,6 +67,7 @@ int main()
 				
 				switch (t)
 				{
+				//Create player
 				case '1':
 					// create a pointer to a new player
 					if (pPlayer == nullptr)
@@ -75,6 +82,7 @@ int main()
 						return 0;
 					}
 					break;
+				//Create enemy
 				case '2':
 					Enemy * enemy = new Enemy(objectPosition);
 					lpPolarBears.push_back(enemy);
@@ -128,6 +136,7 @@ int main()
 
 	Clock clock;
 
+	//Section where timers are placed for the game
 	Time gameTimeTotal;
 	float gameTimeTotalFloat;
 	float pauseTimeTotal;
@@ -169,6 +178,8 @@ int main()
 	healthBar.setFillColor(Color::Green);
 	healthBar.setPosition(50, 950);
 
+
+	//All the text used for the game
 	Text fishText1;
 	Text fishText2;
 	Text levelText1;
@@ -291,7 +302,7 @@ int main()
 
 		while (window.pollEvent(event))
 		{
-			
+			//Used to pause the game
 			if (Keyboard::isKeyPressed(Keyboard::G))
 			{
 				if (waitTimer + 0.1 < pauseTimeTotal) {
@@ -309,6 +320,7 @@ int main()
 				}
 			
 			}
+			//if the game is not paused, allow player movement
 			if (pause == false) 
 			{
 				// reset fps count
@@ -370,27 +382,35 @@ int main()
 				//Attack with R
 				if (Keyboard::isKeyPressed(Keyboard::R))
 				{
+					//Check if enough time has passed to attack
 					if (attackTimer + 0.5 < gameTimeTotalFloat)
 					{
+						//Run through polar bear list and see which are close enough to attack
 						list<PolarBear*>::const_iterator iter;
 						for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); ++iter)
 						{
 							Vector2f eCenter = (*iter)->getCenter();
+							//Get the center of the polar bear and compare it to player
 							std::cout << eCenter.x << " " << eCenter.y << endl;
 							if (pPlayer->getCenter() != (*iter)->getCenter())
 							{
+								//Return player center
 								Vector2f pCenter = pPlayer->getCenter();
 								std::cout << endl;
+								//for loops to scan around player for enemy
 								for (int i = pCenter.x - 128; i < pCenter.x + 129; i = i + 128)
 								{
 									for (int j = pCenter.y - 128; j < pCenter.y + 129; j = j + 128)
 									{
 										std::cout << i << " " << j << endl;
+										//If enemy is found, attack that enemy
 										if (i - 1 <= eCenter.x && i + 1 >= eCenter.x && j - 1 <= eCenter.y && j + 1 >= eCenter.y)
 										{
+											//Run the attack function for both player and enemy and reduce health by the returned amount
 											int damage = 0;
 											damage = pPlayer->Attack();
 											(*iter)->ReduceHealth(damage);
+											//If the enemy has health, retailiate, if not, die and give player xp
 											if ((*iter)->getHealth() > 0)
 											{
 												damage = (*iter)->Attack();
@@ -410,13 +430,19 @@ int main()
 					}
 
 				}
+				//Hibernate function, ends the year
 				if (Keyboard::isKeyPressed(Keyboard::Q))
 				{
+					//Check the player's location, see if they can hibernate based on terrain and time passed
 					if (pPlayer->getTerrain() == Tile::terrainType::SNOW && seasonTimer > 5)
 					{
+						//Player hibernate function
 						pPlayer->Hibernate();
+						//Check if the player has levelled up
 						pPlayer->CheckIfLevelUp();
+						//Reset seasonTimer
 						seasonTimer = 0;
+						//Increment year
 						year++;
 
 						//Attempting to reload tilemap with restored ice blocks, currently doesn't work

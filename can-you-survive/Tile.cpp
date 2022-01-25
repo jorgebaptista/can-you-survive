@@ -21,6 +21,7 @@ Tile::terrainType Tile::getTerrainType()
 	return m_terrainType;
 }
 
+//change the terrains type
 void Tile::ChangeType(Tile::terrainType terrain)
 {
 	m_terrainType = terrain;

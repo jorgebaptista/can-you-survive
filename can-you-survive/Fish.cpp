@@ -8,6 +8,7 @@ Fish::Fish()
 	m_Position.y = -1000;
 }
 
+//Spawn fish with type
 void Fish::Spawn(string t)
 {
 	type = t;
@@ -34,14 +35,17 @@ string Fish::getType()
 	return type;
 }
 
+//return sprite
 Sprite Fish::getSprite() {
 	return m_Sprite;
 }
 
+//return position
 FloatRect Fish::getPosition() {
 	return m_Sprite.getGlobalBounds();
 }
 
+//set position
 void Fish::setPosition(float x, float y) {
 	m_Position.x = x;
 	m_Position.y = y;

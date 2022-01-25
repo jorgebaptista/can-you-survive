@@ -72,6 +72,7 @@ Sprite PolarBear::getSprite()
 	return m_Sprite;
 }
 
+//Check if alive and if not
 bool PolarBear::isAlive()
 {
 	if (health<=0) {
@@ -86,16 +87,19 @@ bool PolarBear::isAlive()
 	}
 }
 
+//return health
 int PolarBear::getHealth()
 {
 	return health;
 }
 
+//return terrain and assign it to polarbear
 void PolarBear::ChangeTerrain(Tile::terrainType terrain)
 {
 	m_currentTerrain = terrain;
 }
 
+//get terrain type
 Tile::terrainType PolarBear::getTerrain()
 {
 	return m_currentTerrain;
