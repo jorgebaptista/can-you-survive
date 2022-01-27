@@ -4,10 +4,38 @@ Tilemap::Tilemap(int y)
 {
 	//Used to draw map
 	std::ifstream mapFile("map.txt");
-	//mapFile.open("map2.txt", std::ifstream::in);
-	//if (y = 2) {
-		//std::ifstream mapFile("map2.txt"); // open map text file
-	//}
+	mapFile.close();
+	
+	if (y == 1) {
+		mapFile.open("map.txt", std::ifstream::in);
+	}
+	if (y == 2) {
+		mapFile.open("map2.txt", std::ifstream::in); // open map text file
+	}
+	if (y == 3) {
+		mapFile.open("map3.txt", std::ifstream::in);
+	}
+	if (y == 4) {
+		mapFile.open("map4.txt", std::ifstream::in); // open map text file
+	}
+	if (y == 5) {
+		mapFile.open("map5.txt", std::ifstream::in);
+	}
+	if (y == 6) {
+		mapFile.open("map6.txt", std::ifstream::in); // open map text file
+	}
+	if (y == 7) {
+		mapFile.open("map7.txt", std::ifstream::in);
+	}
+	if (y == 8) {
+		mapFile.open("map8.txt", std::ifstream::in); // open map text file
+	}
+	if (y == 9) {
+		mapFile.open("map9.txt", std::ifstream::in);
+	}
+	if (y == 10) {
+		mapFile.open("map10.txt", std::ifstream::in); // open map text file
+	}
 
 
 	Vector2f tilePosition (0, 0); // first tile position at 0, 0

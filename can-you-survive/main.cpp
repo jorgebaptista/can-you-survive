@@ -118,15 +118,17 @@ int main()
 	//blackout
 	Texture blackoutT;
 	Sprite blackoutS;
+	//colors used to change blackout image
 	Color blackoutCDarken;
 	Color blackoutCLighten;
 	blackoutCDarken.a = 100;
 	blackoutCLighten.a = 0;
 	
+	//load blackout file
 	blackoutT.loadFromFile("graphics/black.png");
 	blackoutS.setTexture(blackoutT);
 	
-	
+	//scale to fill screen
 	blackoutS.scale(4.0,4.0);
 
 	//Views created
@@ -157,6 +159,7 @@ int main()
 	fishLand.Spawn("land");
 	fishSea.Spawn("sea");
 
+	//pause bool to pause the game
 	bool pause;
 	pause = false;
 	int randnum = 0; rand() % 4 + 1;
@@ -193,6 +196,7 @@ int main()
 	Text yearText1;
 	Text yearText2;
 
+	//set font
 	Font font;
 	font.loadFromFile("fonts/KOMIKAP_.ttf");
 	fishText1.setFont(font);
@@ -267,28 +271,35 @@ int main()
 	yearText2.setFillColor(Color::White);
 	yearText2.setPosition(53, 53);
 
+	//fps stored
 	int maxFps = 0;
 	int minFps = 50000;
 	
-
+	//Start of while loop, runs game while window is open
 	while (window.isOpen())
 	{
+		//Event variable
 		Event event;
 
-		Time dt = clock.restart();
 
+		Time dt = clock.restart();
+		float dtAsSeconds = dt.asSeconds();
+
+		//Check if pause variable has been made false, if so, increase gameTimeTotal
 		if (pause == false) {
 			gameTimeTotal += dt;
-
+			seasonTimer = seasonTimer + dtAsSeconds;
 			gameTimeTotalFloat = gameTimeTotal.asSeconds();
 		}
 		
+		//Constantly increment pauseTimeTotal to pause and unpause game
 		pauseTimeTotal += dt.asSeconds();
 		
 
-		float dtAsSeconds = dt.asSeconds();
+		
 
-		seasonTimer = seasonTimer + dtAsSeconds;
+		//change seasons
+		
 
 
 		// debug fps
@@ -305,6 +316,7 @@ int main()
 			//Used to pause the game
 			if (Keyboard::isKeyPressed(Keyboard::G))
 			{
+				//Add wait timer to stop input being reread
 				if (waitTimer + 0.1 < pauseTimeTotal) {
 					if (pause == false)
 					{
@@ -458,9 +470,11 @@ int main()
 
 		}
 
+		//Season timer will change blackout sprite to be less opaque, darkening the screen
 		if (seasonTimer > 5) {
 			blackoutS.setColor(blackoutCDarken);
 		}
+		//blackout sprite will be set to opaque, lightening the screen
 		else {
 			blackoutS.setColor(blackoutCLighten);
 		}
@@ -488,13 +502,14 @@ int main()
 				decreaseAmount = staminaDecrease;
 			}
 
+			//Stamina percent used to determine if player regens health
 			float staminaPercent = 0;
 			staminaPercent = (pPlayer->getStamina() / pPlayer->getStaminaMax()) * 100;
 
 			if (staminaPercent > 80) {
 				pPlayer->addHealth(2);
 			}
-			std::cout << staminaPercent << endl;
+			
 
 			// if player stamina is not 0 it decreases stamina, else it decreases health
 			pPlayer->getStamina() > 0 ? pPlayer->StaminaDecrease(decreaseAmount) : pPlayer->ReduceHealth(decreaseAmount);
@@ -505,6 +520,7 @@ int main()
 		// fish collision
 		std::list<Fish*>::const_iterator iterF;
 
+		//Scanning through fish list to determine which fish was found
 		for (iterF = lpFish.begin(); iterF != lpFish.end(); iterF++) {
 			if (pPlayer->getPosition().intersects((*iterF)->getPosition())) {
 				if ((*iterF)->getType() == "land") {
@@ -637,6 +653,7 @@ int main()
 					// if the terrain type is ice
 					if (map[i][j]->getTerrainType() == Tile::terrainType::ICE)
 					{
+						//determine if ice terrain changes to water
 						if (((rand() % 100) + 1.f) >= 99.9)
 						{
 							if (tileChangeTimer + 0.1 < gameTimeTotalFloat) {
@@ -654,13 +671,16 @@ int main()
 		//std::cout << tilenumX / 128 << endl;
 		//std::cout << tilenumY / 128 << endl;
 
+	
 		iterE = lpEnemy.begin();
+		//While loop, will check if enemy has died and will respawn them, will also drop fish on land
 		while (iterE != lpEnemy.end())
 		{
 			if (!(*iterE)->isAlive())
 			{
 				
 				for (iterF = lpFish.begin(); iterF != lpFish.end(); iterF++) {
+					//Checks to see if the fish has already been placed, if not, place the fish and break the loop
 					if (((*iterF)->getCenter().x < -0) && (*iterF)->getType() == "land") {
 						
 						(*iterF)->setPosition((*iterE)->getCenter().x, (*iterE)->getCenter().y);
@@ -671,11 +691,12 @@ int main()
 				//int tilenumX = mapBounds.x;
 				//int tilenumY = mapBounds.y;
 				//cout << tilenumX / 128 << endl;
+				//calculate new spawn location for enemy
 				randnum = rand() % 4 + 1;
 				int x = randnum;
 				randnum = rand() % 4 + 1;
 				int y = randnum;
-				(*iterE)->Spawn(100, 100, 1, 3, x * 128, y * 128);
+				(*iterE)->Spawn(100, 100, year, 3, x * 128, y * 128);
 			}
 			else
 			{
@@ -683,6 +704,7 @@ int main()
 			}
 		}
 
+		//Perform draws
 		for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); ++iter)
 		{
 			window.draw((*iter)->getSprite());
@@ -713,6 +735,7 @@ int main()
 		yearText1.setString(yearString.str());
 		yearText2.setString(yearString.str());
 
+		//change view to hudView to set hud graphics
 		window.setView(hudView);
 		window.draw(staminaBar);
 		window.draw(healthBar);
