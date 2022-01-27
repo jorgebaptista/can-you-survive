@@ -28,7 +28,7 @@ PolarBear::PolarBear(Vector2f position)
 
 //Used to spawn new polarbears when they die
 void PolarBear::Spawn(int h, int mh, int l, int d, float x, float y) {
-	float multi = pow(1.1, l);
+	float multi = pow(1.08, l);
 	health = h * multi;
 	maxHealth = mh * multi;
 	level = l;

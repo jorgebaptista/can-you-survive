@@ -268,3 +268,11 @@ void Enemy::MoveTowards(float elapsedTime, float totalTime, Vector2f pPosition)
 
 	}
 }
+
+void Enemy::LevelUp() {
+	level++;
+	float multi = pow(1.08, level);
+	health = maxHealth * multi;
+	maxHealth = maxHealth * multi;
+	m_damage = m_damage * multi;
+}

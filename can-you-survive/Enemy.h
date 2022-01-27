@@ -10,6 +10,7 @@ public:
 	//Virtual functions to be given details
 	void Movement(float elapsedTime, float totalTime, Vector2f mapBounds) override;
 	void MoveTowards(float elapsedTime, float totalTime, Vector2f pPosition);
+	void LevelUp();
 
 protected:
 	//Random number used to determine which direction to go
