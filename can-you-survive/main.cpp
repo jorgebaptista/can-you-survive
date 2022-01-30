@@ -163,7 +163,9 @@ int main()
 
 	//pause bool to pause the game
 	bool pause;
+	bool select;
 	pause = false;
+	select = false;
 	int randnum = 0;
 	//Stamina Bar to display player stamina
 	RectangleShape staminaBar;
@@ -191,7 +193,24 @@ int main()
 	Text playText;
 
 	playText.setFont(font);
-	playText.setString("Play Game");
+	
+	std::stringstream playStream;
+	playStream <<
+		"1. Play Game" <<
+		"\n2. About" <<
+		"\n3. Instructions";
+	std::stringstream aboutStream;
+	aboutStream <<
+		"This game is about the theme of global warming, staring" <<
+		"\na polar bear attempting to survive in the polar ice caps";
+	std::stringstream instructionsStream;
+	instructionsStream <<
+		"WASD - Movement" <<
+		"\nQ - Hibernate(When screen dark, on solid land)" <<
+		"\nR - Attack" <<
+		"\nE - Eat Fish in stock" <<
+		"\nSpace - Pause";
+	playText.setString(playStream.str());
 	playText.setCharacterSize(75);
 	playText.setFillColor(Color::White);
 	playText.setPosition(700, 540);
@@ -283,6 +302,14 @@ int main()
 	yearText2.setFillColor(Color::White);
 	yearText2.setPosition(53, 53);
 
+	//Text for end state
+	Text loseText;
+
+	loseText.setFont(font);
+	loseText.setString("You Lose...");
+	loseText.setCharacterSize(100);
+	loseText.setFillColor(Color::White);
+	loseText.setPosition(955, 535);
 	//fps stored
 	int maxFps = 0;
 	int minFps = 50000;
@@ -301,13 +328,17 @@ int main()
 		if (pause == false)
 		{
 			gameTimeTotal += dt;
-			seasonTimer = seasonTimer + dtAsSeconds;
+			
 			gameTimeTotalFloat = gameTimeTotal.asSeconds();
+		}
+		if (pause == false && state==State::PLAYING)
+		{
+			seasonTimer = seasonTimer + dtAsSeconds;
 		}
 		
 		//Constantly increment pauseTimeTotal to pause and unpause game
-		pauseTimeTotal += dt.asSeconds();
 		
+		pauseTimeTotal += dt.asSeconds();
 		
 
 		
@@ -329,14 +360,45 @@ int main()
 		{
 			if (state == State::PAUSED)
 			{
-				if (Keyboard::isKeyPressed(Keyboard::G))
+				if (Keyboard::isKeyPressed(Keyboard::Escape))
+				{
+					if(select ==true){
+						select = false;
+						playText.setString(playStream.str());
+						playText.setPosition(700, 540);
+						playText.setCharacterSize(75);
+					}
+				}
+				if (Keyboard::isKeyPressed(Keyboard::Num1) && select == false)
 				{
 					state = State::PLAYING;
 					waitTimer = pauseTimeTotal;
+					pause == false;
+				}
+				if (Keyboard::isKeyPressed(Keyboard::Num2) && select == false)
+				{
+					playText.setString(aboutStream.str());
+					select = true;
+					playText.setPosition(100, 100);
+					playText.setCharacterSize(25);
+				}
+				if (Keyboard::isKeyPressed(Keyboard::Num3) && select == false)
+				{
+					playText.setString(instructionsStream.str());
+					select = true;
+					playText.setPosition(500, 300);
+					playText.setCharacterSize(50);
+				}
+			}
+			if (state != State::PAUSED) {
+				if (Keyboard::isKeyPressed(Keyboard::Escape))
+				{
+					window.close();
 				}
 			}
 			if (state == State::PLAYING)
 			{
+				
 				//Used to pause the game
 				if (Keyboard::isKeyPressed(Keyboard::G))
 				{
@@ -366,10 +428,7 @@ int main()
 						maxFps = 0;
 					}
 
-					if (Keyboard::isKeyPressed(Keyboard::Escape))
-					{
-						window.close();
-					}
+					
 					//Allow player to move using WASD
 					if (Keyboard::isKeyPressed(Keyboard::W))
 					{
@@ -480,16 +539,21 @@ int main()
 							seasonTimer = 0;
 							//Increment year
 							year++;
-							//When year increases, level up enemies
-							std::list<Enemy*>::const_iterator iterE;
-							for (iterE = lpEnemy.begin(); iterE != lpEnemy.end(); ++iterE) {
-								float x = (*iterE)->getCenter().x;
-								float y = (*iterE)->getCenter().y;
-								(*iterE)->LevelUp();
+							if (year == 3) {
+								state = State::END;
 							}
-							//Attempting to reload tilemap with restored ice blocks, currently doesn't work
-							tileMap = new Tilemap(year);
-							pause = true;
+							else {
+								//When year increases, level up enemies
+								std::list<Enemy*>::const_iterator iterE;
+								for (iterE = lpEnemy.begin(); iterE != lpEnemy.end(); ++iterE) {
+									float x = (*iterE)->getCenter().x;
+									float y = (*iterE)->getCenter().y;
+									(*iterE)->LevelUp();
+								}
+								//Attempting to reload tilemap with restored ice blocks, currently doesn't work
+								tileMap = new Tilemap(year);
+								pause = true;
+							}
 
 
 						}
@@ -648,12 +712,12 @@ int main()
 
 				if ((*iterE)->getCenter().y > minCameraViewY && (*iterE)->getCenter().y < maxCameraViewY
 					&& (*iterE)->getCenter().x > minCameraViewX && (*iterE)->getCenter().x < maxCameraViewX)
-				{
+				{      
 
 					(*iterE)->MoveTowards(dtAsSeconds, gameTimeTotalFloat, pPlayer->getCenter());
 				}
 			}
-
+			       
 			//Move characters
 			if (pause == false) {
 				for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); ++iter)
@@ -739,13 +803,29 @@ int main()
 				}
 			}
 		}
+
+		
 		//Perform draws
 		//Draw for paused
 		
 		if (state == State::PAUSED) 
 		{
+			window.clear(Color(0,0,0)); // clear the window
+			window.setView(hudView);
 			window.draw(playText);
 
+		}
+
+		if (state == State::END) {
+			window.clear(Color(0, 0, 0)); // clear the window
+			window.setView(hudView);
+			//Check if player level meets win condition
+			if (pPlayer->getLevel() > 6) {
+				window.draw(winText2);
+			}
+			else {
+				window.draw(loseText);
+			}
 		}
 		//Draw for playing
 		if (state == State::PLAYING)
@@ -795,11 +875,7 @@ int main()
 			window.draw(yearText1);
 			window.draw(yearText2);
 
-			//Check if player level meets win condition
-			if (pPlayer->getLevel() > 4) {
-				window.draw(winText1);
-				window.draw(winText2);
-			}
+			
 		}
 		window.display();
 	}
