@@ -12,7 +12,7 @@ Player::Player(Vector2f position)
 	xpNeed = 100;
 	m_damage = 5;
 	speed = 256;
-	fishNum = 100;
+	fishNum = 3;
 	move = 'c';
 	staminaTimer = 0;
 
@@ -80,6 +80,8 @@ void Player::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 		{
 			m_Position.y -= speed * elapsedTime;
 			m_Sprite.setRotation(270);
+			m_Texture.loadFromFile("graphics/polar.png");
+			m_Sprite.setTexture(m_Texture);
 		}
 		else 
 		{
@@ -93,6 +95,8 @@ void Player::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 		{
 			m_Position.y += speed * elapsedTime;
 			m_Sprite.setRotation(90);
+			m_Texture.loadFromFile("graphics/polar.png");
+			m_Sprite.setTexture(m_Texture);
 		}
 		else 
 		{
@@ -104,7 +108,9 @@ void Player::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 		if (m_Position.x > goal_PositionX) 
 		{
 			m_Position.x -= speed * elapsedTime;
-			m_Sprite.setRotation(180);
+			m_Sprite.setRotation(0);
+			m_Texture.loadFromFile("graphics/polarflip.png");
+			m_Sprite.setTexture(m_Texture);
 		}
 		else 
 		{
@@ -116,6 +122,8 @@ void Player::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 		if (m_Position.x < goal_PositionX) {
 			m_Position.x += speed * elapsedTime;
 			m_Sprite.setRotation(0);
+			m_Texture.loadFromFile("graphics/polar.png");
+			m_Sprite.setTexture(m_Texture);
 		}
 		else 
 		{

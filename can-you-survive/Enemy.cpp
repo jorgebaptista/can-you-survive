@@ -121,6 +121,8 @@ void Enemy::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 		{
 			m_Position.y -= speed * elapsedTime;
 			m_Sprite.setRotation(270);
+			m_Texture.loadFromFile("graphics/polar.png");
+			m_Sprite.setTexture(m_Texture);
 		}
 		//Used to ensure character doesn't move past boundry
 		else
@@ -135,6 +137,8 @@ void Enemy::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 		{
 			m_Position.y += speed * elapsedTime;
 			m_Sprite.setRotation(90);
+			m_Texture.loadFromFile("graphics/polar.png");
+			m_Sprite.setTexture(m_Texture);
 		}
 		//Used to ensure character doesn't move past boundry
 		else
@@ -148,7 +152,9 @@ void Enemy::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 		if (m_Position.x > goal_PositionX)
 		{
 			m_Position.x -= speed * elapsedTime;
-			m_Sprite.setRotation(180);
+			m_Sprite.setRotation(0);
+			m_Texture.loadFromFile("graphics/polarflip.png");
+			m_Sprite.setTexture(m_Texture);
 		}
 		//Used to ensure character doesn't move past boundry
 		else
@@ -163,6 +169,8 @@ void Enemy::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 		{
 			m_Position.x += speed * elapsedTime;
 			m_Sprite.setRotation(0);
+			m_Texture.loadFromFile("graphics/polar.png");
+			m_Sprite.setTexture(m_Texture);
 		}
 		//Used to ensure character doesn't move past boundry
 		else

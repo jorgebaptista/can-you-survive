@@ -19,16 +19,16 @@ PolarBear::PolarBear(Vector2f position)
 	moveTime = 0;
 	m_damage = 5;
 
-	m_Texture.loadFromFile("graphics/polartemp.png");
+	m_Texture.loadFromFile("graphics/polar.png");
 	m_Sprite.setTexture(m_Texture);
-	m_Sprite.scale(0.1, 0.1);
-	m_Sprite.setOrigin(256, 256);
+	m_Sprite.scale(2, 2);
+	m_Sprite.setOrigin(19, 19);
 	m_Sprite.setPosition(m_Position);
 }
 
 //Used to spawn new polarbears when they die
 void PolarBear::Spawn(int h, int mh, int l, int d, float x, float y) {
-	float multi = pow(1.08, l);
+	float multi = pow(1.05, l);
 	health = h * multi;
 	maxHealth = mh * multi;
 	level = l;

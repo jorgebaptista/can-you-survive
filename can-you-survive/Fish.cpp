@@ -14,11 +14,11 @@ void Fish::Spawn(string t)
 	type = t;
 	if (type == "sea")
 	{
-		m_Texture.loadFromFile("graphics/fishseatemp.png");
+		m_Texture.loadFromFile("graphics/fishsea.png");
 	}
 	else if (type == "land")
 	{
-		m_Texture.loadFromFile("graphics/fishlandtemp.png");
+		m_Texture.loadFromFile("graphics/fishland.png");
 	}
 
 	m_Sprite.setTexture(m_Texture);

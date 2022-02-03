@@ -13,7 +13,7 @@ int main()
 	srand(static_cast<unsigned int>(time(0)));
 	//Objects file used to draw objects
 	std::ifstream objectFile("objects.txt");
-	enum class State {PAUSED, PLAYING, END};
+	enum class State {PAUSED, INTRO, PLAYING, END};
 
 	State state = State::PAUSED;
 	//Year used for map changes
@@ -29,11 +29,11 @@ int main()
 	//create a list of pointers to fish
 	std::list<Fish*> lpFish;
 	//fill pointers with fish
-	for (int i = 0; i < 5; i++) {
+	for (int i = 0; i < 5; i++) 
+	{
 		Fish* fishLand = new Fish();
 		fishLand->Spawn("land");
 		lpFish.push_back(fishLand);
-
 	}
 
 	Player* pPlayer = nullptr;
@@ -194,26 +194,69 @@ int main()
 
 	playText.setFont(font);
 	
+	//multiple stringstreams used to quickly switch text
 	std::stringstream playStream;
 	playStream <<
 		"1. Play Game" <<
 		"\n2. About" <<
-		"\n3. Instructions";
+		"\n3. Instructions" <<
+		"\n4. References";
 	std::stringstream aboutStream;
 	aboutStream <<
-		"This game is about the theme of global warming, staring" <<
-		"\na polar bear attempting to survive in the polar ice caps";
+		"This game is about the theme of global warming, staring a polar bear attempting" <<
+		"\nto survive in the polar ice caps. Global Warming has constantly been affecting " <<
+		"\nthe world in a variety of ways, and in the case of this scenario, Animals have been" <<
+		"\nlosing their homes thanks to the ice caps melting, and the effects this has on us" <<
+		"\nare that we will lose livable land mass due to flooding, as the melting results in" <<
+		"\nmore water in the oceans. Global warming is not to be taken lightly and needs to be" <<
+		"\nprevented" <<
+		"\n" <<
+		"\nPolar Bears are animals that reside in the Polar Ice Caps and the feature of the game" <<
+		"\nPolar Bears are experiencing long summer fasts as a result of climate change, and the" <<
+		"\nfasts they experience will continue to get longer and longer as climate change gets worse." <<
+		"\nPolar bears primary food source is ringed seals, however, in cases where food is scarce," <<
+		"\ntheir food source is fish.";
 	std::stringstream instructionsStream;
 	instructionsStream <<
 		"WASD - Movement" <<
 		"\nQ - Hibernate(When screen dark, on solid land)" <<
 		"\nR - Attack" <<
 		"\nE - Eat Fish in stock" <<
-		"\nSpace - Pause";
+		"\nSpace - Pause" <<
+		"\nEscape - Closes game (if still in main menu, will only return to play menu)";
+	std::stringstream referenceStream;
+	referenceStream <<
+		"ice.png and snow.png - digit1024 on opengameart.com, originally called ice block (snow modified ice)" <<
+		"\npolar.png and polarflip - rapidpunches on opengameart.com, part of Galapagos Penguin and Polar Bear" <<
+		"\nfishland.png and fishsea.png - skylerb on opengameart.com, part of 02 The Rescue Assets COMP 1501A" <<
+		"\n";
 	playText.setString(playStream.str());
 	playText.setCharacterSize(75);
 	playText.setFillColor(Color::White);
-	playText.setPosition(700, 540);
+	playText.setPosition(550, 400);
+
+	//Text for Intro state
+	Text introText;
+
+	//introText font
+	introText.setFont(font);
+
+	std::stringstream introStream;
+	introStream <<
+		"You play as a polar bear in the melting ice caps affected by global warming. In the game," <<
+		"\nyou must survive by eating fish you can find by either defeating other polar bears or " <<
+		"\nby swimming out into the water where fish can be found. As you hunt, your health and " <<
+		"\nstamina will start to drop, and if you are swimming, you will lose even more. This is" <<
+		"\nregained byconsuming fish, fish found in water are held, while those gained from" <<
+		"\ndefeated enemies areimmediately consumed. By consuming fish and defeating enemies," <<
+		"\nyou will gain xp, and when dark arrives, you can hibernate and regain your health" <<
+		"\nand stamina, and if you have enough xp you will level up. Reach level 10 by the" <<
+		"\nend of the 10th year and you will survive" <<
+		"\n" << 
+		"\nPress enter to continue";
+	introText.setString(introStream.str());
+	introText.setFillColor(Color::White);
+	introText.setPosition(100, 100);
 
 	//Text for Playing state
 	Text fishText1;
@@ -365,15 +408,15 @@ int main()
 					if(select ==true){
 						select = false;
 						playText.setString(playStream.str());
-						playText.setPosition(700, 540);
+						playText.setPosition(550, 400);
 						playText.setCharacterSize(75);
 					}
 				}
 				if (Keyboard::isKeyPressed(Keyboard::Num1) && select == false)
 				{
-					state = State::PLAYING;
+					state = State::INTRO;
 					waitTimer = pauseTimeTotal;
-					pause == false;
+					
 				}
 				if (Keyboard::isKeyPressed(Keyboard::Num2) && select == false)
 				{
@@ -386,11 +429,28 @@ int main()
 				{
 					playText.setString(instructionsStream.str());
 					select = true;
-					playText.setPosition(500, 300);
+					playText.setPosition(100, 100);
 					playText.setCharacterSize(50);
 				}
+				if (Keyboard::isKeyPressed(Keyboard::Num4) && select == false) {
+					playText.setString(referenceStream.str());
+					select = true;
+					playText.setPosition(100, 100);
+					playText.setCharacterSize(25);
+				}
 			}
-			if (state != State::PAUSED) {
+			//Intro state input
+			if (state == State::INTRO) 
+			{
+				//Pressing lets player enter game
+				if (Keyboard::isKeyPressed(Keyboard::Enter)) 
+				{
+					state = State::PLAYING;
+					pause == false;
+				}
+			}
+			if (state != State::PAUSED) 
+			{
 				if (Keyboard::isKeyPressed(Keyboard::Escape))
 				{
 					window.close();
@@ -400,10 +460,11 @@ int main()
 			{
 				
 				//Used to pause the game
-				if (Keyboard::isKeyPressed(Keyboard::G))
+				if (Keyboard::isKeyPressed(Keyboard::Space))
 				{
 					//Add wait timer to stop input being reread
-					if (waitTimer + 0.1 < pauseTimeTotal) {
+					if (waitTimer + 0.1 < pauseTimeTotal)
+					{
 						if (pause == false)
 						{
 							pause = true;
@@ -529,7 +590,7 @@ int main()
 					if (Keyboard::isKeyPressed(Keyboard::Q))
 					{
 						//Check the player's location, see if they can hibernate based on terrain and time passed
-						if (pPlayer->getTerrain() == Tile::terrainType::SNOW && seasonTimer > 5)
+						if (pPlayer->getTerrain() == Tile::terrainType::SNOW && seasonTimer > 30)
 						{
 							//Player hibernate function
 							pPlayer->Hibernate();
@@ -539,13 +600,16 @@ int main()
 							seasonTimer = 0;
 							//Increment year
 							year++;
-							if (year == 3) {
+							if (year == 11) 
+							{
 								state = State::END;
 							}
-							else {
+							else 
+							{
 								//When year increases, level up enemies
 								std::list<Enemy*>::const_iterator iterE;
-								for (iterE = lpEnemy.begin(); iterE != lpEnemy.end(); ++iterE) {
+								for (iterE = lpEnemy.begin(); iterE != lpEnemy.end(); ++iterE) 
+								{
 									float x = (*iterE)->getCenter().x;
 									float y = (*iterE)->getCenter().y;
 									(*iterE)->LevelUp();
@@ -554,28 +618,25 @@ int main()
 								tileMap = new Tilemap(year);
 								pause = true;
 							}
-
-
 						}
 					}
-
 				}
 			}
-
-			
-
 		}
+
 		std::list<PolarBear*>::const_iterator iter;
 		std::list<Enemy*>::const_iterator iterE;
 		std::list<Fish*>::const_iterator iterF;
 		if (state == State::PLAYING)
 		{
 			//Season timer will change blackout sprite to be less opaque, darkening the screen
-			if (seasonTimer > 5) {
+			if (seasonTimer > 30) 
+			{
 				blackoutS.setColor(blackoutCDarken);
 			}
 			//blackout sprite will be set to opaque, lightening the screen
-			else {
+			else 
+			{
 				blackoutS.setColor(blackoutCLighten);
 			}
 			//Will set the stamina timer
@@ -606,14 +667,13 @@ int main()
 				float staminaPercent = 0;
 				staminaPercent = (pPlayer->getStamina() / pPlayer->getStaminaMax()) * 100;
 
-				if (staminaPercent > 80) {
+				if (staminaPercent > 80) 
+				{
 					pPlayer->addHealth(2);
 				}
 
-
 				// if player stamina is not 0 it decreases stamina, else it decreases health
 				pPlayer->getStamina() > 0 ? pPlayer->StaminaDecrease(decreaseAmount) : pPlayer->ReduceHealth(decreaseAmount);
-
 				pPlayer->setStaminaTimer();
 			}
 
@@ -621,12 +681,16 @@ int main()
 			
 
 			//Scanning through fish list to determine which fish was found
-			for (iterF = lpFish.begin(); iterF != lpFish.end(); iterF++) {
-				if (pPlayer->getPosition().intersects((*iterF)->getPosition())) {
-					if ((*iterF)->getType() == "land") {
+			for (iterF = lpFish.begin(); iterF != lpFish.end(); iterF++) 
+			{
+				if (pPlayer->getPosition().intersects((*iterF)->getPosition())) 
+				{
+					if ((*iterF)->getType() == "land") 
+					{
 						pPlayer->Pickup("land");
 					}
-					else if ((*iterF)->getType() == "sea") {
+					else if ((*iterF)->getType() == "sea") 
+					{
 						pPlayer->Pickup("sea");
 					}
 					(*iterF)->setPosition(-1000, -1000);
@@ -634,14 +698,10 @@ int main()
 				}
 			}
 
-
-
-
-			// TODO: optimize
-			// creates iterator for polar bear list
-			
+			// TODO: optimize			
 			// iterate through each element
-			if (pause == false) {
+			if (pause == false) 
+			{
 				for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); iter++)
 				{
 					Tile* tile = tileMap->getMap()[(*iter)->getCenter().y / 128][(*iter)->getCenter().x / 128];
@@ -719,7 +779,8 @@ int main()
 			}
 			       
 			//Move characters
-			if (pause == false) {
+			if (pause == false) 
+			{
 				for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); ++iter)
 				{
 					(*iter)->Movement(dtAsSeconds, gameTimeTotalFloat, mapBounds);
@@ -743,7 +804,8 @@ int main()
 
 
 			// TODO: Need better system to melt ice 
-			if (pause == false) {
+			if (pause == false) 
+			{
 				for (int i = 0; i < mapBounds.y / 128; i++)
 				{
 					// for each tile on that row
@@ -755,7 +817,8 @@ int main()
 							//determine if ice terrain changes to water
 							if (((rand() % 100) + 1.f) >= 99.9)
 							{
-								if (tileChangeTimer + 0.1 < gameTimeTotalFloat) {
+								if (tileChangeTimer + 0.1 < gameTimeTotalFloat) 
+								{
 									tileMap->ChangeTileTerrain(i, j, Tile::terrainType::WATER);
 									tileChangeTimer = gameTimeTotalFloat;
 								}
@@ -778,9 +841,11 @@ int main()
 				if (!(*iterE)->isAlive())
 				{
 
-					for (iterF = lpFish.begin(); iterF != lpFish.end(); iterF++) {
+					for (iterF = lpFish.begin(); iterF != lpFish.end(); iterF++) 
+					{
 						//Checks to see if the fish has already been placed, if not, place the fish and break the loop
-						if (((*iterF)->getCenter().x < -0) && (*iterF)->getType() == "land") {
+						if (((*iterF)->getCenter().x < -0) && (*iterF)->getType() == "land") 
+						{
 
 							(*iterF)->setPosition((*iterE)->getCenter().x, (*iterE)->getCenter().y);
 							break;
@@ -801,6 +866,11 @@ int main()
 				{
 					++iterE;
 				}
+				//Check if the player has died
+				if (!pPlayer->isAlive()) 
+				{
+					state = State::END;
+				}
 			}
 		}
 
@@ -816,11 +886,17 @@ int main()
 
 		}
 
+		if (state == State::INTRO) 
+		{
+			window.clear(Color(0, 0, 0)); // clear the window
+			window.setView(hudView);
+			window.draw(introText);
+		}
 		if (state == State::END) {
 			window.clear(Color(0, 0, 0)); // clear the window
 			window.setView(hudView);
 			//Check if player level meets win condition
-			if (pPlayer->getLevel() > 6) {
+			if (pPlayer->getLevel() > 6 && pPlayer->isAlive()) {
 				window.draw(winText2);
 			}
 			else {
