@@ -43,6 +43,14 @@ private:
 	// create a pointer to a new Tilemap
 	Tilemap* tileMap;
 
+	// Store map bounds
+	Vector2f mapBounds;
+
+	// create a list of pointers to Polar bears
+	std::list<PolarBear*> lpPolarBears;
+
+	//create a list of pointers to fish
+	std::list<Fish*> lpFish;
 };
 #endif
 

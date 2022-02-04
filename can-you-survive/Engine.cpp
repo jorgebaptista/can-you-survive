@@ -27,20 +27,16 @@ Engine::Engine()
 	// Point tilemap to a new object
 	tileMap = new Tilemap(year);
 
+	// Save map boundaries for future use such as camera and player block
+	mapBounds = tileMap->getMapBounds();
+
 }
 
 void Engine::run()
 {
 	//Objects file used to draw objects
 	std::ifstream objectFile("objects.txt");
-	//map boundaries gotten to stop player from walking outside of map.
-	Vector2f mapBounds = tileMap->getMapBounds();
 
-	// create a list of pointers to Polar bears
-	std::list<PolarBear*> lpPolarBears;
-
-	//create a list of pointers to fish
-	std::list<Fish*> lpFish;
 	//fill pointers with fish
 	for (int i = 0; i < 5; i++)
 	{
