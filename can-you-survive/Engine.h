@@ -1,4 +1,6 @@
 #pragma once
+#ifndef ENGINE_H
+#define ENGINE_H
 #include "Enemy.h"
 #include "Fish.h"
 #include "Player.h"
@@ -12,11 +14,35 @@ using namespace sf;
 class Engine
 {
 public:
-	Engine();
+	Engine(); // Constructor
 
 	// Run the game
 	void run();
 
 private:
+	Vector2f m_Resolution;
+
+	RenderWindow m_Window;
+
+	View m_MainView;
+	View m_BlackoutView;
+	View m_HudView;
+
+	// enum to define state of the game
+	enum class GameState { PAUSED, INTRO, PLAYING, END };
+
+	// Store the current state of the game
+	GameState m_State;
+
+	/***** TO ORGANIZE ****/
+	// TODO: Organize
+
+	// Store current year
+	int year;
+
+	// create a pointer to a new Tilemap
+	Tilemap* tileMap;
+
 };
+#endif
 

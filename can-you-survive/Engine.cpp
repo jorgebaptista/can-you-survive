@@ -2,21 +2,38 @@
 
 Engine::Engine()
 {
-	// Constructor
+	// Get the width and height of the screen and apply it  to x and y of the resolution variable.
+	m_Resolution.x = VideoMode::getDesktopMode().width;
+	m_Resolution.y = VideoMode::getDesktopMode().height;
+
+	// Create the window with a title and in full screen and store it in the variable
+	m_Window.create(VideoMode(m_Resolution.x, m_Resolution.y), "Can You Survive?", Style::Fullscreen);
+
+	/** Setup the views **/
+	// Main v+iew
+	m_MainView.reset(FloatRect(0, 0, m_Resolution.x, m_Resolution.y));
+	// TODO: Blackout view
+	m_BlackoutView.reset(FloatRect(0, 0, m_Resolution.x, m_Resolution.y));
+	// HUD view
+	m_HudView.reset(FloatRect(0, 0, m_Resolution.x, m_Resolution.y));
+
+	// Initial state of game is Paused
+	m_State = GameState::PAUSED;
+
+	/***** TO ORGANIZE ****/
+	// TODO: Organize
+	year = 1;
+
+	// Point tilemap to a new object
+	tileMap = new Tilemap(year);
+
 }
 
 void Engine::run()
 {
 	//Objects file used to draw objects
 	std::ifstream objectFile("objects.txt");
-	enum class State { PAUSED, INTRO, PLAYING, END };
-
-	State state = State::PAUSED;
-	//Year used for map changes
-	int year = 1;
-	// create a pointer to a new Tilemap
-	Tilemap* tileMap = new Tilemap(year);
-	//map boundries gotten to stop player from walking outside of map.
+	//map boundaries gotten to stop player from walking outside of map.
 	Vector2f mapBounds = tileMap->getMapBounds();
 
 	// create a list of pointers to Polar bears
@@ -106,13 +123,6 @@ void Engine::run()
 
 	float staminaDecrease = 1.f;
 
-	//TODO: Warning, use static cast unsigned??
-	Vector2f resolution;
-	resolution.x = VideoMode::getDesktopMode().width;
-	resolution.y = VideoMode::getDesktopMode().height;
-
-	RenderWindow window(VideoMode(resolution.x, resolution.y), "Can You Survive?", Style::Fullscreen);
-
 	//blackout
 	Texture blackoutT;
 	Sprite blackoutS;
@@ -128,11 +138,6 @@ void Engine::run()
 
 	//scale to fill screen
 	blackoutS.scale(4.0, 4.0);
-
-	//Views created
-	View mainView(FloatRect(0, 0, resolution.x, resolution.y));
-	View blackoutView(FloatRect(0, 0, resolution.x, resolution.y));
-	View hudView(FloatRect(0, 0, resolution.x, resolution.y));
 
 	Clock clock;
 
@@ -354,7 +359,7 @@ void Engine::run()
 	int minFps = 50000;
 
 	//Start of while loop, runs game while window is open
-	while (window.isOpen())
+	while (m_Window.isOpen())
 	{
 		//Event variable
 		Event event;
@@ -370,7 +375,7 @@ void Engine::run()
 
 			gameTimeTotalFloat = gameTimeTotal.asSeconds();
 		}
-		if (pause == false && state == State::PLAYING)
+		if (pause == false && m_State == GameState::PLAYING)
 		{
 			seasonTimer = seasonTimer + dtAsSeconds;
 		}
@@ -395,9 +400,9 @@ void Engine::run()
 		// CHECK FPS
 		//std::cout << "Fps: " << fps << " Min fps: " << minFps << " Max fps: " << maxFps << std::endl;
 
-		while (window.pollEvent(event))
+		while (m_Window.pollEvent(event))
 		{
-			if (state == State::PAUSED)
+			if (m_State == GameState::PAUSED)
 			{
 				if (Keyboard::isKeyPressed(Keyboard::Escape))
 				{
@@ -410,7 +415,7 @@ void Engine::run()
 				}
 				if (Keyboard::isKeyPressed(Keyboard::Num1) && select == false)
 				{
-					state = State::INTRO;
+					m_State = GameState::INTRO;
 					waitTimer = pauseTimeTotal;
 
 				}
@@ -436,23 +441,23 @@ void Engine::run()
 				}
 			}
 			//Intro state input
-			if (state == State::INTRO)
+			if (m_State == GameState::INTRO)
 			{
 				//Pressing lets player enter game
 				if (Keyboard::isKeyPressed(Keyboard::Enter))
 				{
-					state = State::PLAYING;
+					m_State = GameState::PLAYING;
 					pause == false;
 				}
 			}
-			if (state != State::PAUSED)
+			if (m_State != GameState::PAUSED)
 			{
 				if (Keyboard::isKeyPressed(Keyboard::Escape))
 				{
-					window.close();
+					m_Window.close();
 				}
 			}
-			if (state == State::PLAYING)
+			if (m_State == GameState::PLAYING)
 			{
 
 				//Used to pause the game
@@ -598,7 +603,7 @@ void Engine::run()
 							year++;
 							if (year == 11)
 							{
-								state = State::END;
+								m_State = GameState::END;
 							}
 							else
 							{
@@ -623,7 +628,7 @@ void Engine::run()
 		std::list<PolarBear*>::const_iterator iter;
 		std::list<Enemy*>::const_iterator iterE;
 		std::list<Fish*>::const_iterator iterF;
-		if (state == State::PLAYING)
+		if (m_State == GameState::PLAYING)
 		{
 			//Season timer will change blackout sprite to be less opaque, darkening the screen
 			if (seasonTimer > 30)
@@ -708,7 +713,7 @@ void Engine::run()
 			/****************************  CAMERA  *******************************/
 
 			// calculate where camera will be centered
-			Vector2f cameraCenter = mainView.getCenter();
+			Vector2f cameraCenter = m_MainView.getCenter();
 
 			// if player x position is less the center of screen width
 			if (pPlayer->getCenter().x < (VideoMode::getDesktopMode().width / 2 - 64))
@@ -744,10 +749,10 @@ void Engine::run()
 				cameraCenter.y = pPlayer->getCenter().y;
 			}
 
-			mainView.setCenter(cameraCenter);
+			m_MainView.setCenter(cameraCenter);
 
-			window.clear(Color(135, 206, 235)); // clear the window
-			window.setView(mainView);
+			m_Window.clear(Color(135, 206, 235)); // clear the window
+			m_Window.setView(m_MainView);
 
 			// TODO: Optimize camera view, variables ?
 			int minCameraViewX = cameraCenter.x - VideoMode::getDesktopMode().width / 2;
@@ -794,7 +799,7 @@ void Engine::run()
 				for (int j = minCameraViewX / 128; j < maxCameraViewX / 128; j++)
 				{
 					// draw that tile
-					window.draw(map[i][j]->getSprite());
+					m_Window.draw(map[i][j]->getSprite());
 				}
 			}
 
@@ -865,7 +870,7 @@ void Engine::run()
 				//Check if the player has died
 				if (!pPlayer->isAlive())
 				{
-					state = State::END;
+					m_State = GameState::END;
 				}
 			}
 		}
@@ -874,47 +879,47 @@ void Engine::run()
 		//Perform draws
 		//Draw for paused
 
-		if (state == State::PAUSED)
+		if (m_State == GameState::PAUSED)
 		{
-			window.clear(Color(0, 0, 0)); // clear the window
-			window.setView(hudView);
-			window.draw(playText);
+			m_Window.clear(Color(0, 0, 0)); // clear the window
+			m_Window.setView(m_HudView);
+			m_Window.draw(playText);
 
 		}
 
-		if (state == State::INTRO)
+		if (m_State == GameState::INTRO)
 		{
-			window.clear(Color(0, 0, 0)); // clear the window
-			window.setView(hudView);
-			window.draw(introText);
+			m_Window.clear(Color(0, 0, 0)); // clear the window
+			m_Window.setView(m_HudView);
+			m_Window.draw(introText);
 		}
-		if (state == State::END) {
-			window.clear(Color(0, 0, 0)); // clear the window
-			window.setView(hudView);
+		if (m_State == GameState::END) {
+			m_Window.clear(Color(0, 0, 0)); // clear the window
+			m_Window.setView(m_HudView);
 			//Check if player level meets win condition
 			if (pPlayer->getLevel() > 6 && pPlayer->isAlive()) {
-				window.draw(winText2);
+				m_Window.draw(winText2);
 			}
 			else {
-				window.draw(loseText);
+				m_Window.draw(loseText);
 			}
 		}
 		//Draw for playing
-		if (state == State::PLAYING)
+		if (m_State == GameState::PLAYING)
 		{
 			for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); ++iter)
 			{
-				window.draw((*iter)->getSprite());
+				m_Window.draw((*iter)->getSprite());
 			}
 
 			for (iterF = lpFish.begin(); iterF != lpFish.end(); ++iterF) {
-				window.draw((*iterF)->getSprite());
+				m_Window.draw((*iterF)->getSprite());
 			}
-			window.draw(fishSea.getSprite());
-			window.draw(fishLand.getSprite());
+			m_Window.draw(fishSea.getSprite());
+			m_Window.draw(fishLand.getSprite());
 
-			window.setView(blackoutView);
-			window.draw(blackoutS);
+			m_Window.setView(m_BlackoutView);
+			m_Window.draw(blackoutS);
 
 			stringstream fishString;
 			fishString << "Fish : " << pPlayer->getFish();
@@ -933,22 +938,22 @@ void Engine::run()
 			yearText2.setString(yearString.str());
 
 			//change view to hudView to set hud graphics
-			window.setView(hudView);
-			window.draw(staminaBar);
-			window.draw(healthBar);
-			window.draw(fishText1);
-			window.draw(fishText2);
-			window.draw(levelText1);
-			window.draw(levelText2);
-			window.draw(healthText1);
-			window.draw(healthText2);
-			window.draw(staminaText1);
-			window.draw(staminaText2);
-			window.draw(yearText1);
-			window.draw(yearText2);
+			m_Window.setView(m_HudView);
+			m_Window.draw(staminaBar);
+			m_Window.draw(healthBar);
+			m_Window.draw(fishText1);
+			m_Window.draw(fishText2);
+			m_Window.draw(levelText1);
+			m_Window.draw(levelText2);
+			m_Window.draw(healthText1);
+			m_Window.draw(healthText2);
+			m_Window.draw(staminaText1);
+			m_Window.draw(staminaText2);
+			m_Window.draw(yearText1);
+			m_Window.draw(yearText2);
 
 
 		}
-		window.display();
+		m_Window.display();
 	}
 }
