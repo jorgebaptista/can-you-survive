@@ -30,13 +30,7 @@ Engine::Engine()
 	// Save map boundaries for future use such as camera and player block
 	mapBounds = tileMap->getMapBounds();
 
-}
-
-void Engine::run()
-{
-	//Objects file used to draw objects
-	std::ifstream objectFile("objects.txt");
-
+	// TODO: FISH? change to foreach?
 	//fill pointers with fish
 	for (int i = 0; i < 5; i++)
 	{
@@ -45,37 +39,38 @@ void Engine::run()
 		lpFish.push_back(fishLand);
 	}
 
-	Player* pPlayer = nullptr;
-
-	// ? merge conflict
-	std::list<Enemy*> lpEnemy;
-
+	// Create a stream object and open objects.txt file
+	std::ifstream objectFile("objects.txt");
 
 	//TODO: Move this repeated stuff to another class? singleton for files? tile map has this kind of loop too
 	if (objectFile.is_open())
 	{
 		Vector2f objectPosition(0, 0); // first tile position at 0, 0
-		std::string line;
+
+		std::string line; // Create a string to access each line of the document
 
 		int row = 0;
-		//for loop to place player and enemies into lists, and assign position
+		// Iterate through the lines of the text file
 		for (line; getline(objectFile, line);)
 		{
-			//ensure the row size of the object file doesn't exceed the map boundaries
+			// If the object position is outside map bounds on Y
 			if (objectPosition.y > mapBounds.y)
 			{
+				// Display error to console
 				std::cout << "Row size of objects.txt file cannot be greater than bounds of map.\n";
-				return;
+				return; // stop program
 			}
+			// For each letter in this line
 			for (char& t : line)
 			{
-				//ensure the column size of the object file doesn't exceed the map boundaries
+				// If the object position is outside the map bounds on X
 				if (objectPosition.x > mapBounds.x)
 				{
+					// Displayer error to console
 					std::cout << "Column size of objects.txt file cannot be greater than bounds of map.\n";
-					return;
+					return; // stop the program
 				}
-
+				// Switch character check if it's
 				switch (t)
 				{
 					//Create player
@@ -116,6 +111,12 @@ void Engine::run()
 	}
 
 	objectFile.close();
+
+}
+
+void Engine::run()
+{
+
 
 	float staminaDecrease = 1.f;
 

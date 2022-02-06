@@ -37,6 +37,9 @@ private:
 	/***** TO ORGANIZE ****/
 	// TODO: Organize
 
+	// Create a pointer of type Player
+	Player* pPlayer;
+
 	// Store current year
 	int year;
 
@@ -51,6 +54,9 @@ private:
 
 	//create a list of pointers to fish
 	std::list<Fish*> lpFish;
+
+	// ? merge conflict
+	std::list<Enemy*> lpEnemy;
 };
 #endif
 
