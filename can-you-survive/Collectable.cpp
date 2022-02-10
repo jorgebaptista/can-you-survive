@@ -7,12 +7,6 @@ Collectable::Collectable()
 	collected = false;
 }
 
-void Collectable::CheckPickup(sf::Vector2f position)
-{
-	//Do a check to see if player position is the same as item position
-	//if so, the item is considered picked up.
-}
-
 //Set collected to true
 void Collectable::PickedUp() {
 	collected = true;

@@ -830,8 +830,6 @@ int main()
 
 			int tilenumX = mapBounds.x;
 			int tilenumY = mapBounds.y;
-			//std::cout << tilenumX / 128 << endl;
-			//std::cout << tilenumY / 128 << endl;
 
 
 			iterE = lpEnemy.begin();
@@ -852,9 +850,7 @@ int main()
 						}
 
 					}
-					//int tilenumX = mapBounds.x;
-					//int tilenumY = mapBounds.y;
-					//cout << tilenumX / 128 << endl;
+
 					//calculate new spawn location for enemy
 					randnum = rand() % 4 + 1;
 					int x = randnum;
