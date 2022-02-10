@@ -13,9 +13,9 @@ int main()
 	srand(static_cast<unsigned int>(time(0)));
 	//Objects file used to draw objects
 	std::ifstream objectFile("objects.txt");
-	enum class State {PAUSED, INTRO, PLAYING, END};
+	enum class State {MENU, INTRO, PLAYING, END};
 
-	State state = State::PAUSED;
+	State state = State::MENU;
 	//Year used for map changes
 	int year = 1;
 	// create a pointer to a new Tilemap
@@ -189,7 +189,7 @@ int main()
 	Font font;
 	font.loadFromFile("fonts/KOMIKAP_.ttf");
 	
-	//Text for Paused state 
+	//Text for MENU state 
 	Text playText;
 
 	playText.setFont(font);
@@ -401,7 +401,7 @@ int main()
 
 		while (window.pollEvent(event))
 		{
-			if (state == State::PAUSED)
+			if (state == State::MENU)
 			{
 				if (Keyboard::isKeyPressed(Keyboard::Escape))
 				{
@@ -449,7 +449,7 @@ int main()
 					pause == false;
 				}
 			}
-			if (state != State::PAUSED) 
+			if (state != State::MENU) 
 			{
 				if (Keyboard::isKeyPressed(Keyboard::Escape))
 				{
@@ -872,9 +872,9 @@ int main()
 
 		
 		//Perform draws
-		//Draw for paused
+		//Draw for MENU
 		
-		if (state == State::PAUSED) 
+		if (state == State::MENU) 
 		{
 			window.clear(Color(0,0,0)); // clear the window
 			window.setView(hudView);
