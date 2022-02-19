@@ -274,8 +274,6 @@ int main()
 	Text yearText2;
 	Text pauseText1;
 	Text pauseText2;
-	Text loadingText1;
-	Text loadingText2;
 
 	//set font
 	fishText1.setFont(font);
@@ -349,18 +347,6 @@ int main()
 	yearText2.setCharacterSize(50);
 	yearText2.setFillColor(Color::White);
 	yearText2.setPosition(53, 53);
-
-	loadingText1.setFont(font);
-	loadingText1.setString("Now Loading...");
-	loadingText1.setCharacterSize(75);
-	loadingText1.setFillColor(Color::Black);
-	loadingText1.setPosition(800, 400);
-
-	loadingText2.setFont(font);
-	loadingText2.setString("Now Loading...");
-	loadingText2.setCharacterSize(75);
-	loadingText2.setFillColor(Color::White);
-	loadingText2.setPosition(805, 405);
 
 	std::stringstream pauseStream;
 	pauseStream <<
