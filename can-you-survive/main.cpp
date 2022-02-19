@@ -200,7 +200,8 @@ int main()
 		"1. Play Game" <<
 		"\n2. About" <<
 		"\n3. Instructions" <<
-		"\n4. References";
+		"\n4. References" <<
+		"\n5. Quit";
 	std::stringstream aboutStream;
 	aboutStream <<
 		"This game is about the theme of global warming, staring a polar bear attempting" <<
@@ -271,6 +272,10 @@ int main()
 	Text winText2;
 	Text yearText1;
 	Text yearText2;
+	Text pauseText1;
+	Text pauseText2;
+	Text loadingText1;
+	Text loadingText2;
 
 	//set font
 	fishText1.setFont(font);
@@ -345,6 +350,39 @@ int main()
 	yearText2.setFillColor(Color::White);
 	yearText2.setPosition(53, 53);
 
+	loadingText1.setFont(font);
+	loadingText1.setString("Now Loading...");
+	loadingText1.setCharacterSize(75);
+	loadingText1.setFillColor(Color::Black);
+	loadingText1.setPosition(800, 400);
+
+	loadingText2.setFont(font);
+	loadingText2.setString("Now Loading...");
+	loadingText2.setCharacterSize(75);
+	loadingText2.setFillColor(Color::White);
+	loadingText2.setPosition(805, 405);
+
+	std::stringstream pauseStream;
+	pauseStream <<
+		"Paused";
+	std::stringstream loadedStream;
+	loadedStream <<
+		"Loading Complete!" <<
+		"\nPress Space to continue";
+
+	pauseText1.setFont(font);
+	pauseText1.setString(pauseStream.str());
+	pauseText1.setCharacterSize(75);
+	pauseText1.setFillColor(Color::Black);
+	pauseText1.setPosition(800, 400);
+
+	pauseText2.setFont(font);
+	pauseText2.setString(pauseStream.str());
+	pauseText2.setCharacterSize(75);
+	pauseText2.setFillColor(Color::White);
+	pauseText2.setPosition(805, 405);
+	
+
 	//Text for end state
 	Text loseText;
 
@@ -383,10 +421,6 @@ int main()
 		
 		pauseTimeTotal += dt.asSeconds();
 		
-
-		
-
-		//change seasons
 		
 
 
@@ -430,13 +464,16 @@ int main()
 					playText.setString(instructionsStream.str());
 					select = true;
 					playText.setPosition(100, 100);
-					playText.setCharacterSize(50);
+					playText.setCharacterSize(35);
 				}
 				if (Keyboard::isKeyPressed(Keyboard::Num4) && select == false) {
 					playText.setString(referenceStream.str());
 					select = true;
 					playText.setPosition(100, 100);
 					playText.setCharacterSize(25);
+				}
+				if (Keyboard::isKeyPressed(Keyboard::Num5) && select == false) {
+					window.close();
 				}
 			}
 			//Intro state input
@@ -477,6 +514,10 @@ int main()
 						}
 						cout << pause << endl;
 					}
+					pauseText1.setString(pauseStream.str());
+					pauseText1.setPosition(800, 400);
+					pauseText2.setString(pauseStream.str());
+					pauseText2.setPosition(805, 405);
 
 				}
 				//if the game is not paused, allow player movement
@@ -590,7 +631,7 @@ int main()
 					if (Keyboard::isKeyPressed(Keyboard::Q))
 					{
 						//Check the player's location, see if they can hibernate based on terrain and time passed
-						if (pPlayer->getTerrain() == Tile::terrainType::SNOW && seasonTimer > 30)
+						if (pPlayer->getTerrain() == Tile::terrainType::SNOW && seasonTimer > 3)
 						{
 							//Player hibernate function
 							pPlayer->Hibernate();
@@ -614,8 +655,12 @@ int main()
 									float y = (*iterE)->getCenter().y;
 									(*iterE)->LevelUp();
 								}
-								//Attempting to reload tilemap with restored ice blocks, currently doesn't work
+								//Attempting to reload tilemap with restored ice blocks
 								tileMap = new Tilemap(year);
+								pauseText1.setString(loadedStream.str());
+								pauseText1.setPosition(700, 300);
+								pauseText2.setString(loadedStream.str());
+								pauseText2.setPosition(705, 305);
 								pause = true;
 							}
 						}
@@ -946,6 +991,11 @@ int main()
 			window.draw(staminaText2);
 			window.draw(yearText1);
 			window.draw(yearText2);
+
+			if (pause == true) {
+				window.draw(pauseText1);
+				window.draw(pauseText2);
+			}
 
 			
 		}
