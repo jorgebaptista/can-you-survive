@@ -617,7 +617,7 @@ int main()
 					if (Keyboard::isKeyPressed(Keyboard::Q))
 					{
 						//Check the player's location, see if they can hibernate based on terrain and time passed
-						if (pPlayer->getTerrain() == Tile::terrainType::SNOW && seasonTimer > 3)
+						if (pPlayer->getTerrain() == Tile::terrainType::SNOW && seasonTimer > 30)
 						{
 							//Player hibernate function
 							pPlayer->Hibernate();
