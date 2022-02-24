@@ -36,7 +36,7 @@
     <ClInclude Include="Tilemap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="FileSystem.h">
+    <ClInclude Include="Engine.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -65,7 +65,7 @@
     <ClCompile Include="Tilemap.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="FileSystem.cpp">
+    <ClCompile Include="Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
