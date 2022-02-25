@@ -64,6 +64,8 @@ public:
 	void stopUp();
 	void stopDown();
 
+	void update(float elapsedTime);
+
 protected:
 	// Stamina of Player
 	float stamina;

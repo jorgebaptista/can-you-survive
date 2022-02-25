@@ -21,7 +21,7 @@ PolarBear::PolarBear(Vector2f position)
 
 	m_Texture.loadFromFile("graphics/polar.png");
 	m_Sprite.setTexture(m_Texture);
-	m_Sprite.scale(2, 2);
+	m_Sprite.scale(1, 1);
 	m_Sprite.setOrigin(19, 19);
 	m_Sprite.setPosition(m_Position);
 }

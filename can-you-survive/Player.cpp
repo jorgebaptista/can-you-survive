@@ -307,3 +307,7 @@ void Player::stopDown()
 {
 	DownPressed = false;
 }
+
+void Player::update(float elapsedTime)
+{
+}
