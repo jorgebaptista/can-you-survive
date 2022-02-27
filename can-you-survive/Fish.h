@@ -1,13 +1,19 @@
 #pragma once
 #ifndef FISH_H
 #define FISH_H
-#include "Collectable.h"
+#include <iostream>
+#include <SFML/Graphics.hpp>
+using namespace sf;
 
-class Fish : public Collectable
+using namespace std;
+
+class Fish
 {
 public:
 	//Constructor
 	Fish();
+
+	Vector2f getCenter();
 
 	void Spawn(string t);
 	//Return the type of fish
@@ -19,6 +25,9 @@ public:
 	void setPosition(float x, float y);
 
 	FloatRect getPosition();
+
+	bool getActive();
+	void setActive(bool value);
 
 private:
 	//The type of fish
@@ -36,5 +45,8 @@ private:
 
 	//fish texture
 	Texture m_Texture;
+
+	// Check if inactive
+	bool m_Active;
 };
 #endif

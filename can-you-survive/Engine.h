@@ -55,6 +55,8 @@ private:
 	float m_SeasonTimer;
 	float m_WaitTimer;
 
+	float m_FishTimer;
+
 	//pause bool to pause the game
 	bool pause;
 	bool select;
@@ -84,6 +86,8 @@ private:
 	std::list<PolarBear*> lpPolarBears;
 	//create a list of pointers to fish
 	std::list<Fish*> lpFish;
+	// pointers to fish that will spawn in water
+	std::list<Fish*> lpSeaFish;
 	// ? merge conflict
 	std::list<Enemy*> lpEnemy;
 
@@ -92,6 +96,7 @@ private:
 	std::list<Enemy*>::const_iterator iterE;
 	std::list<Fish*>::const_iterator iterF;
 
+	std::list<Fish*>::const_iterator iterSF;
 
 	/********** HUD *********/
 

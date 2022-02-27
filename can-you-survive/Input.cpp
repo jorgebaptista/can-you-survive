@@ -226,6 +226,15 @@ void Engine::input()
 							pauseText2.setString(loadedStream.str());
 							pauseText2.setPosition(705, 305);
 							pause = true;
+
+							// Reset all sea fish
+							for (iterSF = lpSeaFish.begin(); iterSF != lpSeaFish.end(); ++iterSF)
+							{
+								if ((*iterSF)->getActive())
+								{
+									(*iterSF)->setActive(false);
+								}
+							}
 						}
 					}
 				}

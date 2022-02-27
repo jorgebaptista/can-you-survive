@@ -39,8 +39,15 @@ void Engine::draw()
 		}
 
 		// Iterate through the fish list and draw each fish
-		for (iterF = lpFish.begin(); iterF != lpFish.end(); ++iterF) {
+		for (iterF = lpFish.begin(); iterF != lpFish.end(); ++iterF) 
+		{
 			m_Window.draw((*iterF)->getSprite());
+		}
+
+		// Iterate through the SEA fish list and draw each fish if they are active
+		for (iterSF = lpSeaFish.begin(); iterSF != lpSeaFish.end(); ++iterSF)
+		{
+			if ((*iterSF)->getActive()) m_Window.draw((*iterSF)->getSprite());
 		}
 
 		m_Window.setView(m_BlackoutView);

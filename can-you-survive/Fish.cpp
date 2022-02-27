@@ -1,11 +1,16 @@
 #include "Fish.h"
 //Constructor
-Fish::Fish() 
+Fish::Fish()
 {
 	type = "null";
 
 	m_Position.x = -1000;
 	m_Position.y = -1000;
+}
+
+Vector2f Fish::getCenter()
+{
+	return m_Position;
 }
 
 //Spawn fish with type
@@ -43,6 +48,23 @@ Sprite Fish::getSprite() {
 //return position
 FloatRect Fish::getPosition() {
 	return m_Sprite.getGlobalBounds();
+}
+
+bool Fish::getActive()
+{
+	return m_Active;
+}
+
+void Fish::setActive(bool value)
+{
+	m_Active = value;
+
+	if (!value)
+	{
+		// set its position far away from the level
+		m_Position.x = -1000;
+		m_Position.y = -1000;
+	}
 }
 
 //set position

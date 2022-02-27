@@ -31,6 +31,8 @@ Engine::Engine()
 	m_SeasonTimer = 0;
 	m_WaitTimer = 0;
 
+	m_FishTimer = 0;
+
 	// Pause booleans
 	pause = false;
 	select = false;
@@ -49,7 +51,7 @@ Engine::Engine()
 
 	pPlayer = nullptr;
 
-	staminaDecrease = 1.f;
+	staminaDecrease = 2.f;
 	m_AttackTimer = 0;
 	m_EatTimer = 0;
 
@@ -88,11 +90,11 @@ Engine::Engine()
 				// Switch character check if it's....
 				switch (t)
 				{
-				// If it's the player
+					// If it's the player
 				case '1':
 					// If player is pointing to a null pointer, i.e., no player yet
 					if (pPlayer == nullptr)
-					{ 
+					{
 						// Create a new player and point to it
 						pPlayer = new Player(objectPosition);
 						// push player to list of polar bears
@@ -106,7 +108,7 @@ Engine::Engine()
 						return;
 					}
 					break;
-				// If it's an enemy
+					// If it's an enemy
 				case '2':
 					// Create a new enemy on the same position as the position in the text file
 					Enemy * enemy = new Enemy(objectPosition);
@@ -116,7 +118,7 @@ Engine::Engine()
 					break;
 				}
 				// next tile to the right (each tile is 128 pixels)
-				objectPosition.x += 128; 
+				objectPosition.x += 128;
 			}
 			// Return to the left most tile and one row down
 			objectPosition = Vector2f(0, objectPosition.y + 128);
@@ -138,6 +140,15 @@ Engine::Engine()
 		Fish* fishLand = new Fish();
 		fishLand->Spawn("land");
 		lpFish.push_back(fishLand);
+	}
+
+	// Fill sea fish list with some fish initially
+	for (int i = 0; i < 10; i++)
+	{
+		Fish* fishSea = new Fish(); // create new fish object
+		fishSea->Spawn("sea"); // spawn it
+		fishSea->setActive(false); // disable it 
+		lpSeaFish.push_back(fishSea); // push it into list
 	}
 
 	setupUI();
@@ -225,19 +236,21 @@ void Engine::run()
 			{
 				if (pPlayer->getPosition().intersects((*iterF)->getPosition()))
 				{
-					if ((*iterF)->getType() == "land")
-					{
-						pPlayer->Pickup("land");
-					}
-					else if ((*iterF)->getType() == "sea")
-					{
-						pPlayer->Pickup("sea");
-					}
+					pPlayer->Pickup("land");
 					(*iterF)->setPosition(-1000, -1000);
-					(*iterF)->PickedUp();
 				}
 			}
-	
+
+			for (iterSF = lpSeaFish.begin(); iterSF != lpSeaFish.end(); iterSF++)
+			{
+				if (pPlayer->getPosition().intersects((*iterSF)->getPosition()))
+				{
+					pPlayer->Pickup("sea");
+					(*iterSF)->setActive(false);
+					(*iterSF)->setPosition(-1000, -1000);
+				}
+			}
+
 			// iterate through each element
 			if (pause == false)
 			{
@@ -330,10 +343,8 @@ void Engine::run()
 				}
 			}
 
-			// TODO: need better way to draw all map, DRAW class?
 			std::vector<std::vector<Tile*>> map = (tileMap->getMap());
 
-			// TODO: Need better system to melt ice 
 			if (pause == false)
 			{
 				for (int i = 0; i < mapBounds.y / 128; i++)
@@ -341,14 +352,40 @@ void Engine::run()
 					// for each tile on that row
 					for (int j = 0; j < mapBounds.x / 128; j++)
 					{
+					// if tile is water
+						if (map[i][j]->getTerrainType() == Tile::terrainType::WATER)
+						{
+							// every 2 seconds
+							if (m_FishTimer + 4 < m_TimeAsSeconds)
+							{
+								// chance to spawn on this tile
+								if ((rand() % 20) >= 18)
+								{
+									for (iterSF = lpSeaFish.begin(); iterSF != lpSeaFish.end(); ++iterSF)
+									{
+										if (!((*iterSF)->getActive()))
+										{
+											(*iterSF)->setPosition(j * 128, i * 128);
+											(*iterSF)->setActive(true);
+
+											break;
+										}
+									}
+									m_FishTimer = m_TimeAsSeconds;
+								}
+							}
+						}
+
 						// if the terrain type is ice
 						if (map[i][j]->getTerrainType() == Tile::terrainType::ICE)
 						{
-							//determine if ice terrain changes to water
+							// random chance to turn to water
 							if (((rand() % 100) + 1.f) >= 99.9)
 							{
+								// every 0.4 seconds
 								if (m_TileChangeTimer + 0.4 < m_TimeAsSeconds)
 								{
+									// change a ice tile to water
 									tileMap->ChangeTileTerrain(i, j, Tile::terrainType::WATER);
 									m_TileChangeTimer = m_TimeAsSeconds;
 								}
