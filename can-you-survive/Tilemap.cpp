@@ -102,6 +102,7 @@ std::vector<std::vector<Tile*>> Tilemap::getMap()
 
 void Tilemap::ChangeTileTerrain(int y, int x, terrainType terrain)
 {
+	// Change the tile terrain type at this specific position
 	map[y][x]->ChangeType(terrain);
 }
 
