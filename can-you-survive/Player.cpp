@@ -24,6 +24,17 @@ Player::Player(Vector2f position)
 	DownPressed = false;
 	LeftPressed = false;
 	RightPressed = false;
+
+	// load all correct textures
+	m_TextureUp.loadFromFile("graphics/player/up.png");
+	m_TextureDown.loadFromFile("graphics/player/down.png");
+	m_TextureLeft.loadFromFile("graphics/player/left.png");
+	m_TextureRight.loadFromFile("graphics/player/right.png");
+
+	// create rect to navigate through the spriresheet
+	rectSourceSprite = sf::IntRect(0, 0, 64, 64);
+
+	m_animateTimer = 0;
 }
 
 
@@ -73,19 +84,38 @@ void Player::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 	}
 	//If moveTime is still larger than totalTime, then the character will continue moving in the same direction as what was inputted
 
+	// add the delta time to animate timer 
+	m_animateTimer += elapsedTime;
+
 	//Depending on what move is, the player will continue moving in the previously inputted direction
 	if (move == 'U')
 	{
 		if (m_Position.y > goal_PositionY) 
 		{
 			m_Position.y -= speed * elapsedTime;
-			m_Sprite.setRotation(270);
-			m_Texture.loadFromFile("graphics/polar.png");
-			m_Sprite.setTexture(m_Texture);
+
+			// every 0.2 seconds
+			if (m_animateTimer > 0.2f)
+			{
+				// if rect is at the right most of the sprite sheet reset it 
+				if (rectSourceSprite.left == 320) rectSourceSprite.left = 0;
+				// else just jump to the right one
+				else rectSourceSprite.left += 64;
+
+				// set the sprite to the correct texture and rect properties
+				m_Sprite = Sprite(m_TextureUp, rectSourceSprite);
+
+				// set the animate timer back to 0
+				m_animateTimer = 0;
+			}
 		}
 		else 
 		{
 			m_Position.y = goal_PositionY;
+
+			// reset the sprite and rect back to first one not animated
+			rectSourceSprite = sf::IntRect(0, 0, 64, 64);
+			m_Sprite = Sprite(m_TextureUp, rectSourceSprite);
 		}
 		
 	}
@@ -94,13 +124,29 @@ void Player::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 		if (m_Position.y < goal_PositionY) 
 		{
 			m_Position.y += speed * elapsedTime;
-			m_Sprite.setRotation(90);
-			m_Texture.loadFromFile("graphics/polar.png");
-			m_Sprite.setTexture(m_Texture);
+
+			// every 0.2 seconds
+			if (m_animateTimer > 0.2f)
+			{
+				// if rect is at the right most of the sprite sheet reset it 
+				if (rectSourceSprite.left == 320) rectSourceSprite.left = 0;
+				// else just jump to the right one
+				else rectSourceSprite.left += 64;
+
+				// set the sprite to the correct texture and rect properties
+				m_Sprite = Sprite(m_TextureDown, rectSourceSprite);
+
+				// set the animate timer back to 0
+				m_animateTimer = 0;
+			}
 		}
 		else 
 		{
 			m_Position.y = goal_PositionY;
+
+			// reset the sprite and rect back to first one not animated
+			rectSourceSprite = sf::IntRect(0, 0, 64, 64);
+			m_Sprite = Sprite(m_TextureDown, rectSourceSprite);
 		}
 	}
 	if (move == 'L')
@@ -108,30 +154,64 @@ void Player::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 		if (m_Position.x > goal_PositionX) 
 		{
 			m_Position.x -= speed * elapsedTime;
-			m_Sprite.setRotation(0);
-			m_Texture.loadFromFile("graphics/polarflip.png");
-			m_Sprite.setTexture(m_Texture);
+
+			// every 0.2 seconds
+			if (m_animateTimer > 0.2f)
+			{
+				// if rect is at the right most of the sprite sheet reset it 
+				if (rectSourceSprite.left == 320) rectSourceSprite.left = 0;
+				// else just jump to the right one
+				else rectSourceSprite.left += 64;
+
+				// set the sprite to the correct texture and rect properties
+				m_Sprite = Sprite(m_TextureLeft, rectSourceSprite);
+
+				// set the animate timer back to 0
+				m_animateTimer = 0;
+			}
 		}
 		else 
 		{
 			m_Position.x = goal_PositionX;
+
+			// reset the sprite and rect back to first one not animated
+			rectSourceSprite = sf::IntRect(0, 0, 64, 64);
+			m_Sprite = Sprite(m_TextureLeft, rectSourceSprite);
 		}
 	}
 	if (move == 'R')
 	{
-		if (m_Position.x < goal_PositionX) {
+		if (m_Position.x < goal_PositionX) 
+		{
 			m_Position.x += speed * elapsedTime;
-			m_Sprite.setRotation(0);
-			m_Texture.loadFromFile("graphics/polar.png");
-			m_Sprite.setTexture(m_Texture);
+
+			// every 0.2 seconds
+			if (m_animateTimer > 0.2f)
+			{
+				// if rect is at the right most of the sprite sheet reset it 
+				if (rectSourceSprite.left == 320) rectSourceSprite.left = 0;
+				// else just jump to the right one
+				else rectSourceSprite.left += 64;
+
+				// set the sprite to the correct texture and rect properties
+				m_Sprite = Sprite(m_TextureRight, rectSourceSprite);
+
+				// set the animate timer back to 0
+				m_animateTimer = 0;
+			}
 		}
 		else 
 		{
 			m_Position.x = goal_PositionX;
+
+			// reset the sprite and rect back to first one not animated
+			rectSourceSprite = sf::IntRect(0, 0, 64, 64);
+			m_Sprite = Sprite(m_TextureRight, rectSourceSprite);
 		}
 	}
 
-
+	// set origin and position
+	m_Sprite.setOrigin(32, 32);
 	m_Sprite.setPosition(m_Position);
 }
 
@@ -142,11 +222,12 @@ void Player::EatFish()
 	if (fishNum > 0)
 	{
 		//Increase stamina by maxStamina amount divided by 10
-		stamina = stamina + maxStamina / 10;
+		stamina += 20;
 		//If stamina addition is more than maxStamina, set stamina to maxStamina
 		if (stamina >= maxStamina)
 		{
 			stamina = maxStamina;
+			addHealth(10);
 		}
 		//Reduce fish in inventory by 1
 		xp = xp + 10;

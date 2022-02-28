@@ -97,10 +97,10 @@ Tilemap::Tilemap(int y)
 
 std::vector<std::vector<Tile*>> Tilemap::getMap()
 {
-	return map; //TODO: need better map drawing system
+	return map;
 }
 
-void Tilemap::ChangeTileTerrain(int y, int x, terrainType terrain)
+void Tilemap::ChangeTileTerrain(int y, int x, Tile::terrainType terrain)
 {
 	// Change the tile terrain type at this specific position
 	map[y][x]->ChangeType(terrain);

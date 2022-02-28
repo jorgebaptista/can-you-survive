@@ -5,7 +5,6 @@
 #include "Fish.h"
 #include "Player.h"
 #include "Tilemap.h"
-#include "TextureHolder.h"
 #include <sstream>
 #include <list>
 #include <stdexcept>

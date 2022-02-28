@@ -12,7 +12,6 @@ Tile::Tile(Vector2f position, terrainType terrain)
 	m_Sprite.setTexture(m_Texture); // assign the texture to the sprite
 	m_Sprite.setOrigin(128,128); // set origin to center
 
-	//TODO: TILE Scale or different file size
 	m_Sprite.setScale(.5,.5);
 }
 

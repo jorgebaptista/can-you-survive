@@ -17,7 +17,6 @@ public:
 
 	terrainType getTerrainType(); // get current terrain type
 
-	// TODO: what functions are used TILE
 	//Function to change the type of the tile.
 	void ChangeType(Tile::terrainType terrain);
 
@@ -34,7 +33,6 @@ protected:
 	Texture m_Texture; // store the texture of this object to be used by the sprite
 	Sprite m_Sprite; // store the sprite of this object
 
-	// TODO: What variables are used TILE
 	Vector2f m_Position;
 	Vector2f m_Resolution;	
 };

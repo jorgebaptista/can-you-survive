@@ -14,7 +14,7 @@ Engine::Engine()
 	/** Setup the views **/
 	// Main view
 	m_MainView.reset(FloatRect(0, 0, m_Resolution.x, m_Resolution.y));
-	// TODO: Blackout view
+	// Blackout view
 	m_BlackoutView.reset(FloatRect(0, 0, m_Resolution.x, m_Resolution.y));
 	// HUD view
 	m_HudView.reset(FloatRect(0, 0, m_Resolution.x, m_Resolution.y));
@@ -222,7 +222,7 @@ void Engine::run()
 
 				if (staminaPercent > 80)
 				{
-					pPlayer->addHealth(2);
+					pPlayer->addHealth(10);
 				}
 
 				// if player stamina is not 0 it decreases stamina, else it decreases health

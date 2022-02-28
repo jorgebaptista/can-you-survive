@@ -7,7 +7,7 @@
 
 using namespace sf;
 
-class Tilemap : public Tile 
+class Tilemap
 {
 public:
 	Tilemap(int y);
@@ -16,7 +16,7 @@ public:
 
 	//void LoadMap();
 
-	void ChangeTileTerrain(int x, int y, terrainType terrain);
+	void ChangeTileTerrain(int x, int y, Tile::terrainType terrain);
 
 	Vector2f getMapBounds();
 

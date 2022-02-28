@@ -13,6 +13,17 @@ Enemy::Enemy(Vector2f position)
 	goal_PositionY = m_Position.y;
 
 	m_Sprite.setPosition(m_Position);
+
+	// load all correct textures
+	m_TextureUp.loadFromFile("graphics/enemy/up.png");
+	m_TextureDown.loadFromFile("graphics/enemy/down.png");
+	m_TextureLeft.loadFromFile("graphics/enemy/left.png");
+	m_TextureRight.loadFromFile("graphics/enemy/right.png");
+
+	// create rect to navigate through the spriresheet
+	rectSourceSprite = sf::IntRect(0, 0, 64, 64);
+
+	m_animateTimer = 0;
 }
 
 

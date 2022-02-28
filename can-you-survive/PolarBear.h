@@ -13,7 +13,6 @@ public:
 	//Default Constructor
 	PolarBear(Vector2f position = Vector2f(128,128));
 	//Function to move
-	//TODO: Implement bound check here because both enemy and player uses it?
 	virtual void Movement(float elapsedTime, float totalTime, Vector2f mapBounds) = 0;
 	//virtual sf::Vector2f Movement()=0;
 	//Function to attack
@@ -37,7 +36,6 @@ public:
 	Tile::terrainType getTerrain();
 
 	//Will check if polar bear is alive
-	//TODO: isalive?
 	bool isAlive();
 
 	void Spawn(int h, int mh, int l, int d, float x, float y);
@@ -56,7 +54,6 @@ protected:
 
 	Vector2f m_Resolution;
 
-	//TODO: Move to enemy class?
 	//goal position
 	float goal_PositionX;
 	float goal_PositionY;
@@ -67,11 +64,20 @@ protected:
 	//Polar bear texture
 	Texture m_Texture;
 
+	Texture m_TextureUp;
+	Texture m_TextureDown;
+	Texture m_TextureLeft;
+	Texture m_TextureRight;
+
+	IntRect rectSourceSprite;
 
 	//The level which determines how strong the polar bear is
 	int level;
 	//The amount of damage the player can deal
 	int m_damage;
 	Tile::terrainType m_currentTerrain;
+
+	// control animation speed
+	float m_animateTimer;
 };
 #endif
