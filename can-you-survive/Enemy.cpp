@@ -12,8 +12,6 @@ Enemy::Enemy(Vector2f position)
 	goal_PositionX = m_Position.x;
 	goal_PositionY = m_Position.y;
 
-	m_Sprite.setPosition(m_Position);
-
 	// load all correct textures
 	m_TextureUp.loadFromFile("graphics/enemy/up.png");
 	m_TextureDown.loadFromFile("graphics/enemy/down.png");
@@ -23,6 +21,12 @@ Enemy::Enemy(Vector2f position)
 	// create rect to navigate through the spriresheet
 	rectSourceSprite = sf::IntRect(0, 0, 64, 64);
 
+	m_Sprite.setTexture(m_TextureRight);
+	m_Sprite = Sprite(m_TextureRight, rectSourceSprite);
+
+	m_Sprite.setOrigin(32, 32);
+	m_Sprite.setPosition(m_Position);
+
 	m_animateTimer = 0;
 }
 
@@ -31,7 +35,7 @@ void Enemy::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 {
 	//Decide where to move randomly, unless player is within sight,
 	//in which case, attempt to move to player.
-	
+
 	//Check if enough time has passed to allow movement
 	if (moveTime <= totalTime)
 	{
@@ -51,7 +55,7 @@ void Enemy::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 			// check direction
 			switch (randnum)
 			{
-			// if up
+				// if up
 			case 1:
 				// if going up goes outside of map
 				if (m_Position.y - speed < 0)
@@ -124,6 +128,9 @@ void Enemy::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 
 	}
 
+	// add the delta time to animate timer 
+	m_animateTimer += elapsedTime;
+
 	//move based on randnum
 	if (randnum == 1)
 	{
@@ -131,14 +138,30 @@ void Enemy::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 		if (m_Position.y > goal_PositionY)
 		{
 			m_Position.y -= speed * elapsedTime;
-			m_Sprite.setRotation(270);
-			m_Texture.loadFromFile("graphics/polar.png");
-			m_Sprite.setTexture(m_Texture);
+
+			// every 0.2 seconds
+			if (m_animateTimer > 0.2f)
+			{
+				// if rect is at the right most of the sprite sheet reset it 
+				if (rectSourceSprite.left == 320) rectSourceSprite.left = 0;
+				// else just jump to the right one
+				else rectSourceSprite.left += 64;
+
+				// set the sprite to the correct texture and rect properties
+				m_Sprite = Sprite(m_TextureUp, rectSourceSprite);
+
+				// set the animate timer back to 0
+				m_animateTimer = 0;
+			}
 		}
-		//Used to ensure character doesn't move past boundry
+		//Used to ensure character doesn't move past boundary
 		else
 		{
 			m_Position.y = goal_PositionY;
+
+			// reset the sprite and rect back to first one not animated
+			rectSourceSprite = sf::IntRect(0, 0, 64, 64);
+			m_Sprite = Sprite(m_TextureUp, rectSourceSprite);
 		}
 	}
 	if (randnum == 2)
@@ -147,14 +170,30 @@ void Enemy::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 		if (m_Position.y < goal_PositionY)
 		{
 			m_Position.y += speed * elapsedTime;
-			m_Sprite.setRotation(90);
-			m_Texture.loadFromFile("graphics/polar.png");
-			m_Sprite.setTexture(m_Texture);
+
+			// every 0.2 seconds
+			if (m_animateTimer > 0.2f)
+			{
+				// if rect is at the right most of the sprite sheet reset it 
+				if (rectSourceSprite.left == 320) rectSourceSprite.left = 0;
+				// else just jump to the right one
+				else rectSourceSprite.left += 64;
+
+				// set the sprite to the correct texture and rect properties
+				m_Sprite = Sprite(m_TextureDown, rectSourceSprite);
+
+				// set the animate timer back to 0
+				m_animateTimer = 0;
+			}
 		}
-		//Used to ensure character doesn't move past boundry
+		//Used to ensure character doesn't move past boundary
 		else
 		{
 			m_Position.y = goal_PositionY;
+
+			// reset the sprite and rect back to first one not animated
+			rectSourceSprite = sf::IntRect(0, 0, 64, 64);
+			m_Sprite = Sprite(m_TextureDown, rectSourceSprite);
 		}
 	}
 	if (randnum == 3)
@@ -163,14 +202,30 @@ void Enemy::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 		if (m_Position.x > goal_PositionX)
 		{
 			m_Position.x -= speed * elapsedTime;
-			m_Sprite.setRotation(0);
-			m_Texture.loadFromFile("graphics/polarflip.png");
-			m_Sprite.setTexture(m_Texture);
+
+			// every 0.2 seconds
+			if (m_animateTimer > 0.2f)
+			{
+				// if rect is at the right most of the sprite sheet reset it 
+				if (rectSourceSprite.left == 320) rectSourceSprite.left = 0;
+				// else just jump to the right one
+				else rectSourceSprite.left += 64;
+
+				// set the sprite to the correct texture and rect properties
+				m_Sprite = Sprite(m_TextureLeft, rectSourceSprite);
+
+				// set the animate timer back to 0
+				m_animateTimer = 0;
+			}
 		}
-		//Used to ensure character doesn't move past boundry
+		//Used to ensure character doesn't move past boundary
 		else
 		{
 			m_Position.x = goal_PositionX;
+
+			// reset the sprite and rect back to first one not animated
+			rectSourceSprite = sf::IntRect(0, 0, 64, 64);
+			m_Sprite = Sprite(m_TextureLeft, rectSourceSprite);
 		}
 	}
 	if (randnum == 4)
@@ -179,20 +234,37 @@ void Enemy::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 		if (m_Position.x < goal_PositionX)
 		{
 			m_Position.x += speed * elapsedTime;
-			m_Sprite.setRotation(0);
-			m_Texture.loadFromFile("graphics/polar.png");
-			m_Sprite.setTexture(m_Texture);
+
+			// every 0.2 seconds
+			if (m_animateTimer > 0.2f)
+			{
+				// if rect is at the right most of the sprite sheet reset it 
+				if (rectSourceSprite.left == 320) rectSourceSprite.left = 0;
+				// else just jump to the right one
+				else rectSourceSprite.left += 64;
+
+				// set the sprite to the correct texture and rect properties
+				m_Sprite = Sprite(m_TextureRight, rectSourceSprite);
+
+				// set the animate timer back to 0
+				m_animateTimer = 0;
+			}
 		}
-		//Used to ensure character doesn't move past boundry
+		//Used to ensure character doesn't move past boundary
 		else
 		{
 			m_Position.x = goal_PositionX;
+
+			// reset the sprite and rect back to first one not animated
+			rectSourceSprite = sf::IntRect(0, 0, 64, 64);
+			m_Sprite = Sprite(m_TextureRight, rectSourceSprite);
 		}
 	}
 
 	//Depending on number, change position
 
 
+	m_Sprite.setOrigin(32, 32);
 	m_Sprite.setPosition(m_Position);
 }
 
@@ -281,7 +353,7 @@ void Enemy::MoveTowards(float elapsedTime, float totalTime, Vector2f pPosition)
 				}
 				moveTime = totalTime + 1;
 			}
-			
+
 		}
 		//std::cout << randnum << std::endl;
 

@@ -33,6 +33,12 @@ Player::Player(Vector2f position)
 
 	// create rect to navigate through the spriresheet
 	rectSourceSprite = sf::IntRect(0, 0, 64, 64);
+	
+	m_Sprite.setTexture(m_TextureRight);
+	m_Sprite = Sprite(m_TextureRight, rectSourceSprite);
+
+	m_Sprite.setOrigin(32, 32);
+	m_Sprite.setPosition(m_Position);
 
 	m_animateTimer = 0;
 }

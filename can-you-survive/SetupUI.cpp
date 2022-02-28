@@ -20,7 +20,7 @@ void Engine::setupUI()
 		"1. Play Game" <<
 		"\n2. About" <<
 		"\n3. Instructions" <<
-		"\n4. References" <<
+		"\n4. Credits" <<
 		"\n5. Quit";
 	aboutStream <<
 		"This game is about the theme of global warming, staring a polar bear attempting" <<
@@ -44,10 +44,12 @@ void Engine::setupUI()
 		"\nSpace - Pause" <<
 		"\nEscape - Closes game (if still in main menu, will only return to play menu)";
 	referenceStream <<
-		"ice.png and snow.png - digit1024 on opengameart.com, originally called ice block (snow modified ice)" <<
-		"\npolar.png and polarflip - rapid punches on opengameart.com, part of Galapagos Penguin and Polar Bear" <<
-		"\nfishland.png and fishsea.png - skylerb on opengameart.com, part of 02 The Rescue Assets COMP 1501A" <<
-		"\n";
+		"Programmers:" <<
+		"\nDesmond Delaney"<<
+		"\nJorge Baptista" <<
+		"\n" <<
+		"\n Artist:" <<
+		"\n Isabelle Rellinghaus";
 	playText.setString(playStream.str());
 	playText.setCharacterSize(75);
 	playText.setFillColor(Color::White);

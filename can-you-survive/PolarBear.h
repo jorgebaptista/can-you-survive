@@ -62,7 +62,6 @@ protected:
 	Sprite m_Sprite;
 
 	//Polar bear texture
-	Texture m_Texture;
 
 	Texture m_TextureUp;
 	Texture m_TextureDown;

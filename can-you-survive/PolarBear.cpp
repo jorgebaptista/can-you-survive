@@ -18,11 +18,6 @@ PolarBear::PolarBear(Vector2f position)
 
 	moveTime = 0;
 	m_damage = 5;
-
-	m_Texture.loadFromFile("graphics/polar.png");
-	m_Sprite.setTexture(m_Texture);
-	m_Sprite.setOrigin(32, 32);
-	m_Sprite.setPosition(m_Position);
 }
 
 //Used to spawn new polarbear when they die
