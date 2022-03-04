@@ -179,7 +179,7 @@ void Engine::input()
 											}
 											else
 											{
-												pPlayer->addXP(90 * year);
+												pPlayer->addXP(50 + (10 * year));
 											}
 										}
 									}

@@ -260,6 +260,9 @@ void Player::StaminaDecrease(float reduce)
 {
 	//Reduce stamina a certain amount
 	stamina = stamina - reduce;
+	if (stamina < 0) {
+		stamina = 0;
+	}
 }
 
 //Restore health and stamina when player hibernates, fish consumed and used 
@@ -267,7 +270,7 @@ void Player::Hibernate()
 {
 	stamina = maxStamina;
 	health = maxHealth;
-	xp = fishNum * 10;
+	xp = xp + (fishNum * 10);
 	fishNum = 0;
 }
 //Check if the player has gained enough xp to level up.
@@ -279,8 +282,9 @@ void Player::CheckIfLevelUp()
 		maxStamina = maxStamina * 1.05;
 		health = maxHealth;
 		stamina = maxStamina;
-		m_damage++;
-		xpNeed = xpNeed * 2;
+		m_damage = m_damage ;
+		xp = xp - xpNeed;
+		xpNeed = xpNeed * 1.3;
 		//Check level up again incase another level up condition is already met
 		CheckIfLevelUp();
 	}
@@ -339,13 +343,13 @@ void Player::Pickup(std::string name)
 	if (name == "land")
 	{
 		//Stamina restoration is based on maximum stamina, the higher the max, the more stamina restored
-		stamina = stamina + maxStamina / 10;
+		stamina = stamina + maxStamina / 5;
 		//If stamina restoration increases it to more than the max, set stamina to max
 		if (stamina >= maxStamina)
 		{
 			stamina = maxStamina;
 		}
-		xp = xp + 10;
+		
 	}
 	//Sea fish are stored for later use
 	else if (name == "sea")

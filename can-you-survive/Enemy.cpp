@@ -2,8 +2,8 @@
 //Constructor
 Enemy::Enemy(Vector2f position)
 {
-	health = 100;
-	maxHealth = 100;
+	health = 75;
+	maxHealth = 75;
 	level = 1;
 	m_damage = 2;
 	speed = 128;
@@ -362,7 +362,7 @@ void Enemy::MoveTowards(float elapsedTime, float totalTime, Vector2f pPosition)
 
 void Enemy::LevelUp() {
 	level++;
-	float multi = pow(1.08, level);
+	float multi = 1.05;
 	health = maxHealth * multi;
 	maxHealth = maxHealth * multi;
 	m_damage = m_damage * multi;
