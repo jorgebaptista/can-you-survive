@@ -261,6 +261,32 @@ void Enemy::Movement(float elapsedTime, float totalTime, Vector2f mapBounds)
 		}
 	}
 
+	if (m_attacked)
+	{
+		m_attackAnimTimer += elapsedTime;
+
+		if (m_attackAnimTimer > 0.1)
+		{
+			// if rect is at the right most of the sprite sheet stop animation and reset
+			if (rectSourceAttack.left == 320)
+			{
+				rectSourceAttack.left = 0;
+				m_attacked = false;
+			}
+			// else just jump to the right one
+			else rectSourceAttack.left += 64;
+
+			// set the sprite to the correct texture and rect properties
+			m_AttackedSprite = Sprite(m_AttackedTexture, rectSourceAttack);
+
+			// set the animate timer back to 0
+			m_attackAnimTimer = 0;
+
+			m_AttackedSprite.setPosition(m_Position);
+			m_AttackedSprite.setOrigin(32, 32);
+		}
+	}
+
 	//Depending on number, change position
 
 

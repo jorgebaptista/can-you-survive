@@ -106,6 +106,9 @@ private:
 	Color blackoutCDarken;
 	Color blackoutCLighten;
 
+	Texture backgroundTexture;
+	Sprite background;
+
 	Font font;
 
 	// Text for MENU m_State 

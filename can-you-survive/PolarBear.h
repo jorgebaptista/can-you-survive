@@ -29,6 +29,10 @@ public:
 	//Returns the sprite
 	Sprite getSprite();
 
+	Sprite getAttackedSprite();
+
+	bool isAttacked();
+
 	//Will return health
 	int getHealth();
 
@@ -78,5 +82,14 @@ protected:
 
 	// control animation speed
 	float m_animateTimer;
+
+	// Control attacked animation
+
+	Texture m_AttackedTexture;
+	Sprite m_AttackedSprite;
+	IntRect rectSourceAttack;
+
+	bool m_attacked;
+	float m_attackAnimTimer;
 };
 #endif

@@ -18,6 +18,14 @@ PolarBear::PolarBear(Vector2f position)
 
 	moveTime = 0;
 	m_damage = 5;
+
+	m_AttackedTexture.loadFromFile("graphics/attack.png");
+	rectSourceAttack = sf::IntRect(0, 0, 64, 64);
+	m_AttackedSprite = Sprite(m_AttackedTexture, rectSourceAttack);
+	m_AttackedSprite.setOrigin(32, 32);
+
+	m_attacked = false;
+	m_attackAnimTimer = 0;
 }
 
 //Used to spawn new polarbear when they die
@@ -47,6 +55,7 @@ int PolarBear::Attack()
 void PolarBear::ReduceHealth(int reduce)
 {
 	health = health - reduce;
+	m_attacked = true;
 }
 
 //Return the global bounds of the polar bear
@@ -65,6 +74,16 @@ Vector2f PolarBear::getCenter()
 Sprite PolarBear::getSprite()
 {
 	return m_Sprite;
+}
+
+Sprite PolarBear::getAttackedSprite()
+{
+	return m_AttackedSprite;
+}
+
+bool PolarBear::isAttacked()
+{
+	return m_attacked;
 }
 
 //Check if alive and if not

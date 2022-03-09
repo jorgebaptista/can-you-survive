@@ -10,6 +10,10 @@ void Engine::setupUI()
 	blackoutS.setTexture(blackoutT);
 	blackoutS.scale(4.0, 4.0);
 
+	backgroundTexture.loadFromFile("graphics/menu.png");
+	background.setTexture(backgroundTexture);
+	background.setPosition(0, 0);
+
 	//All the text used for the game
 	font.loadFromFile("fonts/KOMIKAP_.ttf");
 
@@ -49,11 +53,11 @@ void Engine::setupUI()
 		"\nJorge Baptista" <<
 		"\n" <<
 		"\n Artist:" <<
-		"\n Isabelle Rellinghaus";
+		"\n Isabell Rellinghaus";
 	playText.setString(playStream.str());
 	playText.setCharacterSize(75);
 	playText.setFillColor(Color::White);
-	playText.setPosition(550, 400);
+	playText.setPosition(700, 400);
 
 	//introText font
 	introText.setFont(font);

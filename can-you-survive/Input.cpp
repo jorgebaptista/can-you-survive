@@ -28,20 +28,20 @@ void Engine::input()
 			{
 				playText.setString(aboutStream.str());
 				select = true;
-				playText.setPosition(100, 100);
+				playText.setPosition(500, 100);
 				playText.setCharacterSize(25);
 			}
 			if (Keyboard::isKeyPressed(Keyboard::Num3) && select == false)
 			{
 				playText.setString(instructionsStream.str());
 				select = true;
-				playText.setPosition(100, 100);
+				playText.setPosition(500, 100);
 				playText.setCharacterSize(35);
 			}
 			if (Keyboard::isKeyPressed(Keyboard::Num4) && select == false) {
 				playText.setString(referenceStream.str());
 				select = true;
-				playText.setPosition(100, 100);
+				playText.setPosition(500, 100);
 				playText.setCharacterSize(25);
 			}
 			if (Keyboard::isKeyPressed(Keyboard::Num5) && select == false) {
@@ -228,12 +228,10 @@ void Engine::input()
 							pause = true;
 
 							// Reset all sea fish
-							for (iterSF = lpSeaFish.begin(); iterSF != lpSeaFish.end(); ++iterSF)
+							for (iterSF = lpSeaFish.begin(); iterSF != lpSeaFish.end(); iterSF++)
 							{
-								if ((*iterSF)->getActive())
-								{
-									(*iterSF)->setActive(false);
-								}
+								(*iterSF)->setActive(false);
+								(*iterSF)->setPosition(-1000, -1000);
 							}
 						}
 					}

@@ -8,6 +8,7 @@ void Engine::draw()
 	{
 		m_Window.clear(Color(0, 0, 0)); // clear the m_Window
 		m_Window.setView(m_HudView);
+		m_Window.draw(background);
 		m_Window.draw(playText);
 
 	}
@@ -36,6 +37,11 @@ void Engine::draw()
 		for (iter = lpPolarBears.begin(); iter != lpPolarBears.end(); ++iter)
 		{
 			m_Window.draw((*iter)->getSprite());
+
+			if ((*iter)->isAttacked())
+			{
+				m_Window.draw((*iter)->getAttackedSprite());
+			}
 		}
 
 		// Iterate through the fish list and draw each fish

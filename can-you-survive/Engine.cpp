@@ -361,7 +361,7 @@ void Engine::run()
 								// chance to spawn on this tile
 								if ((rand() % 20) >= 18)
 								{
-									for (iterSF = lpSeaFish.begin(); iterSF != lpSeaFish.end(); ++iterSF)
+									for (iterSF = lpSeaFish.begin(); iterSF != lpSeaFish.end(); iterSF++)
 									{
 										if (!((*iterSF)->getActive()))
 										{
