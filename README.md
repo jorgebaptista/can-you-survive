@@ -30,7 +30,7 @@ The game follows the OOP principles and makes use of:
 ## Game Developed by:
 
 - [Desmond Delaney](https://github.com/DesDel) (Programmer)
-- Isabelle Rellinghaus (Artist)
+- [Isabelle Rellinghaus](https://www.instagram.com/wandereule.art/) (Artist)
 - [Jorge Baptista](https://github.com/jorgebaptista) (Programmer)
 
 ## License
